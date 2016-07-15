@@ -62,7 +62,7 @@ function levelOneScene(){
     mario.jumpMario();
     levelOneSprites[0].moveSprite();
   }
-  detectCollision(mario, levelOneSprites[0]);
+  enemyDetectCollision(mario, levelOneSprites[0]);
   //console.log(xPositionInLevel);
   //pause
   pauseScene();

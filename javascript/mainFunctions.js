@@ -47,9 +47,26 @@ function pauseScene(){
 	}
 }
 
-function detectCollision(objectOne, objectTwo){
+function refreshLevelAndGoToScene(scene){
+  clearInterval(levelInterval);
+  levelInterval = 0;
+  currentScene = scene;
+  gameplayFreeze = false;
+  levelLoaded = false;
+  initialiseScene();
+}
+
+function groundDetectCollision(){
+
+}
+
+function enemyDetectCollision(objectOne, objectTwo){
   if(objectOne.x + objectOne.width >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width
   && objectOne.y + objectOne.height >= objectTwo.y && objectOne.y <= objectTwo.y + objectTwo.height){
-    console.log("collision");
+    if(objectOne.y + objectOne.height <= objectTwo.y + objectTwo.height/8){
+      mario.velocity = screenHeight/80;
+    } else {
+      refreshLevelAndGoToScene("levelSelect");
+    }
   }
 }

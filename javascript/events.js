@@ -70,12 +70,7 @@ function getPositionClick(event) {
         gameplayFreeze = false;
       }
       if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*3/8 && y < screenHeight*17/40)) {
-        clearInterval(levelInterval);
-        levelInterval = 0;
-        currentScene = "levelSelect";
-        gameplayFreeze = false;
-        levelLoaded = false;
-        initialiseScene();
+        refreshLevelAndGoToScene("levelSelect");
       }
     break;
     default:
