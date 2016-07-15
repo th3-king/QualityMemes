@@ -4,17 +4,28 @@ function Sprite(x, y, width, height, movementSpeed, image) {
 	this.width = width;
 	this.height = height;
   this.movementSpeed = movementSpeed;
-	this.image = image;
+  this.imageArray = image
+	this.image = this.imageArray[0];
   this.originX = x;
-  this.bounce = true;
+  this.squashed = false;
+  this.removed = false;
 
 	this.drawSprite = function (){
 		drawImageOnCanvas(this.x, this.y, this.width, this.height, this.image);
 	}
 
   this.moveSprite = function (){
+    if(this.squashed == false){
+    this.originX -= this.movementSpeed;
     this.x = this.originX - xPositionInLevel;
-    //this.x -= this.movementSpeed;
+    }
+  }
+
+  this.squashSprite = function (){
+    this.squashed = true;
+    this.y = this.y + this.height/2
+    this.height = this.height/2
+    this.image = this.imageArray[2];
   }
 }
 
@@ -74,7 +85,7 @@ function Mario(x,y, width, height, movementSpeed, image){
             this.x += this.movementSpeed;
       }
     if (this.x >= screenWidth/2 - this.width/2 && moveRight == true){
-        xPositionInLevel += movementSpeed;
+        xPositionInLevel += movementSpeed/2;
     }
   }
 
@@ -96,5 +107,9 @@ function Mario(x,y, width, height, movementSpeed, image){
       this.y -= this.velocity;
       this.velocity -= this.gravity;
     }
+  }
+
+  this.gameOver = function () {
+    this.y -= this.movementSpeed/2;
   }
 }

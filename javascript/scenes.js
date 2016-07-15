@@ -54,7 +54,12 @@ function levelOneScene(){
   drawRect(0,0, screenWidth, screenHeight, "#7F77FC")
   imageRepeat(groundTexture, 0, screenHeight*6/8, screenHeight*1/8, screenHeight*1/8, screenWidth/(screenHeight*1/8), 2);
   mario.drawMario();
+  if(levelOneSprites[0].removed == false){
   levelOneSprites[0].drawSprite();
+  }
+  if (levelOneSprites[0].squashed == false){
+    enemyDetectCollision(mario, levelOneSprites[0]);
+  }
 
   //update
   if (gameplayFreeze == false){
@@ -62,7 +67,7 @@ function levelOneScene(){
     mario.jumpMario();
     levelOneSprites[0].moveSprite();
   }
-  enemyDetectCollision(mario, levelOneSprites[0]);
+
   //console.log(xPositionInLevel);
   //pause
   pauseScene();

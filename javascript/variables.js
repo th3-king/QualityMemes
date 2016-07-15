@@ -36,5 +36,5 @@
 
 	//Declare Characters for level
 	function declareLevelOneSprites() {
-	levelOneSprites.push(new Sprite(screenWidth*3/4, screenHeight*2/3, screenHeight/12, screenHeight/12, screenWidth/500, goobaLeft));
+	levelOneSprites[0] = new Sprite(screenWidth*3/4, screenHeight*2/3, screenHeight/12, screenHeight/12, screenWidth/500, gooba);
 	}

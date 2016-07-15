@@ -54,19 +54,40 @@ function refreshLevelAndGoToScene(scene){
   gameplayFreeze = false;
   levelLoaded = false;
   initialiseScene();
+  for(var i = 0; i < levelOneSprites.length; i ++){
+    levelOneSprites[i].removed = false;
+    levelOneSprites[i].squashed = false;
+  }
 }
 
 function groundDetectCollision(){
 
 }
 
-function enemyDetectCollision(objectOne, objectTwo){
-  if(objectOne.x + objectOne.width >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width
-  && objectOne.y + objectOne.height >= objectTwo.y && objectOne.y <= objectTwo.y + objectTwo.height){
-    if(objectOne.y + objectOne.height <= objectTwo.y + objectTwo.height/8){
+function enemyDetectCollision(marioObject, enemyObject){
+  if(marioObject.x + marioObject.width >= enemyObject.x && marioObject.x <= enemyObject.x + enemyObject.width
+  && marioObject.y + marioObject.height >= enemyObject.y && marioObject.y <= enemyObject.y + enemyObject.height){
+    if(marioObject.y + marioObject.height <= enemyObject.y + enemyObject.height/8){
       mario.velocity = screenHeight/80;
+      enemyObject.squashSprite();
+      setTimeout(function () {
+        removeSprite(enemyObject);
+      }, 1000);
     } else {
-      refreshLevelAndGoToScene("levelSelect");
+      gameplayFreeze = true;
+      mario.gameOver;
+      setTimeout(function (){
+        refreshLevelAndGoToScene("levelSelect");
+      }, 1000);
     }
   }
+}
+
+function test(){
+  console.log("test");
+}
+
+
+function removeSprite(sprite){
+  sprite.removed = true;
 }

@@ -72,6 +72,9 @@ function getPositionClick(event) {
       if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*3/8 && y < screenHeight*17/40)) {
         refreshLevelAndGoToScene("levelSelect");
       }
+      if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*7/16 && y < screenHeight*39/80)) {
+        refreshLevelAndGoToScene("main");
+      }
     break;
     default:
       console.log("nothing Triggered");
