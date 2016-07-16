@@ -54,7 +54,7 @@ function getPositionClick(event) {
   switch (currentScene) {
     case "main":
       if ((x > screenWidth*5/16 && x < screenWidth*11/16)&&(y > screenHeight*9/16 && y < screenHeight*10/16 )){
-        clearInterval(startScreenInterval);
+        refreshMainScene();
         currentScene = "levelSelect";
         initialiseScene();
       }

@@ -60,6 +60,13 @@ function refreshLevelAndGoToScene(scene){
   }
 }
 
+function refreshMainScene(){
+  clearInterval(startScreenInterval);
+  startScreenInterval = 0;
+  clouds = [];
+  createdClouds = false;
+}
+
 function groundDetectCollision(){
 
 }

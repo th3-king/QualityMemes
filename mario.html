@@ -57,7 +57,7 @@ function initialiseScene() {
 
       //checks if clouds have been created
       if (createdClouds == false){
-        createClouds(3);
+        createClouds(randomNum(3,1));
         createdClouds = true;
       } else {
         updateObjectToScreenChangeArray(clouds);
