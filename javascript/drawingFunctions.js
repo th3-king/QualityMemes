@@ -1,7 +1,7 @@
 //random functions
 
 function randomColour() {
-  return "rgb(" + String(randomNum(255,0)) +"," + String(randomNum(255,0)) + "," + String(randomNum(255,0)) + ")"
+  return "rgb(" + String(randomNum(255,0)) +"," + String(randomNum(255,0)) + "," + String(randomNum(255,0)) + ")";
 }
 
 function randomNum(topValue, bottomValue) {

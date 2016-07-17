@@ -1,5 +1,5 @@
 function createLevelInterval(functionOfScene){
-		if (levelInterval == undefined || levelInterval == 0){
+		if (levelInterval === undefined || levelInterval === 0){
 	    levelInterval = setInterval(functionOfScene, 15);
 	  }
 }
@@ -39,10 +39,10 @@ function updateObjectToScreenChangeArray(arrayOfObjects) {
 }
 
 function pauseScene(){
-	if(paused == true){
+	if(paused === true){
 		gameplayFreeze = true;
 	}
-	if (gameplayFreeze == true) {
+	if (gameplayFreeze === true) {
 		drawPausedBox();
 	}
 }
@@ -72,8 +72,7 @@ function groundDetectCollision(){
 }
 
 function enemyDetectCollision(marioObject, enemyObject){
-  if(marioObject.x + marioObject.width >= enemyObject.x && marioObject.x <= enemyObject.x + enemyObject.width
-  && marioObject.y + marioObject.height >= enemyObject.y && marioObject.y <= enemyObject.y + enemyObject.height){
+  if(marioObject.x + marioObject.width >= enemyObject.x && marioObject.x <= enemyObject.x + enemyObject.width && marioObject.y + marioObject.height >= enemyObject.y && marioObject.y <= enemyObject.y + enemyObject.height){
     if(marioObject.y + marioObject.height <= enemyObject.y + enemyObject.height/8){
       mario.velocity = screenHeight/80;
       enemyObject.squashSprite();
@@ -82,7 +81,7 @@ function enemyDetectCollision(marioObject, enemyObject){
       }, 1000);
     } else {
       gameplayFreeze = true;
-      mario.gameOver;
+      mario.gameOver();
       setTimeout(function (){
         refreshLevelAndGoToScene("levelSelect");
       }, 1000);

@@ -13,10 +13,10 @@
 
 	//audio setup
 	function play() {
-		document.getElementById('themeSong').play()
+		document.getElementById('themeSong').play();
 	}
 	function pause() {
-		document.getElementById('themeSong').pause()
+		document.getElementById('themeSong').pause();
 	}
 
 	//arrays

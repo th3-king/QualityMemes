@@ -15,7 +15,7 @@ function onKeyDown() {
   if (event.keyCode == 40) {
     moveDown = true;
   } // down arrow pressed
-  if (event.keyCode == 27) {
+  if (event.keyCode == 27 || event.keyCode == 80) {
     paused = true;
   } // escape key pressed
 }
@@ -34,7 +34,7 @@ function onKeyUp() {
   if (event.keyCode == 40) {
     moveDown = false;
   } // down arrow released
-  if (event.keyCode == 27) {
+  if (event.keyCode == 27 || event.keyCode == 80) {
     paused = false;
   } // escape key released
 }

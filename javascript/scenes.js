@@ -6,8 +6,8 @@ function mainScene() {
   clearScene();
 
   //background
-  drawRect(0,0, screenWidth, screenHeight, "#7F77FC")
-  imageRepeat(groundTexture, 0, screenHeight*6/8, screenHeight*1/8, screenHeight*1/8, screenWidth/(screenHeight*1/8), 2);
+  drawRect(0,0, screenWidth, screenHeight, "#7F77FC");
+  imageRepeat(groundTexture, 0, screenHeight*6/8, screenHeight/8, screenHeight/8, screenWidth/(screenHeight*1/8), 2);
   drawImageOnCanvas(screenWidth/6, screenHeight*11/16, screenHeight/4, screenHeight/16, hillSmallTexture);
   drawImageOnCanvas(screenWidth*2/7, screenHeight*10/16, screenHeight/3, screenHeight/8, hillLargeTexture);
 
@@ -33,8 +33,8 @@ function levelSelect() {
   clearScene();
 
   //Draw background
-  drawRect(0,0, screenWidth, screenHeight, "#7F77FC")
-  imageRepeat(groundTexture, 0, screenHeight*6/8, screenHeight*1/8, screenHeight*1/8, screenWidth/(screenHeight*1/8), 2);
+  drawRect(0,0, screenWidth, screenHeight, "#7F77FC");
+  imageRepeat(groundTexture, 0, screenHeight*6/8, screenHeight/8, screenHeight/8, screenWidth/(screenHeight/8), 2);
   drawImageOnCanvas(screenWidth/6, screenHeight*11/16, screenHeight/4, screenHeight/16, hillSmallTexture);
   drawImageOnCanvas(screenWidth*2/7, screenHeight*10/16, screenHeight/3, screenHeight/8, hillLargeTexture);
 
@@ -51,18 +51,19 @@ function levelOneScene(){
   clearScene();
 
   //draw
-  drawRect(0,0, screenWidth, screenHeight, "#7F77FC")
-  imageRepeat(groundTexture, 0, screenHeight*6/8, screenHeight*1/8, screenHeight*1/8, screenWidth/(screenHeight*1/8), 2);
+  var groundXPosition = -(xPositionInLevel % (screenHeight/8));
+  drawRect(0,0, screenWidth, screenHeight, "#7F77FC");
+  imageRepeat(groundTexture, groundXPosition, screenHeight*6/8, screenHeight/8, screenHeight/8, screenWidth/(screenHeight/8) + 1, 2);
   mario.drawMario();
-  if(levelOneSprites[0].removed == false){
+  if (levelOneSprites[0].removed === false) {
   levelOneSprites[0].drawSprite();
   }
-  if (levelOneSprites[0].squashed == false){
+  if (levelOneSprites[0].squashed === false){
     enemyDetectCollision(mario, levelOneSprites[0]);
   }
 
   //update
-  if (gameplayFreeze == false){
+  if (gameplayFreeze === false){
     mario.moveMario();
     mario.jumpMario();
     levelOneSprites[0].moveSprite();
