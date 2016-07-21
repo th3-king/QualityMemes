@@ -68,15 +68,28 @@ function levelOneScene(){
 
   //update
   if (gameplayFreeze == false){
+    //mario update
     mario.moveAction();
     mario.jumpAction();
+    //sprite update
     for(var i = 0; i < levelSprites.length; i++){
       levelSprites[i].moveSprite();
     }
+    //blocks update
+    blocksNotCollidedWith = [];
     for(var i = 0; i < levelBlocks.length; i++){
       levelBlocks[i].moveBlock();
-      levelBlocks[i].detectCollisionWithMario();
-    }
+      if(levelBlocks[i].isCollidingWith() == true){
+        levelBlocks[i].detectCollisionWithMario();
+      } else {
+        blocksNotCollidedWith.push(false);
+      };
+    };
+    if(blocksNotCollidedWith.length == levelBlocks.length){
+      if(mario.y + mario.height < screenHeight*6/8 && mario.jump == false) {
+        mario.fallAction()
+      };
+    };
   }
 
   //console.log(xPositionInLevel);

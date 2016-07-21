@@ -23,6 +23,7 @@ function pause() {
 var levelSprites = [];
 var levelBlocks
 var clouds = [];
+var blocksNotCollidedWith = [];
 
 //game properties
 var levelLoaded = false;

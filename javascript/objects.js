@@ -155,8 +155,6 @@ function Block(x, y, width, height, image) {
         moveLeft = false;
         mario.x = this.x + this.width;
       }
-    } else if(mario.y + mario.height < screenHeight*6/8 && mario.jump == false) {
-      mario.fallAction()
     }
   }
 
@@ -167,5 +165,4 @@ function Block(x, y, width, height, image) {
       return false;
     }
   }
-
 }
