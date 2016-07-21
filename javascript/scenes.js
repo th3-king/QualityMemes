@@ -51,25 +51,22 @@ function levelOneScene(){
   clearScene();
 
   //draw
+  var groundXPosition = -(xPositionInLevel % (screenHeight/8));
   drawRect(0,0, screenWidth, screenHeight, "#7F77FC");
-  imageRepeat(groundTexture, groundXPosition(), screenHeight*6/8, screenHeight/8, screenHeight/8, screenWidth/(screenHeight/8) + 1, 2);
+  imageRepeat(groundTexture, groundXPosition, screenHeight*6/8, screenHeight/8, screenHeight/8, screenWidth/(screenHeight/8) + 1, 2);
   mario.drawMario();
-  levelBlocks[0].drawBlock();
-
-  if (levelSprites[0].removed == false) {
-  levelSprites[0].drawSprite();
+  if (levelOneSprites[0].removed === false) {
+  levelOneSprites[0].drawSprite();
   }
-  if (levelSprites[0].squashed == false){
-    enemyDetectCollision(mario, levelSprites[0]);
+  if (levelOneSprites[0].squashed === false){
+    enemyDetectCollision(mario, levelOneSprites[0]);
   }
 
   //update
-  if (gameplayFreeze == false){
+  if (gameplayFreeze === false){
     mario.moveMario();
     mario.jumpMario();
-    levelSprites[0].moveSprite();
-    levelBlocks[0].moveBlock();
-    levelBlocks[0].detectCollision(mario);
+    levelOneSprites[0].moveSprite();
   }
 
   //console.log(xPositionInLevel);

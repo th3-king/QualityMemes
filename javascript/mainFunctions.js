@@ -1,5 +1,5 @@
 function createLevelInterval(functionOfScene){
-		if (levelInterval == undefined || levelInterval == 0){
+		if (levelInterval === undefined || levelInterval === 0){
 	    levelInterval = setInterval(functionOfScene, 15);
 	  }
 }
@@ -39,10 +39,10 @@ function updateObjectToScreenChangeArray(arrayOfObjects) {
 }
 
 function pauseScene(){
-	if(paused == true){
+	if(paused === true){
 		gameplayFreeze = true;
 	}
-	if (gameplayFreeze == true) {
+	if (gameplayFreeze === true) {
 		drawPausedBox();
 	}
 }
@@ -54,9 +54,9 @@ function refreshLevelAndGoToScene(scene){
   gameplayFreeze = false;
   levelLoaded = false;
   initialiseScene();
-  for(var i = 0; i < levelSprites.length; i ++){
-    levelSprites[i].removed = false;
-    levelSprites[i].squashed = false;
+  for(var i = 0; i < levelOneSprites.length; i ++){
+    levelOneSprites[i].removed = false;
+    levelOneSprites[i].squashed = false;
   }
 }
 
@@ -93,10 +93,7 @@ function test(){
   console.log("test");
 }
 
+
 function removeSprite(sprite){
   sprite.removed = true;
 }
-
-function groundXPosition() {
-	return -(xPositionInLevel % (screenHeight/8));
-};

@@ -46,6 +46,7 @@ function CreateCanvas() {
 
 function initialiseScene() {
   if (levelLoaded == false){
+    declareLevelOneSprites();
     window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/200, marioTexture);
     xPositionInLevel = 0;
   }
@@ -71,8 +72,6 @@ function initialiseScene() {
     break;
   	case "levelOne":
   		createLevelInterval(levelOneScene);
-      declareLevelOneBlocks();
-      declareLevelOneSprites();
       levelLoaded = true;
   	break;
     case "levelTwo":

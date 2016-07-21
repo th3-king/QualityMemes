@@ -15,7 +15,7 @@ function Sprite(x, y, width, height, movementSpeed, image) {
 	};
 
   this.moveSprite = function (){
-    if(this.squashed == false){
+    if(this.squashed === false){
     this.originX -= this.movementSpeed;
     this.x = this.originX - xPositionInLevel;
     }
@@ -60,7 +60,6 @@ function Mario(x,y, width, height, movementSpeed, image){
   this.gravity = screenHeight/3000;
   this.movementSpeed = movementSpeed;
 	this.image = image;
-  this.jump = false;
 
   this.drawMario = function (){
 		drawImageOnCanvas(this.x, this.y, this.width, this.height, this.image);
@@ -68,43 +67,43 @@ function Mario(x,y, width, height, movementSpeed, image){
 
   this.moveMario = function (){
     if (this.x >= screenWidth/2 - this.width/2) {
-      if(moveLeft == true) {
+      if(moveLeft === true) {
         //console.log("left");
         this.x -= this.movementSpeed;
       }
     } else if (this.x >= 0) {
-        if (moveRight == true) {
+        if (moveRight === true) {
           //console.log("right");
           this.x += this.movementSpeed;
         }
-        if(moveLeft == true) {
+        if(moveLeft === true) {
           //console.log("left");
           this.x -= this.movementSpeed;
         }
-      } else if (moveRight == true) {
+      } else if (moveRight === true) {
             //console.log("right");
             this.x += this.movementSpeed;
       }
-    if (this.x >= screenWidth/2 - this.width/2 && moveRight == true){
+    if (this.x >= screenWidth/2 - this.width/2 && moveRight === true){
         xPositionInLevel += movementSpeed/2;
     }
   };
 
   this.jumpMario = function(){
     //check if fall through floor
-    if (this.y >= screenHeight*3/5 && this.jump == true){
+    if (this.y >= screenHeight*3/5 && jump === true){
       this.velocity = 0;
-      this.jump = false;
+      jump = false;
       this.y = screenHeight*3/5;
     }
 
-    if (moveUp == true && this.jump == false) {
+    if (moveUp === true && jump === false) {
       moveUp = false;
-      this.jump = true;
+      jump = true;
       this.velocity = screenHeight/80;
     }
 
-    if (this.jump == true) {
+    if (jump === true) {
       this.y -= this.velocity;
       this.velocity -= this.gravity;
     }
@@ -113,40 +112,4 @@ function Mario(x,y, width, height, movementSpeed, image){
   this.gameOver = function () {
     this.y += this.movementSpeed/2;
   };
-}
-
-function Block(x, y, width, height, image) {
-  this.x = x;
-	this.y = y;
-	this.width = width;
-	this.height = height;
-  this.image = image;
-  this.originX = x;
-  this.removed = false;
-
-	this.drawBlock = function (){
-		drawImageOnCanvas(this.x, this.y, this.width, this.height, this.image);
-	};
-
-  this.moveBlock = function (){
-    this.x = this.originX - xPositionInLevel;
-  };
-
-  this.detectCollision = function (mario) {
-    if(mario.x + mario.width >= this.x && mario.x <= this.x + this.width && mario.y + mario.height >= this.y && mario.y <= this.y + this.height){
-      if(mario.y + mario.height <= this.y + this.height/8){
-        mario.jump = false;
-      };
-      if(mario.y + mario.height/8 >= this.y + this.height){
-        mario.velocity = 0;
-      };
-      if (mario.x + mario.width <= this.x + this.height/8) {
-        moveRight = false;
-      };
-      if (mario.x + mario.width/8 >= this.x + this.height) {
-        moveLeft = false;
-      };
-    }
-  }
-
 }
