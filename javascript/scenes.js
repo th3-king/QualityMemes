@@ -65,8 +65,8 @@ function levelOneScene(){
 
   //update
   if (gameplayFreeze == false){
-    mario.moveMario();
-    mario.jumpMario();
+    mario.moveAction();
+    mario.jumpAction();
     levelSprites[0].moveSprite();
     levelBlocks[0].moveBlock();
     levelBlocks[0].detectCollision(mario);

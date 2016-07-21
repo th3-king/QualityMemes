@@ -66,7 +66,7 @@ function Mario(x,y, width, height, movementSpeed, image){
 		drawImageOnCanvas(this.x, this.y, this.width, this.height, this.image);
 	};
 
-  this.moveMario = function (){
+  this.moveAction = function (){
     if (this.x >= screenWidth/2 - this.width/2) {
       if(moveLeft == true) {
         //console.log("left");
@@ -90,7 +90,7 @@ function Mario(x,y, width, height, movementSpeed, image){
     }
   };
 
-  this.jumpMario = function(){
+  this.jumpAction = function(){
     //check if fall through floor
     if (this.y >= screenHeight*3/5 && this.jump == true){
       this.velocity = 0;
@@ -105,14 +105,18 @@ function Mario(x,y, width, height, movementSpeed, image){
     }
 
     if (this.jump == true) {
-      this.y -= this.velocity;
-      this.velocity -= this.gravity;
+      this.fallAction();
     }
   };
 
   this.gameOver = function () {
     this.y += this.movementSpeed/2;
   };
+
+  this.fallAction = function () {
+    this.y -= this.velocity;
+    this.velocity -= this.gravity;
+  }
 }
 
 function Block(x, y, width, height, image) {
@@ -135,17 +139,21 @@ function Block(x, y, width, height, image) {
   this.detectCollision = function (mario) {
     if(mario.x + mario.width >= this.x && mario.x <= this.x + this.width && mario.y + mario.height >= this.y && mario.y <= this.y + this.height){
       if(mario.y + mario.height <= this.y + this.height/8){
-        mario.jump = false;
-      };
-      if(mario.y + mario.height/8 >= this.y + this.height){
+        if(mario.x + mario.width >= this.x + this.width/100 && mario.x <= this.x + this.width*99/100){
+          mario.jump = false;
+          mario.y = this.y - mario.height;
+        }
+      } else if(mario.y + mario.height/8 >= this.y + this.height){
         mario.velocity = 0;
-      };
-      if (mario.x + mario.width <= this.x + this.height/8) {
+      } else if (mario.x + mario.width <= this.x + this.height/8) {
         moveRight = false;
-      };
-      if (mario.x + mario.width/8 >= this.x + this.height) {
+        mario.x = this.x - mario.width;
+      } else if (mario.x + mario.width/8 >= this.x + this.height) {
         moveLeft = false;
-      };
+        mario.x = this.x + this.width;
+      }
+    } else if(mario.y + mario.height < screenHeight*6/8 && mario.jump == false) {
+      mario.fallAction()
     }
   }
 
