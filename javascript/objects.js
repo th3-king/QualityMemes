@@ -136,7 +136,7 @@ function Block(x, y, width, height, image) {
     this.x = this.originX - xPositionInLevel;
   };
 
-  this.detectCollision = function (mario) {
+  this.detectCollisionWithMario = function () {
     if(mario.x + mario.width >= this.x && mario.x <= this.x + this.width && mario.y + mario.height >= this.y && mario.y <= this.y + this.height){
       if(mario.y + mario.height <= this.y + this.height/8){
         if(mario.x + mario.width >= this.x + this.width/100 && mario.x <= this.x + this.width*99/100){
@@ -144,7 +144,10 @@ function Block(x, y, width, height, image) {
           mario.y = this.y - mario.height;
         }
       } else if(mario.y + mario.height/8 >= this.y + this.height){
-        mario.velocity = 0;
+        if(mario.x + mario.width >= this.x + this.width/100 && mario.x <= this.x + this.width*99/100){
+          mario.y = this.y + this.height;
+          mario.velocity = -mario.gravity;
+        }
       } else if (mario.x + mario.width <= this.x + this.height/8) {
         moveRight = false;
         mario.x = this.x - mario.width;
@@ -154,6 +157,14 @@ function Block(x, y, width, height, image) {
       }
     } else if(mario.y + mario.height < screenHeight*6/8 && mario.jump == false) {
       mario.fallAction()
+    }
+  }
+
+  this.isCollidingWith = function (){
+    if(mario.x + mario.width >= this.x && mario.x <= this.x + this.width && mario.y + mario.height >= this.y && mario.y <= this.y + this.height){
+      return true;
+    } else {
+      return false;
     }
   }
 

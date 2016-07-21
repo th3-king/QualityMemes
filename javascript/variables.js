@@ -46,5 +46,7 @@ function declareLevelOneBlocks() {
 	if (levelLoaded == false){
 		levelBlocks = [];
 		levelBlocks[0] = new Block(screenWidth * 1.5, screenHeight*5/8, screenHeight/8, screenHeight/8, groundTexture);
+		levelBlocks[1] = new Block(screenWidth * 1.5 + screenHeight/8, screenHeight*4/8, screenHeight/8, screenHeight/8, groundTexture);
+		levelBlocks[2] = new Block(screenWidth * 1.5 + screenHeight/4, screenHeight*3/8, screenHeight/8, screenHeight/8, groundTexture);
 	};
 };
