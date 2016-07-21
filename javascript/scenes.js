@@ -49,16 +49,29 @@ function levelSelect() {
 function levelOneScene(){
   //clear
   clearScene();
+  levelBlocks = declareLevelBlocks();
 
   //draw
   drawRect(0,0, screenWidth, screenHeight, "#7F77FC");
-  imageRepeat(groundTexture, groundXPosition(), screenHeight*6/8, screenHeight/8, screenHeight/8, screenWidth/(screenHeight/8) + 1, 2);
-  mario.drawMario();
-  levelBlocks[0].drawBlock();
-
-  if (levelSprites[0].removed == false) {
-  levelSprites[0].drawSprite();
+  for (var i = 0; i < groundBlocks.length; i++){
+    groundBlocks[i].x = groundBlocks[i].originX + groundXPosition();
+    groundBlocks[i].drawBlock();
   }
+
+  for(var z = 0; z < mario.collisions.length; z++){
+    for (var i = 0; i < groundBlocks.length; i++){
+      //it's the mario.collisions not setting the mario.
+      groundBlocks[i].detectCollision();
+      if(mario.collisions[z] == true){
+        {break};
+      }
+    }
+  }
+
+  mario.drawMario();
+  levelObstacles[0].drawBlock();
+
+
   if (levelSprites[0].squashed == false){
     enemyDetectCollision(mario, levelSprites[0]);
   }
@@ -67,10 +80,12 @@ function levelOneScene(){
   if (gameplayFreeze == false){
     mario.moveMario();
     mario.jumpMario();
+    if (levelSprites[0].removed == false) {
+    levelSprites[0].drawSprite();
     levelSprites[0].moveSprite();
-    levelBlocks[0].moveBlock();
-    levelBlocks[0].detectCollision(mario);
-  }
+    }
+    levelObstacles[0].moveBlock();
+  };
 
   //console.log(xPositionInLevel);
   //pause

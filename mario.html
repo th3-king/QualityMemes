@@ -13,7 +13,7 @@ function CreateCanvas() {
   function resizeCanvas() {
     if (initialRun == false){
       createScreenChangeMultiplierArray(clouds);
-      createScreenChangeMultiplierArray(levelOneSprites);
+      createScreenChangeMultiplierArray(levelSprites);
       createScreenChangeMultiplier(mario);
       xPositionInLevelMultiplier = xPositionInLevel/screenWidth;
     }
@@ -30,12 +30,12 @@ function CreateCanvas() {
     screenHeight = canvas.height;
 
     if (initialRun == true){
-      window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/200, marioTexture);
+      window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight/10, screenHeight*3/20, screenWidth/200, marioTexture);
       initialRun = false;
       declareLevelOneSprites();
     } else {
       updateObjectToScreenChange(mario);
-      updateObjectToScreenChangeArray(levelOneSprites);
+      updateObjectToScreenChangeArray(levelSprites);
       xPositionInLevel = xPositionInLevelMultiplier * screenWidth;
     }
 

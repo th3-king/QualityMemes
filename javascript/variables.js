@@ -21,8 +21,11 @@ function pause() {
 
 //arrays
 var levelSprites = [];
-var levelBlocks
+var levelObstacles = [];
+var levelBlocks = [];
 var clouds = [];
+var groundBlocks = [];
+
 
 //game properties
 var levelLoaded = false;
@@ -44,7 +47,9 @@ function declareLevelOneSprites() {
 
 function declareLevelOneBlocks() {
 	if (levelLoaded == false){
-		levelBlocks = [];
-		levelBlocks[0] = new Block(screenWidth * 1.5, screenHeight*5/8, screenHeight/8, screenHeight/8, groundTexture);
+		levelObstacles = [];
+		levelObstacles[0] = new Block(screenWidth * 1.5, screenHeight*5/8, screenHeight/8, screenHeight/8, groundTexture);
+		groundBlocks = [];
+		groundBlocks = createGround();
 	};
 };

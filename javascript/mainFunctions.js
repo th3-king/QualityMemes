@@ -4,6 +4,17 @@ function createLevelInterval(functionOfScene){
 	  }
 }
 
+function createGround() {
+	var groundBlocks = []
+	var size = screenHeight/8
+	for (var dx = 0; dx < screenWidth/(screenHeight/8) + 1; dx++){
+		for (var dy = 0; dy < 2; dy++) {
+			groundBlocks.push(new Block(0 + dx*size, screenHeight*6/8 + dy*size, size, size, groundTexture));
+		};
+	};
+	return groundBlocks;
+}
+
 function createScreenChangeMultiplier(object) {
 		object.multiplierX = object.x/screenWidth;
 		object.multiplierY = object.y/screenHeight;
@@ -100,3 +111,14 @@ function removeSprite(sprite){
 function groundXPosition() {
 	return -(xPositionInLevel % (screenHeight/8));
 };
+
+function declareLevelBlocks() {
+	var BlocksArray = [];
+	for (var i = 0; i < groundBlocks.length; i++){
+		BlocksArray.push(groundBlocks[i]);
+	};
+	for (var i = 0; i < levelObstacles.length; i++){
+		BlocksArray.push(levelObstacles[i]);
+	};
+	return BlocksArray;
+}
