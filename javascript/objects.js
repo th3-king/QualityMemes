@@ -4,14 +4,28 @@ function Sprite(x, y, width, height, movementSpeed, image) {
 	this.width = width;
 	this.height = height;
   this.movementSpeed = movementSpeed;
-  this.imageArray = image;
-	this.image = this.imageArray[0];
+  this.index = 0;
+	this.image = image[this.index];
   this.originX = x;
   this.squashed = false;
   this.removed = false;
+  this.counter = 0;
 
 	this.drawSprite = function (){
+    if(this.squashed == false){
+      this.image = image[this.index];
+    }
 		drawImageOnCanvas(this.x, this.y, this.width, this.height, this.image);
+    if(this.counter == 16){
+      if(this.index < image.length - 2){
+        this.index++;
+      } else {
+        this.index = 0;
+      }
+      this.counter = 0;
+    } else {
+      ++this.counter;
+    }
 	};
 
   this.moveSprite = function (){
@@ -25,7 +39,7 @@ function Sprite(x, y, width, height, movementSpeed, image) {
     this.squashed = true;
     this.y = this.y + this.height/2;
     this.height = this.height/2;
-    this.image = this.imageArray[2];
+    this.image = image[2];
   };
 }
 
@@ -170,11 +184,13 @@ function Block(x, y, width, height, image) {
 function Coin(x, y){
   this.x = x;
   this.y = y;
+  this.originX = x;
   this.index = 0;
   this.image = coin[this.index];
   this.width = screenHeight*25/528;
   this.height = screenHeight/16;
   this.counter = 0;
+  this.collected = false;
 
   this.drawCoin = function(){
     this.image = coin[this.index];
@@ -191,4 +207,13 @@ function Coin(x, y){
     }
   };
 
+  this.detectCollisionWithMario = function(){
+    if(mario.x + mario.width >= this.x && mario.x <= this.x + this.width && mario.y + mario.height >= this.y && mario.y <= this.y + this.height){
+      this.collected = true;
+    }
+  }
+
+  this.moveCoin = function (){
+    this.x = this.originX - xPositionInLevel;
+  };
 };

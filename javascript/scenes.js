@@ -66,7 +66,9 @@ function levelOneScene(){
     }
   }
   for(var i = 0; i < levelCoins.length; i++){
-    levelCoins[i].drawCoin();
+    if(levelCoins[i].collected == false){
+      levelCoins[i].drawCoin();
+    }
   }
 
   //update
@@ -88,14 +90,21 @@ function levelOneScene(){
         blocksNotCollidedWith.push(false);
       };
     };
+    //checks to see if colliding with any blocks, otherwise falls to ground
     if(blocksNotCollidedWith.length == levelBlocks.length){
       if(mario.y + mario.height < screenHeight*6/8 && mario.jump == false) {
         mario.fallAction()
       };
     };
+    for(var i = 0; i < levelCoins.length; i++){
+      if(levelCoins[i].collected == false){
+        levelCoins[i].detectCollisionWithMario();
+        levelCoins[i].moveCoin();
+      }
+    }
   }
 
   //console.log(xPositionInLevel);
-  //pause
+  //pause scene causing menu to appear
   pauseScene();
 }

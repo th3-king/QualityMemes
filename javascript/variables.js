@@ -48,6 +48,9 @@ function declareLevelOneObjects() {
 		levelBlocks[2] = new Block(screenWidth * 1.5 + screenHeight/4, screenHeight*3/8, screenHeight/8, screenHeight/8, groundTexture);
 
 		levelCoins = [];
-		levelCoins[0] = new Coin(screenWidth/2, screenHeight/2);
+		levelCoins[0] = new Coin(screenWidth*7/8, screenHeight/3);
+		levelCoins[1] = new Coin(screenWidth*6/8, screenHeight/3);
+		levelCoins[2] = new Coin(screenWidth*5/8, screenHeight/3);
+		levelCoins[3] = new Coin(screenWidth*4/8, screenHeight/3);
 	};
 };

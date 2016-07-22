@@ -15,6 +15,7 @@ function CreateCanvas() {
       createScreenChangeMultiplierArray(clouds);
       createScreenChangeMultiplierArray(levelSprites);
       createScreenChangeMultiplierArray(levelBlocks);
+      createScreenChangeMultiplierArray(levelCoins);
       createScreenChangeMultiplier(mario);
       xPositionInLevelMultiplier = xPositionInLevel/screenWidth;
     }
@@ -38,6 +39,7 @@ function CreateCanvas() {
       updateObjectToScreenChange(mario);
       updateObjectToScreenChangeArray(levelSprites);
       updateObjectToScreenChangeArray(levelBlocks);
+      updateObjectToScreenChangeArray(levelCoins);
       xPositionInLevel = xPositionInLevelMultiplier * screenWidth;
     }
 
