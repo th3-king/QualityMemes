@@ -166,3 +166,20 @@ function Block(x, y, width, height, image) {
     }
   }
 }
+
+function Coin(x, y){
+  this.x = x;
+  this.y = y;
+  this.imageArray = coin;
+  this.image = this.imageArray[0];
+  this.width = screenHeight*25/528;
+  this.height = screenHeight/16;
+
+  this.drawCoin = function(){
+    drawImageOnCanvas(this.x, this.y, this.width, this.height, this.image);
+    if(this.image != this.imageArray[4]){
+      this.image = this.imageArray.next();
+    }
+  }
+
+}

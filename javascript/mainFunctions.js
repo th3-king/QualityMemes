@@ -100,3 +100,8 @@ function removeSprite(sprite){
 function groundXPosition() {
 	return -(xPositionInLevel % (screenHeight/8));
 };
+
+Object.defineProperty(Array.prototype, "next", {
+    value: function() { return this[++this.current]; },
+    enumerable: false
+});

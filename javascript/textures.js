@@ -18,6 +18,7 @@ var levelSelectText   = new Image();
 var mainMenuText      = new Image();
 var resumeGameText    = new Image();
 var gooba             = [new Image(), new Image(), new Image()];
+var coin              = [new Image(), new Image(), new Image(), new Image()];
 
 groundTexture.src     = "textures/backgroundTextures/groundTexture.png";
 marioTexture.src      = "textures/marioTextures/marioSprite.png";
@@ -39,3 +40,7 @@ resumeGameText.src    = "textures/pauseTextures/resumeGameText.png";
 gooba[0].src          = "textures/enemyTextures/goobaLeft.png";
 gooba[1].src          = "textures/enemyTextures/goobaRight.png";
 gooba[2].src          = "textures/enemyTextures/goobaSquashed.png";
+coin[0].src           = "textures/blocksOfLevelsTextures/coinOne.png";
+coin[1].src           = "textures/blocksOfLevelsTextures/coinTwo.png";
+coin[2].src           = "textures/blocksOfLevelsTextures/coinThree.png";
+coin[3].src           = "textures/blocksOfLevelsTextures/coinFour.png";
