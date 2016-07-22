@@ -21,7 +21,8 @@ function pause() {
 
 //arrays
 var levelSprites = [];
-var levelBlocks
+var levelBlocks = [];
+var levelCoins = [];
 var clouds = [];
 var blocksNotCollidedWith = [];
 
@@ -45,5 +46,8 @@ function declareLevelOneObjects() {
 		levelBlocks[0] = new Block(screenWidth * 1.5, screenHeight*5/8, screenHeight/8, screenHeight/8, groundTexture);
 		levelBlocks[1] = new Block(screenWidth * 1.5 + screenHeight/8, screenHeight*4/8, screenHeight/8, screenHeight/8, groundTexture);
 		levelBlocks[2] = new Block(screenWidth * 1.5 + screenHeight/4, screenHeight*3/8, screenHeight/8, screenHeight/8, groundTexture);
+
+		levelCoins = [];
+		levelCoins[0] = new Coin(screenWidth/2, screenHeight/2);
 	};
 };

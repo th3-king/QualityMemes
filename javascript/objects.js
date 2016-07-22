@@ -170,16 +170,25 @@ function Block(x, y, width, height, image) {
 function Coin(x, y){
   this.x = x;
   this.y = y;
-  this.imageArray = coin;
-  this.image = this.imageArray[0];
+  this.index = 0;
+  this.image = coin[this.index];
   this.width = screenHeight*25/528;
   this.height = screenHeight/16;
+  this.counter = 0;
 
   this.drawCoin = function(){
+    this.image = coin[this.index];
     drawImageOnCanvas(this.x, this.y, this.width, this.height, this.image);
-    if(this.image != this.imageArray[4]){
-      this.image = this.imageArray.next();
+    if(this.counter == 4){
+      if(this.index < coin.length - 1){
+        this.index++;
+      } else {
+        this.index = 0;
+      }
+      this.counter = 0;
+    } else {
+      ++this.counter;
     }
-  }
+  };
 
-}
+};

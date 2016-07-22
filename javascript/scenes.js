@@ -65,6 +65,9 @@ function levelOneScene(){
       enemyDetectCollision(mario, levelSprites[i]);
     }
   }
+  for(var i = 0; i < levelCoins.length; i++){
+    levelCoins[i].drawCoin();
+  }
 
   //update
   if (gameplayFreeze == false){
