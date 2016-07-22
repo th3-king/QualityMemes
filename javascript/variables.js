@@ -35,6 +35,7 @@ var moveLeft = false;
 var moveRight = false;
 var moveDown = false;
 var moveUp = false;
+var score = 0;
 
 //Declare Characters for level
 function declareLevelOneObjects() {

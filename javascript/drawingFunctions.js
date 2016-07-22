@@ -10,11 +10,6 @@ function randomNum(topValue, bottomValue) {
 
 //drawing functions
 
-function drawCross(x, y, size, colour, thickness) {
-	drawRect(x , y + size/2 - size/thickness, size, size*2/thickness, colour);
-	drawRect(x + size/2 - size/thickness, y, size*2/thickness, size, colour);
-}
-
 function drawRect(x,y, xLength, yLength, colour) {
 	canvas = document.getElementById("canvas");
   context = canvas.getContext("2d");
@@ -26,32 +21,14 @@ function drawRect(x,y, xLength, yLength, colour) {
   context.fill();
 }
 
-function drawSolidSquare(x, y, size, colour) {
-  drawRect(x,y,size,size,colour);
-}
-
-function drawSolidTriangle(x, y, size, colour) {
+function drawText(x, y ,font, size, alignment, colour, text){
   canvas = document.getElementById("canvas");
   context = canvas.getContext("2d");
 
-  context.beginPath();
-  context.moveTo(x,y);
-  context.lineTo(x + size, y);
-  context.lineTo(x + size/2, y - size);
+  context.font = (size + " " + font );
   context.fillStyle = colour;
-  context.closePath();
-  context.fill();
-  }
-
-function drawCircle(x, y, radius, colour){
-  canvas = document.getElementById("canvas");
-  context = canvas.getContext("2d");
-
-  context.beginPath();
-	context.arc(x,y,radius,0, 2 * Math.PI);
-  context.fillStyle = colour;
-  context.closePath();
-	context.fill();
+  context.textAlign = alignment;
+  context.fillText(text, x,y);
 }
 
 function imageRepeat(image, x, y, width, height, xRepeat, yRepeat) {

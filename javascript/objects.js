@@ -40,6 +40,7 @@ function Sprite(x, y, width, height, movementSpeed, image) {
     this.y = this.y + this.height/2;
     this.height = this.height/2;
     this.image = image[2];
+    score += 100;
   };
 }
 
@@ -210,6 +211,7 @@ function Coin(x, y){
   this.detectCollisionWithMario = function(){
     if(mario.x + mario.width >= this.x && mario.x <= this.x + this.width && mario.y + mario.height >= this.y && mario.y <= this.y + this.height){
       this.collected = true;
+      score += 25;
     }
   }
 
