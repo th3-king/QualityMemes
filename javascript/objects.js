@@ -107,10 +107,10 @@ function Mario(x,y, width, height, movementSpeed, image){
 
   this.jumpAction = function(){
     //check if fall through floor
-    if (this.y >= screenHeight*3/5 && this.jump == true){
+    if (this.y >= screenHeight*4/5 && this.jump == true){
       this.velocity = 0;
       this.jump = false;
-      this.y = screenHeight*3/5;
+      this.y = screenHeight*4/5;
     }
 
     if (moveUp == true && this.jump == false) {

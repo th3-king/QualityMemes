@@ -52,7 +52,7 @@ function levelOneScene(){
 
   //draw
   drawRect(0,0, screenWidth, screenHeight, "#7F77FC");
-  imageRepeat(groundTexture, groundXPosition(), screenHeight*6/8, screenHeight/8, screenHeight/8, screenWidth/(screenHeight/8) + 1, 2);
+  imageRepeat(groundTexture, groundXPosition(), groundLevelY, groundLevelSize, groundLevelSize, screenWidth/groundLevelSize + 1, 2);
   mario.drawMario();
 
   drawText(screenWidth/50, screenHeight/18 ,"emulogic", "20px", "left", "black", ("score: " + score.toString()))
@@ -95,7 +95,7 @@ function levelOneScene(){
     };
     //checks to see if colliding with any blocks, otherwise falls to ground
     if(blocksNotCollidedWith.length == levelBlocks.length){
-      if(mario.y + mario.height < screenHeight*6/8 && mario.jump == false) {
+      if(mario.y + mario.height < screenHeight*67/75 && mario.jump == false) {
         mario.fallAction()
       };
     };

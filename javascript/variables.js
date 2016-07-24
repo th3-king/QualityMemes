@@ -9,6 +9,14 @@ var paused = false;
 var createdClouds = false;
 var initialRun = true;
 var gameplayFreeze = false;
+var groundLevelY;
+var groundLevelSize;
+var goombaSize;
+function initialiseScreenSizeRelatedElements(){
+	groundLevelY = screenHeight*67/75;
+	groundLevelSize = screenHeight*16/225;
+	goombaSize = screenHeight*32/675;
+}
 window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/200, marioTexture);
 
 //audio setup
@@ -41,7 +49,7 @@ var score = 0;
 function declareLevelOneObjects() {
 	if (levelLoaded == false){
 		levelSprites = [];
-		levelSprites[0] = new Sprite(screenWidth*3/4, screenHeight*2/3, screenHeight/12, screenHeight/12, screenWidth/500, gooba);
+		levelSprites[0] = new Sprite(screenWidth*3/4, (groundLevelY - goombaSize), goombaSize, goombaSize, screenWidth/700, goomba);
 
 		levelBlocks = [];
 		levelBlocks[0] = new Block(screenWidth * 1.5, screenHeight*5/8, screenHeight/8, screenHeight/8, groundTexture);

@@ -46,6 +46,7 @@ function CreateCanvas() {
     initialiseScene();
     }
   resizeCanvas();
+  initialiseScreenSizeRelatedElements();
 }
 
 function initialiseScene() {
@@ -75,6 +76,7 @@ function initialiseScene() {
       levelSelect();
     break;
   	case "levelOne":
+      window.mario = new Mario(screenHeight/15, screenHeight*4/5, screenHeight*14/225, screenHeight*7/75, screenWidth/200, marioTexture);
   		createLevelInterval(levelOneScene);
       declareLevelOneObjects();
       levelLoaded = true;

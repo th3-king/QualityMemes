@@ -88,7 +88,7 @@ function groundDetectCollision(){
 got hit or squashed the enemy and does specific actions for either*/
 function enemyDetectCollision(marioObject, enemyObject){
   if(marioObject.x + marioObject.width >= enemyObject.x && marioObject.x <= enemyObject.x + enemyObject.width && marioObject.y + marioObject.height >= enemyObject.y && marioObject.y <= enemyObject.y + enemyObject.height){
-    if(marioObject.y + marioObject.height <= enemyObject.y + enemyObject.height/8){
+    if(marioObject.y + marioObject.height <= enemyObject.y + enemyObject.height/2){
       mario.velocity = screenHeight/80;
       enemyObject.squashSprite();
       setTimeout(function () {
@@ -116,5 +116,5 @@ function removeSprite(sprite){
 /*returns the X position used for the ground image so it moves
 with the players movement*/
 function groundXPosition() {
-	return -(xPositionInLevel % (screenHeight/8));
+	return -(xPositionInLevel % (screenWidth/25));
 };
