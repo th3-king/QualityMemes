@@ -2,7 +2,7 @@
 //creates level interval if none exist for specific scene
 function createLevelInterval(functionOfScene){
 		if (levelInterval == undefined || levelInterval == 0){
-	    levelInterval = setInterval(functionOfScene, 15);
+	    levelInterval = setInterval(functionOfScene, 10);
 	  }
 }
 

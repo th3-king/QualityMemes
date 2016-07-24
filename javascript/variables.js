@@ -49,7 +49,7 @@ var score = 0;
 function declareLevelOneObjects() {
 	if (levelLoaded == false){
 		levelSprites = [];
-		levelSprites[0] = new Sprite(screenWidth*3/4, (groundLevelY - goombaSize), goombaSize, goombaSize, screenWidth/700, goomba);
+		levelSprites[0] = new Sprite(screenWidth*3/4, (groundLevelY - goombaSize), goombaSize, goombaSize, screenWidth/1000, goomba);
 
 		levelBlocks = [];
 		levelBlocks[0] = new Block(screenWidth * 1.5, screenHeight*5/8, screenHeight/8, screenHeight/8, groundTexture);

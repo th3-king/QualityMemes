@@ -72,7 +72,7 @@ function Mario(x,y, width, height, movementSpeed, image){
 	this.width = width;
 	this.height = height;
 	this.velocity = 0;
-  this.gravity = screenHeight/3000;
+  this.gravity = screenHeight/4000;
   this.movementSpeed = movementSpeed;
 	this.image = image;
   this.jump = false;
@@ -196,7 +196,7 @@ function Coin(x, y){
   this.drawCoin = function(){
     this.image = coin[this.index];
     drawImageOnCanvas(this.x, this.y, this.width, this.height, this.image);
-    if(this.counter == 4){
+    if(this.counter == 6){
       if(this.index < coin.length - 1){
         this.index++;
       } else {
