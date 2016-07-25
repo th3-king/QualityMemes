@@ -9,13 +9,23 @@ var paused = false;
 var createdClouds = false;
 var initialRun = true;
 var gameplayFreeze = false;
+
 var groundLevelY;
-var groundLevelSize;
+var blockSize;
 var goombaSize;
+var hillLargeWidth;
+var hillLargeHeight;
+var hillSmallWidth;
+var hillSmallHeight;
+
 function initialiseScreenSizeRelatedElements(){
 	groundLevelY = screenHeight*67/75;
-	groundLevelSize = screenHeight*16/225;
+	blockSize = screenHeight*16/225;
 	goombaSize = screenHeight*32/675;
+	hillLargeWidth = screenHeight/3;
+	hillLargeHeight = screenHeight/8;
+	hillSmallWidth = screenHeight/4;
+	hillSmallHeight = screenHeight/16;
 }
 window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/200, marioTexture);
 
@@ -31,6 +41,7 @@ function pause() {
 var levelSprites = [];
 var levelBlocks = [];
 var levelCoins = [];
+var levelBackgroundObjects = [];
 var clouds = [];
 var blocksNotCollidedWith = [];
 
@@ -52,14 +63,20 @@ function declareLevelOneObjects() {
 		levelSprites[0] = new Sprite(screenWidth*3/4, (groundLevelY - goombaSize), goombaSize, goombaSize, screenWidth/1000, goomba);
 
 		levelBlocks = [];
-		levelBlocks[0] = new Block(screenWidth * 1.5, screenHeight*5/8, screenHeight/8, screenHeight/8, groundTexture);
-		levelBlocks[1] = new Block(screenWidth * 1.5 + screenHeight/8, screenHeight*4/8, screenHeight/8, screenHeight/8, groundTexture);
-		levelBlocks[2] = new Block(screenWidth * 1.5 + screenHeight/4, screenHeight*3/8, screenHeight/8, screenHeight/8, groundTexture);
+		levelBlocks[0] = new Block(screenWidth - blockSize, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock);
+		levelBlocks[1] = new Block(screenWidth - blockSize*2, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox);
+		levelBlocks[2] = new Block(screenWidth - blockSize*3, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock);
+		levelBlocks[3] = new Block(screenWidth - blockSize*4, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox);
+		levelBlocks[4] = new Block(screenWidth - blockSize*5, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock);
+		levelBlocks[5] = new Block(screenWidth - blockSize*9, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox);
+		levelBlocks[6] = new Block(screenWidth - blockSize*3, groundLevelY - blockSize*8, blockSize, blockSize, mysteryBox);
 
 		levelCoins = [];
 		levelCoins[0] = new Coin(screenWidth*7/8, screenHeight/3);
 		levelCoins[1] = new Coin(screenWidth*6/8, screenHeight/3);
 		levelCoins[2] = new Coin(screenWidth*5/8, screenHeight/3);
 		levelCoins[3] = new Coin(screenWidth*4/8, screenHeight/3);
+
+		initialiseBackgroundLevelOne();
 	};
 };

@@ -219,3 +219,20 @@ function Coin(x, y){
     this.x = this.originX - xPositionInLevel;
   };
 };
+
+function BackgroundObject(x, y, width, height, image) {
+  this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+  this.image = image;
+  this.originX = x;
+
+	this.drawBackgroundImage = function (){
+		drawImageOnCanvas(this.x, this.y, this.width, this.height, this.image);
+	};
+
+  this.moveBackgroundImage = function (){
+    this.x = this.originX - xPositionInLevel;
+  };
+}
