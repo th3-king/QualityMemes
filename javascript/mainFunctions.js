@@ -88,19 +88,27 @@ function groundDetectCollision(){
 got hit or squashed the enemy and does specific actions for either*/
 function enemyDetectCollision(marioObject, enemyObject){
   if(marioObject.x + marioObject.width >= enemyObject.x && marioObject.x <= enemyObject.x + enemyObject.width && marioObject.y + marioObject.height >= enemyObject.y && marioObject.y <= enemyObject.y + enemyObject.height){
-    if(marioObject.y + marioObject.height <= enemyObject.y + enemyObject.height/2){
-      mario.velocity = screenHeight/80;
-      enemyObject.squashSprite();
-      setTimeout(function () {
-        removeSprite(enemyObject);
-      }, 1000);
-    } else {
-      gameplayFreeze = true;
-      mario.gameOver();
-      setTimeout(function (){
-        refreshLevelAndGoToScene("levelSelect");
-      }, 1000);
-    }
+		if(mario.starMode == false){
+	    if(marioObject.y + marioObject.height <= enemyObject.y + enemyObject.height/2){
+	      mario.velocity = screenHeight/80;
+	      enemyObject.squashSprite();
+	      setTimeout(function () {
+	        removeSprite(enemyObject);
+	      }, 1000);
+	    } else {
+	      gameplayFreeze = true;
+	      mario.gameOver();
+	      setTimeout(function (){
+	        refreshLevelAndGoToScene("levelSelect");
+	      }, 1000);
+	    }
+		} else {
+	      mario.velocity = screenHeight/80;
+	      enemyObject.squashSprite();
+	      setTimeout(function () {
+	        removeSprite(enemyObject);
+	      }, 1000);
+		}
   }
 }
 
@@ -118,3 +126,11 @@ with the players movement*/
 function groundXPosition() {
 	return -(xPositionInLevel % (screenWidth/25));
 };
+
+function isColliding(objectOne, objectTwo) {
+	if(objectOne.x + objectOne.width >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width && objectOne.y + objectOne.height >= objectTwo.y && objectOne.y <= objectTwo.y + objectTwo.height){
+		return true;
+	} else {
+		return false;
+	}
+}

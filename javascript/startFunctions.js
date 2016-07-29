@@ -49,7 +49,6 @@ function CreateCanvas() {
     }
   resizeCanvas();
   initialiseScreenSizeRelatedElements();
-  console.log(groundLevelY);
 }
 
 function initialiseScene() {
