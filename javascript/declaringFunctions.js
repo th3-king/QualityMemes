@@ -15,7 +15,7 @@ function initialiseLevelOneBlocks(){
   levelBlocks = [];
   levelBlocks.push(
     new NormalBlock(screenWidth - blockSize, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock),
-    new NormalBlock(screenWidth - blockSize*2, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox),
+    new MysteryBox(screenWidth - blockSize*2, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox, "coin"),
     new NormalBlock(screenWidth - blockSize*3, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock),
     new NormalBlock(screenWidth - blockSize*4, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox),
     new NormalBlock(screenWidth - blockSize*5, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock),
@@ -37,5 +37,5 @@ function initialiseLevelOneEnemies() {
   levelEnemies = [];
   levelEnemies.push(
     new Enemy(screenWidth*3/4, (groundLevelY - goombaSize), goombaSize, goombaSize, screenWidth/1000, goomba)
-  )
+  );
 }

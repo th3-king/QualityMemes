@@ -99,7 +99,7 @@ class CollidableObject extends BasicObject {
       }
     }
   }
-  
+
 }
 
 class NormalBlock extends CollidableObject {
@@ -127,8 +127,39 @@ class NormalBlock extends CollidableObject {
     }
 }
 
+class MysteryBox extends NormalBlock {
+  constructor(x, y, width, height, image, inside){
+    super(x, y, width, height, image);
+    this.inside = inside;
+    this.hit = false;
+  }
+
+  collisionUp(){
+    super.collisionUp();
+    if(this.hit == false){
+      this.hit = true;
+      switch (this.inside) {
+        case "star":
+          mario.starMode = true;
+          setTimeout(function(){
+            starMode = false;
+          }, 20000);
+          break;
+        case "coin":
+
+          break;
+        default:
+          console.log("nothing inside");
+          break;
+      }
+    }
+  }
+
+}
 
 
+/* The main chatacter of the game Mario, he only extends
+ form basic object due to him having quite specific methods */
 class Mario extends BasicObject{
   constructor(x, y, width, height, movementSpeed, image) {
     super(x, y, width, height, image);
@@ -192,6 +223,9 @@ class Mario extends BasicObject{
   }
 }
 
+
+/* Enemy Class extends from basic object because it is also quite
+unique, it is the basis for all enemies in mario */
 class Enemy extends BasicObject{
   constructor(x, y, width, height, movementSpeed, image){
     super(x, y, width, height, image[0]);

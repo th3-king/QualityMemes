@@ -87,7 +87,7 @@ function groundDetectCollision(){
 /*detects if mario collides with enemy, it then checks whether he
 got hit or squashed the enemy and does specific actions for either*/
 function enemyDetectCollision(marioObject, enemyObject){
-  if(marioObject.x + marioObject.width >= enemyObject.x && marioObject.x <= enemyObject.x + enemyObject.width && marioObject.y + marioObject.height >= enemyObject.y && marioObject.y <= enemyObject.y + enemyObject.height){
+  if(isColliding(marioObject, enemyObject) == true){
 		if(mario.starMode == false){
 	    if(marioObject.y + marioObject.height <= enemyObject.y + enemyObject.height/2){
 	      mario.velocity = screenHeight/80;

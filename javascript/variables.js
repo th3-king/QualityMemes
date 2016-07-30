@@ -70,5 +70,6 @@ function declareLevelOneObjects() {
 		initialiseLevelOneBlocks();
 		initialiseLevelOneCoins();
 		initialiseLevelOneBackground();
+		initialiseLevelOneEnemies();
 	};
 };
