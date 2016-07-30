@@ -75,6 +75,7 @@ class Coin extends OneTimeObject {
   }
 }
 
+/*  */
 class CollidableObject extends BasicObject {
   constructor(x, y, width, height, image){
     super(x, y, width, height, image);
@@ -85,28 +86,48 @@ class CollidableObject extends BasicObject {
     if(isColliding(mario, this) == true){
       if(mario.y + mario.height <= this.y + this.height/2){
         if(mario.x + mario.width >= this.x + this.width/10 && mario.x <= this.x + this.width*9/10){
-          mario.jump = false;
-          mario.velocity = 0;
-          mario.y = this.y - mario.height;
+          this.collisionDown();
         }
       } else if(mario.y + mario.height/2 >= this.y + this.height){
         if(mario.x + mario.width >= this.x + this.width/10 && mario.x <= this.x + this.width*9/10){
-          mario.y = this.y + this.height*11/10;
-          mario.velocity = -mario.gravity;
+          this.collisionUp();
         }
       } else if (mario.x + mario.width <= this.x + this.height/8) {
-        moveRight = false;
-        //has to make 101/100 due to glitching caused by being directly in contact
-        mario.x = this.x - mario.width*101/100;
+        this.collisionRight();
       } else if (mario.x + mario.width/8 >= this.x + this.height) {
-        moveLeft = false;
-        //has to make 101/100 due to glitching caused by being directly in contact
-        mario.x = this.x + this.width*101/100;
+        this.collisionLeft();
       }
     }
   }
-
+  
 }
+
+class NormalBlock extends CollidableObject {
+    collisionDown(){
+      mario.jump = false;
+      mario.velocity = 0;
+      mario.y = this.y - mario.height;
+    }
+
+    collisionUp(){
+      mario.y = this.y + this.height*11/10;
+      mario.velocity = -mario.gravity;
+    }
+
+    collisionRight(){
+      moveRight = false;
+      //has to make 101/100 due to glitching caused by being directly in contact
+      mario.x = this.x - mario.width*101/100;
+    }
+
+    collisionLeft(){
+      moveLeft = false;
+      //has to make 101/100 due to glitching caused by being directly in contact
+      mario.x = this.x + this.width*101/100;
+    }
+}
+
+
 
 class Mario extends BasicObject{
   constructor(x, y, width, height, movementSpeed, image) {
@@ -216,6 +237,9 @@ class Enemy extends BasicObject{
 
 }
 
+/* clouds object is just an object that moves in a single
+direction and when it is out of the screen loops back to the other
+side presenting the illusion there are passing clouds */
 class Cloud extends BasicObject {
   constructor(x, y, width, height, movementSpeed, image){
     super(x, y, width, height, image);
@@ -226,6 +250,7 @@ class Cloud extends BasicObject {
     this.x += this.movementSpeed;
     if (this.x > screenWidth) {
       this.x = 0 - this.width;
+      this.y = randomNum(screenHeight*3/10, screenHeight/10);
     }
   }
 }

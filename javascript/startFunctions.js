@@ -14,7 +14,7 @@ function CreateCanvas() {
   function resizeCanvas() {
     if (initialRun == false){
       createScreenChangeMultiplierArray(clouds);
-      createScreenChangeMultiplierArray(levelSprites);
+      createScreenChangeMultiplierArray(levelEnemies);
       createScreenChangeMultiplierArray(levelBlocks);
       createScreenChangeMultiplierArray(levelCoins);
       createScreenChangeMultiplierArray(levelBackgroundObjects);
@@ -38,7 +38,7 @@ function CreateCanvas() {
       initialRun = false;
     } else {
       updateObjectToScreenChange(mario);
-      updateObjectToScreenChangeArray(levelSprites);
+      updateObjectToScreenChangeArray(levelEnemies);
       updateObjectToScreenChangeArray(levelBlocks);
       updateObjectToScreenChangeArray(levelCoins);
       updateObjectToScreenChangeArray(levelBackgroundObjects);

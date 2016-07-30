@@ -65,9 +65,9 @@ function refreshLevelAndGoToScene(scene){
   gameplayFreeze = false;
   levelLoaded = false;
   initialiseScene();
-  for(var i = 0; i < levelSprites.length; i ++){
-    levelSprites[i].removed = false;
-    levelSprites[i].squashed = false;
+  for(var i = 0; i < levelEnemies.length; i ++){
+    levelEnemies[i].removed = false;
+    levelEnemies[i].squashed = false;
   }
 }
 

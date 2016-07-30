@@ -38,7 +38,7 @@ function pause() {
 }
 
 //arrays
-var levelSprites = [];
+var levelEnemies = [];
 var levelBlocks = [];
 var levelCoins = [];
 var levelBackgroundObjects = [];
@@ -59,24 +59,8 @@ var score = 0;
 //Declare Characters for level
 function declareLevelOneObjects() {
 	if (levelLoaded == false){
-		levelSprites = [];
-		levelSprites[0] = new Enemy(screenWidth*3/4, (groundLevelY - goombaSize), goombaSize, goombaSize, screenWidth/1000, goomba);
-
-		levelBlocks = [];
-		levelBlocks[0] = new CollidableObject(screenWidth - blockSize, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock);
-		levelBlocks[1] = new CollidableObject(screenWidth - blockSize*2, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox);
-		levelBlocks[2] = new CollidableObject(screenWidth - blockSize*3, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock);
-		levelBlocks[3] = new CollidableObject(screenWidth - blockSize*4, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox);
-		levelBlocks[4] = new CollidableObject(screenWidth - blockSize*5, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock);
-		levelBlocks[5] = new CollidableObject(screenWidth - blockSize*9, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox);
-		levelBlocks[6] = new CollidableObject(screenWidth - blockSize*3, groundLevelY - blockSize*8, blockSize, blockSize, mysteryBox);
-
-		levelCoins = [];
-		//levelCoins[0] = new Coin(screenWidth*7/8, screenHeight/3);
-		levelCoins[0] = new Coin(screenWidth*6/8, screenHeight/3);
-		levelCoins[1] = new Coin(screenWidth*5/8, screenHeight/3);
-		levelCoins[2] = new Coin(screenWidth*4/8, screenHeight/3);
-
-		initialiseBackgroundLevelOne();
+		initialiseLevelOneBlocks();
+		initialiseLevelOneCoins();
+		initialiseLevelOneBackground();
 	};
 };

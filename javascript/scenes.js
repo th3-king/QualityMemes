@@ -64,12 +64,12 @@ function levelOneScene(){
   for(var i = 0; i < levelBackgroundObjects.length; i++){
     levelBackgroundObjects[i].draw();
   }
-  for(var i = 0; i < levelSprites.length; i++){
-    if (levelSprites[i].removed == false) {
-      levelSprites[i].draw();
+  for(var i = 0; i < levelEnemies.length; i++){
+    if (levelEnemies[i].removed == false) {
+      levelEnemies[i].draw();
     }
-    if (levelSprites[i].squashed == false){
-      enemyDetectCollision(mario, levelSprites[i]);
+    if (levelEnemies[i].squashed == false){
+      enemyDetectCollision(mario, levelEnemies[i]);
     }
   }
   for(var i = 0; i < levelCoins.length; i++){
@@ -78,15 +78,15 @@ function levelOneScene(){
     }
   }
   mario.draw();
-
+  
   //update
   if (gameplayFreeze == false){
     //mario update
     mario.moveAction();
     mario.jumpAction();
     //sprite update
-    for(var i = 0; i < levelSprites.length; i++){
-      levelSprites[i].moveWithMario();
+    for(var i = 0; i < levelEnemies.length; i++){
+      levelEnemies[i].moveWithMario();
     }
     //blocks update
     blocksNotCollidedWith = [];
@@ -105,7 +105,7 @@ function levelOneScene(){
         mario.fallAction()
       };
     };
-    
+
     for(var i = 0; i < levelCoins.length; i++){
       if(levelCoins[i].collected == false){
         levelCoins[i].detectCollisionWithMario();
