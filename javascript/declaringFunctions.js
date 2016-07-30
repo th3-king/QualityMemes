@@ -1,8 +1,13 @@
 function initialiseLevelOneBackground(){
   levelBackgroundObjects = [];
 
-  levelBackgroundObjects[0] = (new BasicObject(0, groundLevelY - hillLargeHeight, hillLargeWidth, hillLargeHeight, hillLargeTexture));
-  levelBackgroundObjects[1] = (new BasicObject(screenWidth - blockSize*9, groundLevelY - hillSmallHeight, hillSmallWidth, hillSmallHeight, hillSmallTexture));
+  //Hill objects
+  levelBackgroundObjects[0] = new BasicObject(0, groundLevelY - hillLargeHeight, hillLargeWidth, hillLargeHeight, hillLargeTexture);
+  levelBackgroundObjects[1] = new BasicObject(screenWidth - blockSize*9, groundLevelY - hillSmallHeight, hillSmallWidth, hillSmallHeight, hillSmallTexture);
+
+  //cloud objects
+  levelBackgroundObjects[2] = new BasicObject(screenWidth*15/50, groundLevelY - blockSize*10, cloudSmallWidth, cloudSmallHeight, cloudSmallTexture);
+  levelBackgroundObjects[3] = new BasicObject(screenWidth - blockSize*5.5, groundLevelY - blockSize*11, cloudSmallWidth, cloudSmallHeight, cloudSmallTexture);
 }
 
 function initialiseLevelOneBlocks(){

@@ -17,6 +17,10 @@ var hillLargeWidth;
 var hillLargeHeight;
 var hillSmallWidth;
 var hillSmallHeight;
+var cloudSmallWidth;
+var cloudSmallHeight;
+var cloudMediumWidth;
+var cloudMediumHeight;
 
 function initialiseScreenSizeRelatedElements(){
 	groundLevelY = screenHeight*67/75;
@@ -26,6 +30,10 @@ function initialiseScreenSizeRelatedElements(){
 	hillLargeHeight = screenHeight/8;
 	hillSmallWidth = screenHeight/4;
 	hillSmallHeight = screenHeight/16;
+	cloudSmallWidth = screenWidth*2/25;
+	cloudSmallHeight = screenWidth*3/50;
+	cloudMediumWidth = screenWidth/8;
+	cloudMediumHeight = screenWidth/13;
 }
 window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/200, marioTexture);
 

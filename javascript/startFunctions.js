@@ -61,7 +61,7 @@ function initialiseScene() {
   switch (currentScene) {
     case "main":
       //play();
-
+      
       //checks if clouds have been created
       if (createdClouds == false){
         createClouds(randomNum(3,1));
