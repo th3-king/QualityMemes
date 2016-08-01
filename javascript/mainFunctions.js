@@ -22,6 +22,7 @@ function createScreenChangeMultiplierArray(arrayOfObjects) {
 	for(var i = 0; i < arrayOfObjects.length; i++){
 		createScreenChangeMultiplier(arrayOfObjects[i]);
     arrayOfObjects[i].multiplierOriginX = arrayOfObjects[i].originX/screenWidth;
+		arrayOfObjects[i].multiplierOriginY = arrayOfObjects[i].originY/screenHeight;
 	}
 }
 
@@ -42,6 +43,7 @@ function updateObjectToScreenChangeArray(arrayOfObjects) {
 	for(var i = 0; i < arrayOfObjects.length; i++){
 		updateObjectToScreenChange(arrayOfObjects[i]);
     arrayOfObjects[i].originX = arrayOfObjects[i].multiplierOriginX*screenWidth;
+		arrayOfObjects[i].originY = arrayOfObjects[i].multiplierOriginY*screenHeight;
 	}
 }
 

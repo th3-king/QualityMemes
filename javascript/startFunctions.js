@@ -53,7 +53,7 @@ function CreateCanvas() {
 
 function initialiseScene() {
   if (levelLoaded == false){
-    window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/500, marioTexture);
+    window.mario = new Mario(screenHeight/15, screenHeight*4/5, screenHeight*14/225, screenHeight*7/75, screenWidth/400, marioTexture);
     xPositionInLevel = 0;
     score = 0;
   }
@@ -61,7 +61,7 @@ function initialiseScene() {
   switch (currentScene) {
     case "main":
       //play();
-      
+      window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/500, marioTexture);
       //checks if clouds have been created
       if (createdClouds == false){
         createClouds(randomNum(3,1));
@@ -78,7 +78,6 @@ function initialiseScene() {
       levelSelect();
     break;
   	case "levelOne":
-      window.mario = new Mario(screenHeight/15, screenHeight*4/5, screenHeight*14/225, screenHeight*7/75, screenWidth/400, marioTexture);
   		createLevelInterval(levelOneScene);
       declareLevelOneObjects();
       levelLoaded = true;

@@ -9,6 +9,7 @@ class BasicObject {
   	this.height = height;
     this.image = image;
     this.originX = x;
+    this.originY = y;
   }
 
   draw() {
@@ -80,6 +81,7 @@ class CollidableObject extends BasicObject {
   constructor(x, y, width, height, image){
     super(x, y, width, height, image);
     this.removed = false;
+    this.popUpInterval = 0;
   }
 
   detectCollisionWithMario() {
@@ -100,6 +102,27 @@ class CollidableObject extends BasicObject {
     }
   }
 
+  popUpBlock(){
+    var peaked = false;
+    if(this.popUpInterval == undefined || this.popUpInterval == 0){
+        this.popUpInterval = setInterval(() => {
+        console.log("running");
+        if(this.y > this.originY - screenHeight/100 && peaked == false){
+          this.y -= screenHeight/500;
+        } else {
+          peaked = true;
+        }
+        if(peaked == true){
+          this.y += screenHeight/500;
+        }
+        if(peaked == true && this.y > this.originY){
+          this.y = this.originY;
+          clearInterval(this.popUpInterval);
+          this.popUpInterval = 0;
+        }
+      }, 25);
+    }
+  }
 }
 
 class NormalBlock extends CollidableObject {
@@ -112,6 +135,11 @@ class NormalBlock extends CollidableObject {
     collisionUp(){
       mario.y = this.y + this.height*11/10;
       mario.velocity = -mario.gravity;
+      if(mario.isBig == false){
+        super.popUpBlock();
+      } else {
+        console.log("break Block");
+      }
     }
 
     collisionRight(){
@@ -135,9 +163,11 @@ class MysteryBox extends NormalBlock {
   }
 
   collisionUp(){
-    super.collisionUp();
+    mario.y = this.y + this.height*11/10;
+    mario.velocity = -mario.gravity;
     if(this.hit == false){
       this.hit = true;
+      super.popUpBlock();
       switch (this.inside) {
         case "star":
           mario.starMode = true;
@@ -168,6 +198,7 @@ class Mario extends BasicObject{
     this.movementSpeed = movementSpeed;
     this.jump = false;
     this.starMode = false;
+    this.isBig = false;
   }
 
   moveAction(){
