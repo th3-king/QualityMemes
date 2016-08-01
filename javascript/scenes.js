@@ -55,7 +55,6 @@ function levelOneScene(){
 
   //background
   drawRect(0,0, screenWidth, screenHeight, "#4B7DFA");
-  imageRepeat(groundTexture, groundXPosition(), groundLevelY, blockSize, blockSize, screenWidth/blockSize + 1, 2);
   drawText(screenWidth/50, screenHeight/18 ,"emulogic", "20px", "left", "black", ("score: " + score.toString()))
 
   //objects and mario
@@ -64,12 +63,9 @@ function levelOneScene(){
       levelCoins[i].draw();
     }
   }
-  for(var i = 0; i < levelBlocks.length; i++){
-    levelBlocks[i].draw();
-  }
-  for(var i = 0; i < levelBackgroundObjects.length; i++){
-    levelBackgroundObjects[i].draw();
-  }
+  drawArray(levelGround);
+  drawArray(levelBlocks);
+  drawArray(levelBackgroundObjects);
   for(var i = 0; i < levelEnemies.length; i++){
     if (levelEnemies[i].removed == false) {
       levelEnemies[i].draw();
@@ -90,22 +86,16 @@ function levelOneScene(){
       levelEnemies[i].moveWithMario();
     }
     //blocks update
-    blocksNotCollidedWith = [];
+    groundNotCollidedWith = [];
+    collisionWithArrayOfBlocks(groundNotCollidedWith, levelGround);
     for(var i = 0; i < levelBlocks.length; i++){
-      levelBlocks[i].moveWithMario();
-      if(isColliding(mario, levelBlocks[i]) == true){
-        levelBlocks[i].detectCollisionWithMario();
-      } else {
-        blocksNotCollidedWith.push(false);
-      };
-    };
+  		levelBlocks[i].moveWithMario();
+  		levelBlocks[i].detectCollisionWithMario();
+  	}
 
-    //checks to see if colliding with any blocks, otherwise falls to ground
-    if(blocksNotCollidedWith.length == levelBlocks.length){
-      if(mario.y + mario.height < screenHeight*67/75 && mario.jump == false) {
-        mario.fallAction()
-      };
-    };
+    if(groundNotCollidedWith.length == levelGround.length){
+      floorCollision = false;
+    }
 
     for(var i = 0; i < levelCoins.length; i++){
       if(levelCoins[i].collected == false){
@@ -113,11 +103,18 @@ function levelOneScene(){
         levelCoins[i].moveWithMario();
       }
     }
+
     for(var i = 0; i < levelBackgroundObjects.length; i++){
       levelBackgroundObjects[i].moveWithMario();
     }
-  }
 
+    if(floorCollision == false && mario.jump == false){
+      mario.fallAction();
+    }
+  }
+  if(mario.y + mario.height > screenHeight){
+    //gameoverScene
+  }
   //console.log(xPositionInLevel);
   //pause scene causing menu to appear
   pauseScene();

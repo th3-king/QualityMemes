@@ -39,3 +39,8 @@ function initialiseLevelOneEnemies() {
     new Enemy(screenWidth*3/4, (groundLevelY - goombaSize), goombaSize, goombaSize, screenWidth/1000, goomba)
   );
 }
+
+function initialiseLevelOneGround() {
+  levelGround = [];
+  createGroundBlocks(0,69,0,2);
+}

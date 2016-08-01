@@ -9,6 +9,7 @@ var paused = false;
 var createdClouds = false;
 var initialRun = true;
 var gameplayFreeze = false;
+var floorCollision = false;
 
 var groundLevelY;
 var blockSize;
@@ -51,7 +52,7 @@ var levelBlocks = [];
 var levelCoins = [];
 var levelBackgroundObjects = [];
 var clouds = [];
-var blocksNotCollidedWith = [];
+var groundNotCollidedWith = [];
 
 //game properties
 var levelLoaded = false;
@@ -71,5 +72,6 @@ function declareLevelOneObjects() {
 		initialiseLevelOneCoins();
 		initialiseLevelOneBackground();
 		initialiseLevelOneEnemies();
+		initialiseLevelOneGround();
 	};
 };

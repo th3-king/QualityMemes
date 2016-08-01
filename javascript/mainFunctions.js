@@ -136,3 +136,38 @@ function isColliding(objectOne, objectTwo) {
 		return false;
 	}
 }
+
+function createGroundBlocks(startingX, finishingX, startingY, finishingY){
+	for(var x = startingX; x < finishingX; x++){
+		for(var y = startingY; y < finishingY; y++){
+			levelGround.push(new GroundBlock(0 + blockSize*x, groundLevelY + blockSize*y, groundTexture));
+		}
+	}
+}
+
+function inScreen(object){
+	if(object.x + object.width > 0 && object.x < screenWidth){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function drawArray(arrayOfObjects){
+	for(var i = 0; i < arrayOfObjects.length; i++){
+		if (inScreen(arrayOfObjects[i]) == true){
+    	arrayOfObjects[i].draw();
+		}
+  }
+}
+
+function collisionWithArrayOfBlocks(arrayOfNonCollisions, arrayOfCollidableBlocks){
+	for(var i = 0; i < arrayOfCollidableBlocks.length; i++){
+		arrayOfCollidableBlocks[i].moveWithMario();
+		if(isColliding(mario, arrayOfCollidableBlocks[i]) == true){
+			arrayOfCollidableBlocks[i].detectCollisionWithMario();
+		} else {
+			arrayOfNonCollisions.push(false);
+		}
+	}
+}

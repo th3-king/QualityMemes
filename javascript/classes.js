@@ -140,35 +140,39 @@ class CollidableObject extends BasicObject {
       }, 25);
     }
   }
+
+  collisionDown(){
+    mario.jump = false;
+    mario.velocity = 0;
+    mario.y = this.y - mario.height;
+  }
+
+  collisionUp(){
+    mario.y = this.y + this.height*11/10;
+    mario.velocity = -mario.gravity;
+  }
+
+  collisionRight(){
+    moveRight = false;
+    //has to make 101/100 due to glitching caused by being directly in contact
+    mario.x = this.x - mario.width*101/100;
+  }
+
+  collisionLeft(){
+    moveLeft = false;
+    //has to make 101/100 due to glitching caused by being directly in contact
+    mario.x = this.x + this.width*101/100;
+  }
 }
 
 class NormalBlock extends CollidableObject {
-    collisionDown(){
-      mario.jump = false;
-      mario.velocity = 0;
-      mario.y = this.y - mario.height;
-    }
-
     collisionUp(){
-      mario.y = this.y + this.height*11/10;
-      mario.velocity = -mario.gravity;
+      super.collisionUp();
       if(mario.isBig == false){
         super.popUpBlock();
       } else {
         console.log("break Block");
       }
-    }
-
-    collisionRight(){
-      moveRight = false;
-      //has to make 101/100 due to glitching caused by being directly in contact
-      mario.x = this.x - mario.width*101/100;
-    }
-
-    collisionLeft(){
-      moveLeft = false;
-      //has to make 101/100 due to glitching caused by being directly in contact
-      mario.x = this.x + this.width*101/100;
     }
 }
 
@@ -180,8 +184,7 @@ class MysteryBox extends NormalBlock {
   }
 
   collisionUp(){
-    mario.y = this.y + this.height*11/10;
-    mario.velocity = -mario.gravity;
+    super.collisionUp();
     if(this.hit == false){
       this.hit = true;
       super.popUpBlock();
@@ -193,8 +196,8 @@ class MysteryBox extends NormalBlock {
           }, 20000);
           break;
         case "coin":
-            levelCoins.push(new Coin((this.originX + this.width/2) - screenHeight*25/1056, this.originY));
-            super.spawnAbility(levelCoins[levelCoins.length - 1], screenHeight/8, screenHeight/10, screenHeight/80);
+          levelCoins.push(new Coin((this.originX + this.width/2) - screenHeight*25/1056, this.originY));
+          super.spawnAbility(levelCoins[levelCoins.length - 1], screenHeight/8, screenHeight/10, screenHeight/80);
           break;
         default:
           console.log("nothing inside");
@@ -205,6 +208,20 @@ class MysteryBox extends NormalBlock {
 
 }
 
+class Pipe extends CollidableObject {
+
+}
+
+class GroundBlock extends CollidableObject {
+  constructor(x, y, image){
+    super(x, y, blockSize, blockSize, image);
+  }
+
+  collisionDown(){
+    super.collisionDown();
+    floorCollision = true;
+  }
+}
 
 /* The main chatacter of the game Mario, he only extends
  form basic object due to him having quite specific methods */
@@ -245,7 +262,7 @@ class Mario extends BasicObject{
 
   jumpAction(){
     //check if fall through floor
-    if (this.y >= screenHeight*4/5 && this.jump == true){
+    if (floorCollision == true && this.jump == true){
       this.velocity = 0;
       this.jump = false;
       this.y = screenHeight*4/5;
@@ -254,7 +271,7 @@ class Mario extends BasicObject{
     if (moveUp == true && this.jump == false) {
       moveUp = false;
       this.jump = true;
-      this.velocity = screenHeight/80;
+      this.velocity = screenHeight/90;
     }
 
     if (this.jump == true) {
