@@ -53,11 +53,17 @@ function levelOneScene(){
   //clear
   clearScene();
 
-  //draw
+  //background
   drawRect(0,0, screenWidth, screenHeight, "#4B7DFA");
   imageRepeat(groundTexture, groundXPosition(), groundLevelY, blockSize, blockSize, screenWidth/blockSize + 1, 2);
   drawText(screenWidth/50, screenHeight/18 ,"emulogic", "20px", "left", "black", ("score: " + score.toString()))
 
+  //objects and mario
+  for(var i = 0; i < levelCoins.length; i++){
+    if(levelCoins[i].collected == false){
+      levelCoins[i].draw();
+    }
+  }
   for(var i = 0; i < levelBlocks.length; i++){
     levelBlocks[i].draw();
   }
@@ -72,13 +78,8 @@ function levelOneScene(){
       enemyDetectCollision(mario, levelEnemies[i]);
     }
   }
-  for(var i = 0; i < levelCoins.length; i++){
-    if(levelCoins[i].collected == false){
-      levelCoins[i].draw();
-    }
-  }
   mario.draw();
-  
+
   //update
   if (gameplayFreeze == false){
     //mario update

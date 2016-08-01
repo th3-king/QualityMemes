@@ -27,7 +27,6 @@ it will be useful later when a lot of  */
 class OneTimeObject extends BasicObject {
   constructor(x, y, image){
     super(x, y, screenHeight*25/528, screenHeight/16, image);
-    this.originX = x;
     this.collected = false;
   }
 
@@ -48,8 +47,6 @@ class Coin extends OneTimeObject {
     this.index = 0;
   	this.width = screenHeight*25/528;
   	this.height = screenHeight/16;
-    this.originX = x;
-    this.collected = false;
     this.counter = 0;
   }
 
@@ -82,6 +79,7 @@ class CollidableObject extends BasicObject {
     super(x, y, width, height, image);
     this.removed = false;
     this.popUpInterval = 0;
+    this.spawnAbilityInterval = 0;
   }
 
   detectCollisionWithMario() {
@@ -101,12 +99,31 @@ class CollidableObject extends BasicObject {
       }
     }
   }
+  spawnAbility(object, peakHeight, rest, speed){
+    var peaked = false;
+    if(this.spawnAbilityInterval == undefined || this.spawnAbilityInterval == 0){
+        this.spawnAbilityInterval = setInterval(() => {
+        if(object.y > object.originY - peakHeight && peaked == false){
+          object.y -= speed;
+        } else {
+          peaked = true;
+        }
+        if(peaked == true){
+          object.y += speed;
+        }
+        if(peaked == true && object.y > object.originY - rest){
+          object.y = object.originY - rest;
+          clearInterval(this.spawnAbilityInterval);
+          this.spawnAbilityInterval = 0;
+        }
+      }, 25);
+    }
+  }
 
   popUpBlock(){
     var peaked = false;
     if(this.popUpInterval == undefined || this.popUpInterval == 0){
         this.popUpInterval = setInterval(() => {
-        console.log("running");
         if(this.y > this.originY - screenHeight/100 && peaked == false){
           this.y -= screenHeight/500;
         } else {
@@ -176,7 +193,8 @@ class MysteryBox extends NormalBlock {
           }, 20000);
           break;
         case "coin":
-
+            levelCoins.push(new Coin((this.originX + this.width/2) - screenHeight*25/1056, this.originY));
+            super.spawnAbility(levelCoins[levelCoins.length - 1], screenHeight/8, screenHeight/10, screenHeight/80);
           break;
         default:
           console.log("nothing inside");

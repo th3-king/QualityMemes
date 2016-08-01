@@ -81,18 +81,3 @@ function getPositionClick(event) {
     break;
   }
 }
-
-window.addEventListener("mouseover", getPositionHover, false);
-
-function getPositionHover(event) {
-  var x = event.x;
-  var y = event.y;
-
-  var canvas = document.getElementById("canvas");
-
-  x -= canvas.offsetLeft;
-  y -= canvas.offsetTop;
-
-  if((x > screenWidth*5/16 && x < screenWidth*11/16)&&(y > screenHeight*9/16 && y < screenHeight*10/16 )){
-  }
-}
