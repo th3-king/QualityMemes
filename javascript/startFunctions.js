@@ -53,7 +53,7 @@ function CreateCanvas() {
 
 function initialiseScene() {
   if (levelLoaded == false){
-    window.mario = new Mario(screenHeight/15, screenHeight*4/5, screenHeight*14/225, screenHeight*7/75, screenWidth/400, marioTexture);
+    window.mario = new Mario(screenHeight/15, screenHeight*4/5, screenHeight*14/225, screenHeight*7/75, screenWidth/200, marioTexture);
     xPositionInLevel = 0;
     score = 0;
   }

@@ -15,7 +15,7 @@ function initialiseLevelOneBlocks(){
   levelBlocks = [];
   levelBlocks.push(
     new NormalBlock(screenWidth - blockSize, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock),
-    new MysteryBox(screenWidth - blockSize*2, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox, "coin"),
+    new MysteryBox(screenWidth - blockSize*2, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox, "coin", 3),
     new NormalBlock(screenWidth - blockSize*3, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock),
     new NormalBlock(screenWidth - blockSize*4, groundLevelY - blockSize*4, blockSize, blockSize, mysteryBox),
     new NormalBlock(screenWidth - blockSize*5, groundLevelY - blockSize*4, blockSize, blockSize, floatingBlock),
@@ -43,4 +43,7 @@ function initialiseLevelOneEnemies() {
 function initialiseLevelOneGround() {
   levelGround = [];
   createGroundBlocks(0,69,0,2);
+  createGroundBlocks(71,86,0,2);
+  createGroundBlocks(89,153,0,2);
+  createGroundBlocks(155,212,0,2);
 }

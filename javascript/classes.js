@@ -99,8 +99,9 @@ class CollidableObject extends BasicObject {
       }
     }
   }
-  spawnAbility(object, peakHeight, rest, speed){
+  spawnAbility(objectArray, peakHeight, rest, speed, disappear){
     var peaked = false;
+    var object = objectArray[objectArray.length - 1];
     if(this.spawnAbilityInterval == undefined || this.spawnAbilityInterval == 0){
         this.spawnAbilityInterval = setInterval(() => {
         if(object.y > object.originY - peakHeight && peaked == false){
@@ -115,6 +116,10 @@ class CollidableObject extends BasicObject {
           object.y = object.originY - rest;
           clearInterval(this.spawnAbilityInterval);
           this.spawnAbilityInterval = 0;
+          if(disappear == true){
+            objectArray.pop();
+            score += 200;
+          }
         }
       }, 25);
     }
@@ -176,17 +181,23 @@ class NormalBlock extends CollidableObject {
     }
 }
 
-class MysteryBox extends NormalBlock {
-  constructor(x, y, width, height, image, inside){
+class MysteryBox extends CollidableObject {
+  constructor(x, y, width, height, image, inside, amountOfAbilities){
     super(x, y, width, height, image);
     this.inside = inside;
     this.hit = false;
+    this.abilitiesAlreadySpawned = 0;
+    this.amountOfAbilities = amountOfAbilities;
   }
 
   collisionUp(){
     super.collisionUp();
     if(this.hit == false){
-      this.hit = true;
+      ++this.abilitiesAlreadySpawned;
+      if(this.abilitiesAlreadySpawned == this.amountOfAbilities){
+        this.hit = true;
+        this.image = usedBox;
+      }
       super.popUpBlock();
       switch (this.inside) {
         case "star":
@@ -197,7 +208,7 @@ class MysteryBox extends NormalBlock {
           break;
         case "coin":
           levelCoins.push(new Coin((this.originX + this.width/2) - screenHeight*25/1056, this.originY));
-          super.spawnAbility(levelCoins[levelCoins.length - 1], screenHeight/8, screenHeight/10, screenHeight/80);
+          super.spawnAbility(levelCoins, screenHeight/8, screenHeight/10, screenHeight/80, true);
           break;
         default:
           console.log("nothing inside");

@@ -22,6 +22,7 @@ const coin              = [new Image(), new Image(), new Image(), new Image()];
 const floatingBlock     = new Image();
 const solidBlock        = new Image();
 const mysteryBox        = new Image();
+const usedBox           = new Image();
 
 groundTexture.src     = "textures/backgroundTextures/groundTexture.png";
 marioTexture.src      = "textures/marioTextures/marioSprite.png";
@@ -50,3 +51,4 @@ coin[3].src           = "textures/blocksOfLevelsTextures/coinFour.png";
 floatingBlock.src     = "textures/blocksOfLevelsTextures/floatingBlock.png";
 solidBlock.src        = "textures/blocksOfLevelsTextures/solidBlock.png";
 mysteryBox.src        = "textures/blocksOfLevelsTextures/mysteryBox.png";
+usedBox.src           = "textures/blocksOfLevelsTextures/usedBox.png";
