@@ -82,52 +82,12 @@ function refreshMainScene(){
   createdClouds = false;
 }
 
-function groundDetectCollision(){
-
-}
-
-/*detects if mario collides with enemy, it then checks whether he
-got hit or squashed the enemy and does specific actions for either*/
-function enemyDetectCollision(marioObject, enemyObject){
-  if(isColliding(marioObject, enemyObject) == true){
-		if(mario.starMode == false){
-	    if(marioObject.y + marioObject.height <= enemyObject.y + enemyObject.height/2){
-	      mario.velocity = screenHeight/80;
-	      enemyObject.squashSprite();
-	      setTimeout(function () {
-	        removeSprite(enemyObject);
-	      }, 1000);
-	    } else {
-	      gameplayFreeze = true;
-	      mario.gameOver();
-	      setTimeout(function (){
-	        refreshLevelAndGoToScene("levelSelect");
-	      }, 1000);
-	    }
-		} else {
-	      mario.velocity = screenHeight/80;
-	      enemyObject.squashSprite();
-	      setTimeout(function () {
-	        removeSprite(enemyObject);
-	      }, 1000);
-		}
-  }
-}
-
 function test(){
   console.log("test");
 }
 
-/*set's the curret sprite removed to true*/
-function removeSprite(sprite){
-  sprite.removed = true;
-}
-
 /*returns the X position used for the ground image so it moves
 with the players movement*/
-function groundXPosition() {
-	return -(xPositionInLevel % (screenWidth/25));
-};
 
 function isColliding(objectOne, objectTwo) {
 	if(objectOne.x + objectOne.width >= objectTwo.x && objectOne.x <= objectTwo.x + objectTwo.width && objectOne.y + objectOne.height >= objectTwo.y && objectOne.y <= objectTwo.y + objectTwo.height){

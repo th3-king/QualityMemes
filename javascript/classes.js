@@ -300,10 +300,25 @@ class Mario extends BasicObject{
   }
 }
 
+class Sprite extends BasicObject{
+  detectCollisionWithObject(object){
+    if(isColliding(object, this)){
+      this.collision()
+    }
+  }
+
+  detectCollisionWithMario(){
+    if(isColliding(mario, this)){
+      this.collisionWithMario();
+    }
+  }
+
+}
+
 
 /* Enemy Class extends from basic object because it is also quite
 unique, it is the basis for all enemies in mario */
-class Enemy extends BasicObject{
+class Enemy extends Sprite{
   constructor(x, y, width, height, movementSpeed, image){
     super(x, y, width, height, image[0]);
     this.imageArray = image;
@@ -346,6 +361,29 @@ class Enemy extends BasicObject{
     score += 100;
   }
 
+  collisionWithMario(){
+    if(mario.starMode == false){
+      if(mario.y + mario.height <= this.y + this.height/2){
+        mario.velocity = screenHeight/80;
+        this.squashSprite();
+        setTimeout(() => {
+          this.removed = true;
+        }, 1000);
+      } else {
+        gameplayFreeze = true;
+        mario.gameOver();
+        setTimeout(function (){
+          refreshLevelAndGoToScene("levelSelect");
+        }, 1000);
+      }
+    } else {
+        mario.velocity = screenHeight/80;
+        this.squashSprite();
+        setTimeout(() => {
+          this.removed = true;
+        }, 1000);
+    }
+  }
 }
 
 /* clouds object is just an object that moves in a single

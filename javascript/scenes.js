@@ -71,7 +71,7 @@ function levelOneScene(){
       levelEnemies[i].draw();
     }
     if (levelEnemies[i].squashed == false){
-      enemyDetectCollision(mario, levelEnemies[i]);
+      levelEnemies[i].detectCollisionWithMario();
     }
   }
   mario.draw();
