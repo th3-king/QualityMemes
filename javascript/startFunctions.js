@@ -13,6 +13,7 @@ function CreateCanvas() {
 
   function resizeCanvas() {
     if (initialRun == false){
+      createScreenChangeMultiplierArray(levelGround);
       createScreenChangeMultiplierArray(clouds);
       createScreenChangeMultiplierArray(levelEnemies);
       createScreenChangeMultiplierArray(levelBlocks);
@@ -34,9 +35,10 @@ function CreateCanvas() {
     screenHeight = canvas.height;
 
     if (initialRun == true){
-      window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/200, marioTexture);
+      window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, marioTexture);
       initialRun = false;
     } else {
+      updateObjectToScreenChangeArray(levelGround);
       updateObjectToScreenChange(mario);
       updateObjectToScreenChangeArray(levelEnemies);
       updateObjectToScreenChangeArray(levelBlocks);
@@ -53,7 +55,7 @@ function CreateCanvas() {
 
 function initialiseScene() {
   if (levelLoaded == false){
-    window.mario = new Mario(screenHeight/15, screenHeight*4/5, screenHeight*14/225, screenHeight*7/75, screenWidth/200, marioTexture);
+    window.mario = new Mario(screenHeight/15, screenHeight*4/5, blockSize*12/16, blockSize*15/16, marioTexture[0]);
     xPositionInLevel = 0;
     score = 0;
   }
@@ -61,7 +63,7 @@ function initialiseScene() {
   switch (currentScene) {
     case "main":
       //play();
-      window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/500, marioTexture);
+      window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, marioTexture[0]);
       //checks if clouds have been created
       if (createdClouds == false){
         createClouds(randomNum(3,1));

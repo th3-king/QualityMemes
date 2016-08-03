@@ -1,7 +1,7 @@
 //textures
 
 const groundTexture     = new Image();
-const marioTexture      = new Image();
+const marioTexture      = [new Image()];
 const titleTexture      = new Image();
 const playButton        = new Image();
 const hillSmallTexture  = new Image();
@@ -25,7 +25,7 @@ const mysteryBox        = new Image();
 const usedBox           = new Image();
 
 groundTexture.src     = "textures/backgroundTextures/groundTexture.png";
-marioTexture.src      = "textures/marioTextures/marioSprite.png";
+marioTexture[0].src   = "textures/marioTextures/standingMarioRight.png";
 titleTexture.src      = "textures/backgroundTextures/titleTexture.png";
 playButton.src        = "textures/backgroundTextures/playButton.png";
 hillSmallTexture.src  = "textures/backgroundTextures/hillSmallTexture.png";

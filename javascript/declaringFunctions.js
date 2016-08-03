@@ -36,7 +36,7 @@ function initialiseLevelOneCoins() {
 function initialiseLevelOneEnemies() {
   levelEnemies = [];
   levelEnemies.push(
-    new Enemy(screenWidth*3/4, (groundLevelY - goombaSize), goombaSize, goombaSize, screenWidth/1000, goomba)
+    new Enemy(screenWidth*3/4, (groundLevelY - goombaHeight), blockSize, goombaHeight, screenWidth/1500, goomba)
   );
 }
 

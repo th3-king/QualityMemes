@@ -237,11 +237,11 @@ class GroundBlock extends CollidableObject {
 /* The main chatacter of the game Mario, he only extends
  form basic object due to him having quite specific methods */
 class Mario extends BasicObject{
-  constructor(x, y, width, height, movementSpeed, image) {
+  constructor(x, y, width, height, image) {
     super(x, y, width, height, image);
     this.velocity = 0;
     this.gravity = screenHeight/5000;
-    this.movementSpeed = movementSpeed;
+    this.movementSpeed = screenWidth/200;
     this.jump = false;
     this.starMode = false;
     this.isBig = false;

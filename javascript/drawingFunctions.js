@@ -11,8 +11,8 @@ function randomNum(topValue, bottomValue) {
 //drawing functions
 
 function drawRect(x,y, xLength, yLength, colour) {
-	canvas = document.getElementById("canvas");
-  context = canvas.getContext("2d");
+	var canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
 
   context.beginPath();
   context.rect(x, y, xLength, yLength);
@@ -22,8 +22,8 @@ function drawRect(x,y, xLength, yLength, colour) {
 }
 
 function drawText(x, y ,font, size, alignment, colour, text){
-  canvas = document.getElementById("canvas");
-  context = canvas.getContext("2d");
+  var canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
 
   context.font = (size + " " + font );
   context.fillStyle = colour;
@@ -32,8 +32,8 @@ function drawText(x, y ,font, size, alignment, colour, text){
 }
 
 function imageRepeat(image, x, y, width, height, xRepeat, yRepeat) {
-	canvas = document.getElementById("canvas");
-	context = canvas.getContext("2d");
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
 
 	for (var dx = 0; dx < xRepeat; dx++) {
 		for (var dy = 0; dy < yRepeat; dy++) {
@@ -43,8 +43,8 @@ function imageRepeat(image, x, y, width, height, xRepeat, yRepeat) {
 }
 
 function drawImageOnCanvas(x, y, width, height, image) {
-  canvas = document.getElementById("canvas");
-	context = canvas.getContext("2d");
+  var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
 	context.drawImage(image, x, y, width, height);
 }
 

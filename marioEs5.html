@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="compiledJS/classes.js"></script>
+  <script type="text/javascript" src="compiledJS/startFunctions.js"></script>
+  <script type="text/javascript" src="compiledJS/textures.js"></script>
+  <script type="text/javascript" src="compiledJS/mainFunctions.js"></script>
+	<script type="text/javascript" src="compiledJS/drawingFunctions.js"></script>
+	<script type="text/javascript" src="compiledJS/variables.js"></script>
+	<script type="text/javascript" src="compiledJS/events.js"></script>
+  <script type="text/javascript" src="compiledJS/scenes.js"></script>
+  <script type="text/javascript" src="compiledJS/declaringFunctions.js"></script>
+
+	<link rel="stylesheet" href="css/stylesheet.css">
+
+  </head>
+  <body onload="CreateCanvas()" id= "background">
+    <audio id="themeSong">
+			<source src="audio/mainSong.mp3" type="audio/mp3">
+		</audio>
+	  <div id="center">
+		  <canvas id="canvas" style="border-style: solid; border-color: black; border-width: 1px"></canvas>
+		</div>
+    </body>
+</html>
+<script type="text/javascript">
+	var g_duration = 137;
+    var g_iisLatency = 3;
+    var g_responseEnd = new Date().getTime();
+</script>
