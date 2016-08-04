@@ -92,9 +92,9 @@ class CollidableObject extends BasicObject {
         if(mario.x + mario.width >= this.x + this.width/10 && mario.x <= this.x + this.width*9/10){
           this.collisionUp();
         }
-      } else if (mario.x + mario.width <= this.x + this.height/8) {
+      } else if (mario.x + mario.width <= this.x + this.width/2) {
         this.collisionRight();
-      } else if (mario.x + mario.width/8 >= this.x + this.height) {
+      } else if (mario.x + mario.width/2 >= this.x + this.width) {
         this.collisionLeft();
       }
     }
@@ -171,6 +171,9 @@ class CollidableObject extends BasicObject {
 }
 
 class NormalBlock extends CollidableObject {
+    constructor(x, y, image){
+      super(x, y, blockSize, blockSize, image)
+    }
     collisionUp(){
       super.collisionUp();
       if(mario.isBig == false){
@@ -182,8 +185,8 @@ class NormalBlock extends CollidableObject {
 }
 
 class MysteryBox extends CollidableObject {
-  constructor(x, y, width, height, image, inside, amountOfAbilities){
-    super(x, y, width, height, image);
+  constructor(x, y, image, inside, amountOfAbilities){
+    super(x, y, blockSize, blockSize, image);
     this.inside = inside;
     this.hit = false;
     this.abilitiesAlreadySpawned = 0;
@@ -220,7 +223,17 @@ class MysteryBox extends CollidableObject {
 }
 
 class Pipe extends CollidableObject {
+  constructor(x, blocksHeigh){
+    super(x, groundLevelY - blockSize * blocksHeigh, blockSize*2, blockSize * blocksHeigh, [pipeHead, pipeBody]);
+    this.amountOfBodies = (this.height - blockSize)/blockSize;
+  }
 
+  draw(){
+    drawImageOnCanvas(this.x, this.y, this.width, blockSize, this.image[0]);
+    for(var i = 1; i <= this.amountOfBodies; i++){
+      drawImageOnCanvas(this.x , this.y + blockSize * i, this.width, blockSize, this.image[1]);
+    }
+  }
 }
 
 class GroundBlock extends CollidableObject {
@@ -389,7 +402,7 @@ class Enemy extends Sprite{
 /* clouds object is just an object that moves in a single
 direction and when it is out of the screen loops back to the other
 side presenting the illusion there are passing clouds */
-class Cloud extends BasicObject {
+class MovingCloud extends BasicObject {
   constructor(x, y, width, height, movementSpeed, image){
     super(x, y, width, height, image);
     this.movementSpeed = movementSpeed;
@@ -401,5 +414,46 @@ class Cloud extends BasicObject {
       this.x = 0 - this.width;
       this.y = randomNum(screenHeight*3/10, screenHeight/10);
     }
+  }
+}
+
+
+class Cloud extends BasicObject {
+  constructor(x, y, size){
+    var cloudImage;
+    if(size == 1){
+      cloudImage = cloudTextures[0];
+    } else if (size == 2){
+      cloudImage = cloudTextures[1];
+    } else {
+      cloudImage = cloudTextures[2];
+    }
+    super(x, y, blockSize * (size+1), blockSize*3/2,cloudImage);
+  }
+}
+
+class Bush extends BasicObject {
+  constructor(x, size){
+    var bushImage;
+    if(size == 1){
+      bushImage = bushTextures[0];
+    } else if (size == 2){
+      bushImage = bushTextures[1];
+    } else {
+      bushImage = bushTextures[2];
+    }
+    super(x, (groundLevelY - blockSize), blockSize * (size+1), blockSize,bushImage);
+  }
+}
+
+class Hill extends BasicObject {
+  constructor(x, size){
+    var hillImage;
+    if(size == 1){
+      hillImage = hillSmallTexture;
+    } else {
+      hillImage = hillLargeTexture;
+    }
+    super(x, groundLevelY - (blockSize* (size+0.1875)), blockSize * (size*3), blockSize* (size+0.1875),hillImage);
   }
 }

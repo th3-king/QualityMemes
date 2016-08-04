@@ -61,15 +61,15 @@ function createClouds(amountOfClouds) {
 		var movementSpeed = randomNum(screenWidth/500, screenWidth/550)+0.2;
 
 		if (cloudType == 1) {
-			cloudImage = cloudSmallTexture;
+			cloudImage = cloudTextures[0];
 			width = screenWidth/9;
 			height = screenWidth/13;
 		} else {
-			cloudImage = cloudLargeTexture;
+			cloudImage = cloudTextures[1];
 			width = screenWidth/8;
 			height = screenWidth/13;
 		}
-		clouds.push(new Cloud(x , y, width, height, movementSpeed, cloudImage));
+		clouds.push(new MovingCloud(x , y, width, height, movementSpeed, cloudImage));
 	}
 }
 
