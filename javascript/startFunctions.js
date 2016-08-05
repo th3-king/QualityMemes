@@ -81,6 +81,7 @@ function initialiseScene() {
     break;
   	case "levelOne":
   		createLevelInterval(levelOneScene);
+      console.log("run");
       declareLevelOneObjects();
       levelLoaded = true;
   	break;

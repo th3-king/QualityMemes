@@ -147,9 +147,9 @@ var CollidableObject = function (_BasicObject2) {
           if (mario.x + mario.width >= this.x + this.width / 10 && mario.x <= this.x + this.width * 9 / 10) {
             this.collisionUp();
           }
-        } else if (mario.x + mario.width <= this.x + this.height / 8) {
+        } else if (mario.x + mario.width <= this.x + this.width / 2) {
           this.collisionRight();
-        } else if (mario.x + mario.width / 8 >= this.x + this.height) {
+        } else if (mario.x + mario.width / 2 >= this.x + this.width) {
           this.collisionLeft();
         }
       }
@@ -242,10 +242,12 @@ var CollidableObject = function (_BasicObject2) {
 var NormalBlock = function (_CollidableObject) {
   _inherits(NormalBlock, _CollidableObject);
 
-  function NormalBlock() {
+  function NormalBlock(section, blocksFromRight, blocksAboveGround, image) {
     _classCallCheck(this, NormalBlock);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(NormalBlock).apply(this, arguments));
+    var x = screenWidth * section + blockSize * blocksFromRight;
+    var y = groundLevelY - blockSize * blocksAboveGround;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(NormalBlock).call(this, x, y, blockSize, blockSize, image));
   }
 
   _createClass(NormalBlock, [{
@@ -263,19 +265,42 @@ var NormalBlock = function (_CollidableObject) {
   return NormalBlock;
 }(CollidableObject);
 
+var SolidBlock = function (_NormalBlock) {
+  _inherits(SolidBlock, _NormalBlock);
+
+  function SolidBlock() {
+    _classCallCheck(this, SolidBlock);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(SolidBlock).apply(this, arguments));
+  }
+
+  _createClass(SolidBlock, [{
+    key: "collisionUp",
+    value: function collisionUp() {
+      mario.y = this.y + this.height * 11 / 10;
+      mario.velocity = -mario.gravity;
+    }
+  }]);
+
+  return SolidBlock;
+}(NormalBlock);
+
 var MysteryBox = function (_CollidableObject2) {
   _inherits(MysteryBox, _CollidableObject2);
 
-  function MysteryBox(x, y, width, height, image, inside, amountOfAbilities) {
+  function MysteryBox(section, blocksFromRight, blocksAboveGround, image, inside, amountOfAbilities) {
     _classCallCheck(this, MysteryBox);
 
-    var _this7 = _possibleConstructorReturn(this, Object.getPrototypeOf(MysteryBox).call(this, x, y, width, height, image));
+    var x = screenWidth * section + blockSize * blocksFromRight;
+    var y = groundLevelY - blockSize * blocksAboveGround;
 
-    _this7.inside = inside;
-    _this7.hit = false;
-    _this7.abilitiesAlreadySpawned = 0;
-    _this7.amountOfAbilities = amountOfAbilities;
-    return _this7;
+    var _this8 = _possibleConstructorReturn(this, Object.getPrototypeOf(MysteryBox).call(this, x, y, blockSize, blockSize, image));
+
+    _this8.inside = inside;
+    _this8.hit = false;
+    _this8.abilitiesAlreadySpawned = 0;
+    _this8.amountOfAbilities = amountOfAbilities;
+    return _this8;
   }
 
   _createClass(MysteryBox, [{
@@ -314,11 +339,24 @@ var MysteryBox = function (_CollidableObject2) {
 var Pipe = function (_CollidableObject3) {
   _inherits(Pipe, _CollidableObject3);
 
-  function Pipe() {
+  function Pipe(x, blocksHeigh) {
     _classCallCheck(this, Pipe);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Pipe).apply(this, arguments));
+    var _this9 = _possibleConstructorReturn(this, Object.getPrototypeOf(Pipe).call(this, x, groundLevelY - blockSize * blocksHeigh, blockSize * 2, blockSize * blocksHeigh, [pipeHead, pipeBody]));
+
+    _this9.amountOfBodies = blocksHeigh - 1;
+    return _this9;
   }
+
+  _createClass(Pipe, [{
+    key: "draw",
+    value: function draw() {
+      drawImageOnCanvas(this.x, this.y, this.width, blockSize, this.image[0]);
+      for (var i = 1; i <= this.amountOfBodies; i++) {
+        drawImageOnCanvas(this.x, this.y + blockSize * i, this.width, blockSize, this.image[1]);
+      }
+    }
+  }]);
 
   return Pipe;
 }(CollidableObject);
@@ -353,15 +391,15 @@ var Mario = function (_BasicObject3) {
   function Mario(x, y, width, height, image) {
     _classCallCheck(this, Mario);
 
-    var _this10 = _possibleConstructorReturn(this, Object.getPrototypeOf(Mario).call(this, x, y, width, height, image));
+    var _this11 = _possibleConstructorReturn(this, Object.getPrototypeOf(Mario).call(this, x, y, width, height, image));
 
-    _this10.velocity = 0;
-    _this10.gravity = screenHeight / 5000;
-    _this10.movementSpeed = screenWidth / 200;
-    _this10.jump = false;
-    _this10.starMode = false;
-    _this10.isBig = false;
-    return _this10;
+    _this11.velocity = 0;
+    _this11.gravity = screenHeight / 5000;
+    _this11.movementSpeed = screenWidth / 100;
+    _this11.jump = false;
+    _this11.starMode = false;
+    _this11.isBig = false;
+    return _this11;
   }
 
   _createClass(Mario, [{
@@ -463,15 +501,15 @@ var Enemy = function (_Sprite) {
   function Enemy(x, y, width, height, movementSpeed, image) {
     _classCallCheck(this, Enemy);
 
-    var _this12 = _possibleConstructorReturn(this, Object.getPrototypeOf(Enemy).call(this, x, y, width, height, image[0]));
+    var _this13 = _possibleConstructorReturn(this, Object.getPrototypeOf(Enemy).call(this, x, y, width, height, image[0]));
 
-    _this12.imageArray = image;
-    _this12.movementSpeed = movementSpeed;
-    _this12.index = 0;
-    _this12.squashed = false;
-    _this12.removed = false;
-    _this12.counter = 0;
-    return _this12;
+    _this13.imageArray = image;
+    _this13.movementSpeed = movementSpeed;
+    _this13.index = 0;
+    _this13.squashed = false;
+    _this13.removed = false;
+    _this13.counter = 0;
+    return _this13;
   }
 
   _createClass(Enemy, [{
@@ -512,14 +550,14 @@ var Enemy = function (_Sprite) {
   }, {
     key: "collisionWithMario",
     value: function collisionWithMario() {
-      var _this13 = this;
+      var _this14 = this;
 
       if (mario.starMode == false) {
         if (mario.y + mario.height <= this.y + this.height / 2) {
           mario.velocity = screenHeight / 80;
           this.squashSprite();
           setTimeout(function () {
-            _this13.removed = true;
+            _this14.removed = true;
           }, 1000);
         } else {
           gameplayFreeze = true;
@@ -532,7 +570,7 @@ var Enemy = function (_Sprite) {
         mario.velocity = screenHeight / 80;
         this.squashSprite();
         setTimeout(function () {
-          _this13.removed = true;
+          _this14.removed = true;
         }, 1000);
       }
     }
@@ -546,19 +584,19 @@ direction and when it is out of the screen loops back to the other
 side presenting the illusion there are passing clouds */
 
 
-var Cloud = function (_BasicObject5) {
-  _inherits(Cloud, _BasicObject5);
+var MovingCloud = function (_BasicObject5) {
+  _inherits(MovingCloud, _BasicObject5);
 
-  function Cloud(x, y, width, height, movementSpeed, image) {
-    _classCallCheck(this, Cloud);
+  function MovingCloud(x, y, width, height, movementSpeed, image) {
+    _classCallCheck(this, MovingCloud);
 
-    var _this14 = _possibleConstructorReturn(this, Object.getPrototypeOf(Cloud).call(this, x, y, width, height, image));
+    var _this15 = _possibleConstructorReturn(this, Object.getPrototypeOf(MovingCloud).call(this, x, y, width, height, image));
 
-    _this14.movementSpeed = movementSpeed;
-    return _this14;
+    _this15.movementSpeed = movementSpeed;
+    return _this15;
   }
 
-  _createClass(Cloud, [{
+  _createClass(MovingCloud, [{
     key: "moveCloud",
     value: function moveCloud() {
       this.x += this.movementSpeed;
@@ -569,5 +607,69 @@ var Cloud = function (_BasicObject5) {
     }
   }]);
 
+  return MovingCloud;
+}(BasicObject);
+
+var Cloud = function (_BasicObject6) {
+  _inherits(Cloud, _BasicObject6);
+
+  function Cloud(section, blocksFromRight, blocksAboveGround, size) {
+    _classCallCheck(this, Cloud);
+
+    var cloudImage;
+    if (size == 1) {
+      cloudImage = cloudTextures[0];
+    } else if (size == 2) {
+      cloudImage = cloudTextures[1];
+    } else {
+      cloudImage = cloudTextures[2];
+    }
+    var x = screenWidth * section + blockSize * blocksFromRight;
+    var y = groundLevelY - blockSize * blocksAboveGround;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Cloud).call(this, x, y, blockSize * (size + 1), blockSize * 3 / 2, cloudImage));
+  }
+
   return Cloud;
+}(BasicObject);
+
+var Bush = function (_BasicObject7) {
+  _inherits(Bush, _BasicObject7);
+
+  function Bush(section, blocksFromRight, size) {
+    _classCallCheck(this, Bush);
+
+    var bushImage;
+    if (size == 1) {
+      bushImage = bushTextures[0];
+    } else if (size == 2) {
+      bushImage = bushTextures[1];
+    } else {
+      bushImage = bushTextures[2];
+    }
+    var x = screenWidth * section + blockSize * blocksFromRight;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Bush).call(this, x, groundLevelY - blockSize, blockSize * (size + 1), blockSize, bushImage));
+  }
+
+  return Bush;
+}(BasicObject);
+
+var Hill = function (_BasicObject8) {
+  _inherits(Hill, _BasicObject8);
+
+  function Hill(section, blocksFromRight, size) {
+    _classCallCheck(this, Hill);
+
+    var hillImage;
+    if (size == 1) {
+      hillImage = hillSmallTexture;
+      var width = 3;
+    } else {
+      hillImage = hillLargeTexture;
+      var width = 5;
+    }
+    var x = screenWidth * section + blockSize * blocksFromRight;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Hill).call(this, x, groundLevelY - blockSize * (size + 0.1875), blockSize * width, blockSize * (size + 0.1875), hillImage));
+  }
+
+  return Hill;
 }(BasicObject);

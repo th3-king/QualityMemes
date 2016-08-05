@@ -171,8 +171,10 @@ class CollidableObject extends BasicObject {
 }
 
 class NormalBlock extends CollidableObject {
-    constructor(x, y, image){
-      super(x, y, blockSize, blockSize, image)
+    constructor(section, blocksFromRight, blocksAboveGround, image){
+      var x = screenWidth*section + blockSize*blocksFromRight;
+      var y = groundLevelY - blockSize*blocksAboveGround;
+      super(x, y, blockSize, blockSize, image);
     }
     collisionUp(){
       super.collisionUp();
@@ -184,8 +186,17 @@ class NormalBlock extends CollidableObject {
     }
 }
 
+class SolidBlock extends NormalBlock {
+    collisionUp(){
+      mario.y = this.y + this.height*11/10;
+      mario.velocity = -mario.gravity;
+    }
+}
+
 class MysteryBox extends CollidableObject {
-  constructor(x, y, image, inside, amountOfAbilities){
+  constructor(section, blocksFromRight, blocksAboveGround, image, inside, amountOfAbilities){
+    var x = screenWidth*section + blockSize*blocksFromRight;
+    var y = groundLevelY - blockSize*blocksAboveGround;
     super(x, y, blockSize, blockSize, image);
     this.inside = inside;
     this.hit = false;
@@ -225,7 +236,7 @@ class MysteryBox extends CollidableObject {
 class Pipe extends CollidableObject {
   constructor(x, blocksHeigh){
     super(x, groundLevelY - blockSize * blocksHeigh, blockSize*2, blockSize * blocksHeigh, [pipeHead, pipeBody]);
-    this.amountOfBodies = (this.height - blockSize)/blockSize;
+    this.amountOfBodies = blocksHeigh - 1;
   }
 
   draw(){
@@ -254,7 +265,7 @@ class Mario extends BasicObject{
     super(x, y, width, height, image);
     this.velocity = 0;
     this.gravity = screenHeight/5000;
-    this.movementSpeed = screenWidth/200;
+    this.movementSpeed = screenWidth/100;
     this.jump = false;
     this.starMode = false;
     this.isBig = false;
@@ -419,7 +430,7 @@ class MovingCloud extends BasicObject {
 
 
 class Cloud extends BasicObject {
-  constructor(x, y, size){
+  constructor(section, blocksFromRight, blocksAboveGround, size){
     var cloudImage;
     if(size == 1){
       cloudImage = cloudTextures[0];
@@ -428,12 +439,14 @@ class Cloud extends BasicObject {
     } else {
       cloudImage = cloudTextures[2];
     }
-    super(x, y, blockSize * (size+1), blockSize*3/2,cloudImage);
+    var x = screenWidth*section + blockSize*blocksFromRight;
+    var y = groundLevelY - blockSize*blocksAboveGround;
+    super(x , y, blockSize * (size+1), blockSize*3/2, cloudImage);
   }
 }
 
 class Bush extends BasicObject {
-  constructor(x, size){
+  constructor(section, blocksFromRight, size){
     var bushImage;
     if(size == 1){
       bushImage = bushTextures[0];
@@ -442,18 +455,22 @@ class Bush extends BasicObject {
     } else {
       bushImage = bushTextures[2];
     }
+    var x = screenWidth*section + blockSize*blocksFromRight;
     super(x, (groundLevelY - blockSize), blockSize * (size+1), blockSize,bushImage);
   }
 }
 
 class Hill extends BasicObject {
-  constructor(x, size){
+  constructor(section, blocksFromRight, size){
     var hillImage;
     if(size == 1){
       hillImage = hillSmallTexture;
+      var width = 3;
     } else {
       hillImage = hillLargeTexture;
+      var width = 5;
     }
-    super(x, groundLevelY - (blockSize* (size+0.1875)), blockSize * (size*3), blockSize* (size+0.1875),hillImage);
+    var x = screenWidth*section + blockSize*blocksFromRight;
+    super(x, groundLevelY - (blockSize* (size+0.1875)), blockSize * (width), blockSize* (size+0.1875),hillImage);
   }
 }

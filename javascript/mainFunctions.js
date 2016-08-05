@@ -131,3 +131,26 @@ function collisionWithArrayOfBlocks(arrayOfNonCollisions, arrayOfCollidableBlock
 		}
 	}
 }
+
+function createBlockPlatform(section, blocksFromRight, blocksUp, image, length){
+	for(var i = 0; i < length; i++){
+		levelBlocks.push(new NormalBlock(section, blocksFromRight + i, blocksUp, image));
+	}
+}
+
+function createBlockStack(section, blocksFromRight, blocksUp, image, length){
+	for(var i = 0; i < length; i++){
+		levelBlocks.push(new SolidBlock(section, blocksFromRight, blocksUp + i, image));
+	}
+}
+
+function createBlockStairAscendingFromLeft(section, blocksFromRight, blocksUp, image, height){
+	for(var h = 0; h < height; h++){
+		createBlockStack(section, blocksFromRight + h, blocksUp, image, h + 1);
+	}
+}
+function createBlockStairAscendingFromRight(section, blocksFromRight, blocksUp, image, height){
+	for(var h = height - 1; h >= 0; h--){
+		createBlockStack(section, blocksFromRight + h, blocksUp, image, height - h);
+	}
+}

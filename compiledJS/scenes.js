@@ -64,8 +64,8 @@ function levelOneScene() {
     }
   }
   drawArray(levelGround);
-  drawArray(levelBlocks);
   drawArray(levelBackgroundObjects);
+  drawArray(levelBlocks);
   for (var i = 0; i < levelEnemies.length; i++) {
     if (levelEnemies[i].removed == false) {
       levelEnemies[i].draw();

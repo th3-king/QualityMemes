@@ -55,7 +55,7 @@ function levelOneScene(){
 
   //background
   drawRect(0,0, screenWidth, screenHeight, "#4B7DFA");
-  drawText(screenWidth/50, screenHeight/18 ,"emulogic", "20px", "left", "black", ("score: " + score.toString()))
+  drawText(screenWidth/50, screenHeight/18 ,"emulogic", "20px", "left", "black", ("score: " + score.toString()));
 
   //objects and mario
   for(var i = 0; i < levelCoins.length; i++){
@@ -64,8 +64,8 @@ function levelOneScene(){
     }
   }
   drawArray(levelGround);
-  drawArray(levelBlocks);
   drawArray(levelBackgroundObjects);
+  drawArray(levelBlocks);
   for(var i = 0; i < levelEnemies.length; i++){
     if (levelEnemies[i].removed == false) {
       levelEnemies[i].draw();

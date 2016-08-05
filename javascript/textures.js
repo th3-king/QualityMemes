@@ -25,6 +25,7 @@ const mysteryBox        = new Image();
 const usedBox           = new Image();
 const pipeHead          = new Image();
 const pipeBody          = new Image();
+const empty             = new Image();
 
 groundTexture.src     = "textures/backgroundTextures/groundTexture.png";
 marioTexture[0].src   = "textures/marioTextures/standingMarioRight.png";

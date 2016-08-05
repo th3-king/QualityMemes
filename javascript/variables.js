@@ -25,7 +25,7 @@ var cloudMediumHeight;
 
 function initialiseScreenSizeRelatedElements(){
 	groundLevelY = screenHeight*67/75;
-	blockSize = screenHeight*16/225;
+	blockSize = screenWidth/25;
 	goombaHeight = blockSize*15/16;
 	hillLargeWidth = screenHeight/3;
 	hillLargeHeight = screenHeight/8;
