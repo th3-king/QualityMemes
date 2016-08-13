@@ -1,0 +1,41 @@
+* {
+    margin:0;
+    padding:0;
+    } /* to remove the top and left whitespace */
+
+html, body {
+    width:100%;
+    height:100%;
+    position: fixed;
+    } /* just to be sure these are full screen*/
+
+#canvas {
+    display:inline;
+    } /* To remove the scrollbars */
+
+#background {
+    background-image: url("../textures/backgroundTextures/backgroundTexture.jpg");
+    background-repeat: repeat;
+    background-size: 300px;
+}
+
+#center {
+    width: 100%;
+    text-align:center;
+}
+
+#controlButtons {
+  margin: auto;
+  position: relative;
+}
+
+#movementControls, #actionControls {
+  position: absolute;
+}
+
+#up, #left, #right, #down, #aButton, #bButton {
+  position: absolute;
+  border-radius: 20%;
+}
+
+@font-face { font-family: emulogic; src: url("../textures/fonts/emulogic.ttf");}

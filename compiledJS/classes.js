@@ -395,7 +395,7 @@ var Mario = function (_BasicObject3) {
 
     _this11.velocity = 0;
     _this11.gravity = screenHeight / 5000;
-    _this11.movementSpeed = screenWidth / 100;
+    _this11.movementSpeed = screenWidth / 300;
     _this11.jump = false;
     _this11.starMode = false;
     _this11.isBig = false;

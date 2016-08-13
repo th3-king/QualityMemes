@@ -1,8 +1,7 @@
 //Setup
-browserDeviceCheck()
-
 function CreateCanvas() {
-  var canvas = document.getElementById('canvas');
+  var canvas = document.getElementById('canvas'),
+  context = canvas.getContext('2d');
 
 // resize the canvas to fill browser window dynamically
   window.addEventListener('resize', resizeCanvas, false);
@@ -20,15 +19,17 @@ function CreateCanvas() {
     }
 
   	if ((window.innerWidth*9/16) > window.innerHeight) {
-      canvas.width = window.innerHeight*16/9;
-  		canvas.height = window.innerHeight;
+      canvas.width = window.innerHeight*16/9 - (window.innerHeight/4)*16/9;
+  		canvas.height = window.innerHeight - window.innerHeight/4;
     }
     if (window.innerHeight*16/9 > window.innerWidth) {
-    	canvas.width = window.innerWidth;
-    	canvas.height = window.innerWidth*9/16;
+    	canvas.width = window.innerWidth - window.innerHeight/4;
+    	canvas.height = window.innerWidth*9/16 - (window.innerHeight/4)*9/16;
     }
     screenWidth = canvas.width;
     screenHeight = canvas.height;
+
+    mobileButtons();
 
     if (initialRun == true){
       window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, marioTexture);

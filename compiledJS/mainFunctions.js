@@ -1,6 +1,31 @@
 "use strict";
 
 //functions which are used to manipulate variables
+
+//checks device
+function browserDeviceCheck() {
+	var isChromium = window.chrome,
+	    winNav = window.navigator,
+	    vendorName = winNav.vendor,
+	    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+	    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+	    isIOSChrome = winNav.userAgent.match("CriOS");
+
+	if (isIOSChrome) {
+		// is Google Chrome on IOS
+		window.location = "marioMobile.html";
+	} else if (isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera == false && isIEedge == false) {
+		// is Google Chrome
+	} else {
+		// not Google Chrome
+		window.location = "marioMobile.html";
+	}
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+		// Take the user to a different screen here.
+		window.location = "marioMobile.html";
+	}
+}
+
 //creates level interval if none exist for specific scene
 function createLevelInterval(functionOfScene) {
 	if (levelInterval == undefined || levelInterval == 0) {
@@ -84,10 +109,36 @@ function refreshMainScene() {
 	createdClouds = false;
 }
 
-function test() {
-	console.log("test");
+function mobileButtons() {
+	setSizeOfId("controlButtons", canvas.width, window.innerHeight / 4, 'px');
+	setSizeOfId("movementControls", 25, 100, '%');
+	setSizeOfId("up", 100 / 3, 100 / 3, '%');
+	setSizeOfId("down", 100 / 3, 100 / 3, '%');
+	setSizeOfId("left", 100 / 3, 100 / 3, '%');
+	setSizeOfId("right", 100 / 3, 100 / 3, '%');
+	setSizeOfId("actionControls", 25, 100, '%');
+	setSizeOfId("aButton", 100 / 3, 100 / 3, '%');
+	setSizeOfId("bButton", 100 / 3, 100 / 3, '%');
+
+	setPositionOfId("movementControls", 0, 0, '%');
+	setPositionOfId("up", 100 / 3, 0, '%');
+	setPositionOfId("down", 100 / 3, 200 / 3, '%');
+	setPositionOfId("left", 0, 100 / 3, '%');
+	setPositionOfId("right", 200 / 3, 100 / 3, '%');
+	setPositionOfId("actionControls", 75, 0, '%');
+	setPositionOfId("aButton", 100 / 6, 100 / 6, '%');
+	setPositionOfId("bButton", 300 / 6, 300 / 6, '%');
 }
 
+function setSizeOfId(id, width, height, unit) {
+	document.getElementById(id).style.width = Math.floor(width) + unit;
+	document.getElementById(id).style.height = Math.floor(height) + unit;
+}
+
+function setPositionOfId(id, left, top, unit) {
+	document.getElementById(id).style.left = Math.floor(left) + unit;
+	document.getElementById(id).style.top = Math.floor(top) + unit;
+}
 /*returns the X position used for the ground image so it moves
 with the players movement*/
 

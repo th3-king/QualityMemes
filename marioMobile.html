@@ -1,107 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script>
-//Setup
-function CreateCanvas() {
-  var canvas = document.getElementById('canvas'),
-  context = canvas.getContext('2d');
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="compiledJS/classes.js"></script>
+  <script type="text/javascript" src="compiledJS/startFunctionsMobile.js"></script>
+  <script type="text/javascript" src="compiledJS/textures.js"></script>
+  <script type="text/javascript" src="compiledJS/mainFunctions.js"></script>
+	<script type="text/javascript" src="compiledJS/drawingFunctions.js"></script>
+	<script type="text/javascript" src="compiledJS/variables.js"></script>
+	<script type="text/javascript" src="compiledJS/events.js"></script>
+  <script type="text/javascript" src="compiledJS/scenes.js"></script>
+  <script type="text/javascript" src="compiledJS/declaringFunctions.js"></script>
 
-// resize the canvas to fill browser window dynamically
-  window.addEventListener('resize', resizeCanvas, false);
+	<link rel="stylesheet" href="css/mobileStylesheet.css">
 
-  function resizeCanvas() {
-    if (initialRun == false){
-      createScreenChangeMultiplierArray(clouds);
-      createScreenChangeMultiplierArray(levelSprites);
-      createScreenChangeMultiplierArray(levelBlocks);
-      createScreenChangeMultiplierArray(levelCoins);
-      createScreenChangeMultiplier(mario);
-      xPositionInLevelMultiplier = xPositionInLevel/screenWidth;
-    }
-
-  	if ((window.innerWidth*9/16) > window.innerHeight) {
-      canvas.width = window.innerHeight*16/9;
-  		canvas.height = window.innerHeight;
-    }
-    if (window.innerHeight*16/9 > window.innerWidth) {
-    	canvas.width = window.innerWidth;
-    	canvas.height = window.innerWidth*9/16;
-    }
-    screenWidth = canvas.width;
-    screenHeight = canvas.height;
-
-    if (initialRun == true){
-      window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/200, marioTexture);
-      initialRun = false;
-    } else {
-      updateObjectToScreenChange(mario);
-      updateObjectToScreenChangeArray(levelSprites);
-      updateObjectToScreenChangeArray(levelBlocks);
-      updateObjectToScreenChangeArray(levelCoins);
-      xPositionInLevel = xPositionInLevelMultiplier * screenWidth;
-    }
-
-    initialiseScene();
-    }
-  resizeCanvas();
-  initialiseScreenSizeRelatedElements();
-}
-
-function initialiseScene() {
-  if (levelLoaded == false){
-    window.mario = new Mario(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, screenWidth/500, marioTexture);
-    xPositionInLevel = 0;
-    score = 0;
-  }
-
-  switch (currentScene) {
-    case "main":
-      //play();
-
-      //checks if clouds have been created
-      if (createdClouds == false){
-        createClouds(randomNum(3,1));
-        createdClouds = true;
-      } else {
-        updateObjectToScreenChangeArray(clouds);
-      }
-      //runs main scene with interval (due to clouds)
-      if (startScreenInterval == undefined || startScreenInterval == 0){
-        startScreenInterval = setInterval(mainScene, 15);
-      }
-  	break;
-    case "levelSelect":
-      levelSelect();
-    break;
-  	case "levelOne":
-      window.mario = new Mario(screenHeight/15, screenHeight*4/5, screenHeight*14/225, screenHeight*7/75, screenWidth/400, marioTexture);
-  		createLevelInterval(levelOneScene);
-      declareLevelOneObjects();
-      levelLoaded = true;
-  	break;
-    case "levelTwo":
-      createLevelInterval(levelTwoScene);
-  	break;
-    case "levelThree":
-      createLevelInterval(levelThreeScene);
-  	break;
-  	default:
-  		console.log("no current scene");
-  	break;
-  }
-}
-
-    </script>
-  <script type="text/javascript" src="javascript/textures.js"></script>
-	<script type="text/javascript" src="javascript/objects.js"></script>
-  <script type="text/javascript" src="javascript/mainFunctions.js"></script>
-	<script type="text/javascript" src="javascript/drawingFunctions.js"></script>
-	<script type="text/javascript" src="javascript/variables.js"></script>
-	<script type="text/javascript" src="javascript/events.js"></script>
-  <script type="text/javascript" src="javascript/scenes.js"></script>
-  <script type="text/javascript" src="javascript/backgroundFunctions.js"></script>
-	<link rel="stylesheet" href="css/stylesheet.css">
   </head>
   <body onload="CreateCanvas()" id= "background">
     <audio id="themeSong">
@@ -110,10 +22,22 @@ function initialiseScene() {
 	  <div id="center">
 		  <canvas id="canvas" style="border-style: solid; border-color: black; border-width: 1px"></canvas>
 		</div>
+    <div id="controlButtons">
+        <div id="movementControls">
+        <button id="up"></button>
+        <button id="left"></button>
+        <button id="right"></button>
+        <button id="down"></button>
+        </div>
+        <div id="actionControls">
+        <button id="aButton"></button>
+        <button id="bButton"></button>
+        </div>
+    </div>
     </body>
 </html>
 <script type="text/javascript">
 	var g_duration = 137;
-    var g_iisLatency = 3;
-    var g_responseEnd = new Date().getTime();
+  var g_iisLatency = 3;
+  var g_responseEnd = new Date().getTime();
 </script>

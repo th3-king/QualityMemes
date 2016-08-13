@@ -1,14 +1,10 @@
 'use strict';
 
-if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
-  // Take the user to a different screen here.
-  window.location = "marioMobile.html";
-}
-
 //Setup
+browserDeviceCheck();
+
 function CreateCanvas() {
-  var canvas = document.getElementById('canvas'),
-      context = canvas.getContext('2d');
+  var canvas = document.getElementById('canvas');
 
   // resize the canvas to fill browser window dynamically
   window.addEventListener('resize', resizeCanvas, false);

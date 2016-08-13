@@ -265,7 +265,7 @@ class Mario extends BasicObject{
     super(x, y, width, height, image);
     this.velocity = 0;
     this.gravity = screenHeight/5000;
-    this.movementSpeed = screenWidth/100;
+    this.movementSpeed = screenWidth/300;
     this.jump = false;
     this.starMode = false;
     this.isBig = false;
