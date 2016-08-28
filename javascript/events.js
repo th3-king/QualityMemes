@@ -55,25 +55,18 @@ function getPositionClick(event) {
     case "main":
       if ((x > screenWidth*5/16 && x < screenWidth*11/16)&&(y > screenHeight*9/16 && y < screenHeight*10/16 )){
         refreshMainScene();
-        currentScene = "levelSelect";
-        initialiseScene();
-      }
-    break;
-    case "levelSelect":
-      if((x > screenWidth*5/23 && x < screenWidth*8/23) && (y > screenHeight*2/7 && y < screenHeight*2/7 + screenWidth*3/23)) {
-        currentScene = "levelOne";
+        currentScene = "preLevel";
         initialiseScene();
       }
     break;
     case "levelOne":
-      if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*5/16 && y < screenHeight*29/80)) {
-        gameplayFreeze = false;
-      }
-      if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*3/8 && y < screenHeight*17/40)) {
-        refreshLevelAndGoToScene("levelSelect");
-      }
-      if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*7/16 && y < screenHeight*39/80)) {
-        refreshLevelAndGoToScene("main");
+     if(gameplayFreeze){
+        if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*5/16 && y < screenHeight*29/80)) {
+          gameplayFreeze = false;
+        }
+        if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*6/16 && y < screenHeight*34/80)) {
+          refreshLevelAndGoToScene("main");
+        }
       }
     break;
     default:

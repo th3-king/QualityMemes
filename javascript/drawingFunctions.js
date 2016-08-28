@@ -25,7 +25,7 @@ function drawText(x, y ,font, size, alignment, colour, text){
   var canvas = document.getElementById("canvas");
   var context = canvas.getContext("2d");
 
-  context.font = (size + " " + font );
+  context.font = (size.toString() + "px " + font);
   context.fillStyle = colour;
   context.textAlign = alignment;
   context.fillText(text, x,y);
@@ -82,6 +82,5 @@ function drawPausedBox (){
 	drawImageOnCanvas(screenWidth/4, screenHeight/8, screenWidth/2, screenHeight/2, pauseBox);
 	drawImageOnCanvas(screenWidth*5/16, screenHeight*7/32, screenWidth*3/8, screenHeight/14, gamePausedText);
 	drawImageOnCanvas(screenWidth*3/8, screenHeight*5/16, screenWidth/4, screenHeight/20, resumeGameText);
-	drawImageOnCanvas(screenWidth*3/8, screenHeight*3/8, screenWidth/4, screenHeight/20, levelSelectText);
-	drawImageOnCanvas(screenWidth*3/8, screenHeight*7/16, screenWidth/4, screenHeight/20, mainMenuText);
+	drawImageOnCanvas(screenWidth*3/8, screenHeight*3/8, screenWidth/4, screenHeight/20, mainMenuText);
 }

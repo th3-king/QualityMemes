@@ -245,6 +245,24 @@ class Pipe extends CollidableObject {
       drawImageOnCanvas(this.x , this.y + blockSize * i, this.width, blockSize, this.image[1]);
     }
   }
+
+  detectCollisionWithMario() {
+    if(isColliding(mario, this) == true){
+      if(mario.y + mario.height <= this.y + this.height/20){
+        if(mario.x + mario.width >= this.x + this.width/10 && mario.x <= this.x + this.width*9/10){
+          super.collisionDown();
+        }
+      } else if(mario.y + mario.height/2 >= this.y + this.height){
+        if(mario.x + mario.width >= this.x + this.width/10 && mario.x <= this.x + this.width*9/10){
+          super.collisionUp();
+        }
+      } else if (mario.x + mario.width <= this.x + this.width/2) {
+        super.collisionRight();
+      } else if (mario.x + mario.width/2 >= this.x + this.width) {
+        super.collisionLeft();
+      }
+    }
+  }
 }
 
 class GroundBlock extends CollidableObject {
@@ -269,12 +287,12 @@ class Mario extends BasicObject{
     this.jump = false;
     this.starMode = false;
     this.isBig = false;
+    this.currentSpeed = 0;
   }
 
   moveAction(){
-    if (this.x >= screenWidth/2 - this.width/2) {
+    /*if (this.x >= screenWidth/2 - this.width/2) {
       if(moveLeft == true) {
-        //console.log("left");
         this.x -= this.movementSpeed;
       }
     } else if (this.x >= 0) {
@@ -289,9 +307,15 @@ class Mario extends BasicObject{
       } else if (moveRight == true) {
             //console.log("right");
             this.x += this.movementSpeed;
-      }
+      } */
     if (this.x >= screenWidth/2 - this.width/2 && moveRight == true){
         xPositionInLevel += this.movementSpeed/2;
+    }
+    if (this.x <= screenWidth/2 - this.width/2 && moveRight == true){
+        this.x += this.movementSpeed;
+    }
+    if(this.x >= 0 && moveLeft == true){
+        this.x -= this.movementSpeed;
     }
   }
 
@@ -388,7 +412,7 @@ class Enemy extends Sprite{
   collisionWithMario(){
     if(mario.starMode == false){
       if(mario.y + mario.height <= this.y + this.height/2){
-        mario.velocity = screenHeight/80;
+        mario.velocity = screenHeight/150;
         this.squashSprite();
         setTimeout(() => {
           this.removed = true;
@@ -397,7 +421,7 @@ class Enemy extends Sprite{
         gameplayFreeze = true;
         mario.gameOver();
         setTimeout(function (){
-          refreshLevelAndGoToScene("levelSelect");
+          refreshLevelAndGoToScene("preLevel");
         }, 1000);
       }
     } else {
@@ -472,5 +496,21 @@ class Hill extends BasicObject {
     }
     var x = screenWidth*section + blockSize*blocksFromRight;
     super(x, groundLevelY - (blockSize* (size+0.1875)), blockSize * (width), blockSize* (size+0.1875),hillImage);
+  }
+}
+
+class Text {
+  constructor(x, y ,font, size, alignment, colour, text){
+    this.x = x;
+    this.y = y;
+    this.font = font;
+    this.width = size;
+    this.alignment = alignment;
+    this.colour = colour;
+    this.text = text;
+  }
+
+  draw(){
+    drawText(this.x, this.y ,this.font, this.width, this.alignment, this.colour, this.text);
   }
 }

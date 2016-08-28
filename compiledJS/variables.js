@@ -16,14 +16,8 @@ var floorCollision = false;
 var groundLevelY;
 var blockSize;
 var goombaHeight;
-var hillLargeWidth;
-var hillLargeHeight;
-var hillSmallWidth;
-var hillSmallHeight;
-var cloudSmallWidth;
-var cloudSmallHeight;
-var cloudMediumWidth;
-var cloudMediumHeight;
+var hillLargeWidth, hillLargeHeight, hillSmallWidth, hillSmallHeight;
+var cloudSmallWidth, cloudSmallHeight, cloudMediumWidth, cloudMediumHeight;
 
 function initialiseScreenSizeRelatedElements() {
 	groundLevelY = screenHeight * 67 / 75;
@@ -54,6 +48,7 @@ var levelBlocks = [];
 var levelCoins = [];
 var levelGround = [];
 var levelBackgroundObjects = [];
+var levelText = [];
 var clouds = [];
 var groundNotCollidedWith = [];
 
@@ -61,12 +56,15 @@ var groundNotCollidedWith = [];
 var levelLoaded = false;
 var xPositionInLevel = 0;
 var xPositionInLevelMultiplier = 0;
-var lives = 3;
 var moveLeft = false;
 var moveRight = false;
 var moveDown = false;
 var moveUp = false;
-var score = 0;
+var score = 0,
+    lives = 3,
+    time = 0,
+    coinsCollected = 0,
+    level = 1;
 
 //Declare Characters for level
 function declareLevelOneObjects() {
@@ -76,5 +74,6 @@ function declareLevelOneObjects() {
 		initialiseLevelOneBackground();
 		initialiseLevelOneEnemies();
 		initialiseLevelOneGround();
+		initialiseLevelText();
 	};
 };

@@ -15,6 +15,7 @@ function CreateCanvas() {
       createScreenChangeMultiplierArray(levelBlocks);
       createScreenChangeMultiplierArray(levelCoins);
       createScreenChangeMultiplierArray(levelBackgroundObjects);
+      createScreenChangeMultiplierArray(levelText);
       createScreenChangeMultiplier(mario);
       xPositionInLevelMultiplier = xPositionInLevel/screenWidth;
     }
@@ -40,6 +41,7 @@ function CreateCanvas() {
       updateObjectToScreenChangeArray(levelBlocks);
       updateObjectToScreenChangeArray(levelCoins);
       updateObjectToScreenChangeArray(levelBackgroundObjects);
+      updateObjectToScreenChangeArray(levelText);
       xPositionInLevel = xPositionInLevelMultiplier * screenWidth;
       initialiseScreenSizeRelatedElements();
     }
@@ -72,20 +74,19 @@ function initialiseScene() {
         startScreenInterval = setInterval(mainScene, 15);
       }
   	break;
-    case "levelSelect":
-      levelSelect();
+    case "preLevel":
+      preLevel();
     break;
   	case "levelOne":
-  		createLevelInterval(levelOneScene);
-      console.log("run");
+  		createLevelInterval(levelScene);
       declareLevelOneObjects();
       levelLoaded = true;
   	break;
     case "levelTwo":
-      createLevelInterval(levelTwoScene);
+      createLevelInterval(levelScene);
   	break;
     case "levelThree":
-      createLevelInterval(levelThreeScene);
+      createLevelInterval(levelScene);
   	break;
   	default:
   		console.log("no current scene");

@@ -129,3 +129,11 @@ function initialiseLevelOneGround() {
   createGroundBlocks(89,153,0,2);
   createGroundBlocks(155,212,0,2);
 }
+
+function initialiseLevelText(){
+  levelText = [];
+  levelText.push(
+    new Text(screenWidth/50, screenHeight/18 ,"emulogic", screenWidth/50, "left", "black", "Mario "),
+    new Text(screenWidth/50, screenHeight*2/18 ,"emulogic", screenWidth/50, "left", "black", score.toString())
+  );
+}

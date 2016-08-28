@@ -32,30 +32,31 @@ function mainScene() {
 }
 
 //Level Selection scene
-function levelSelect() {
-  //clear
-  clearScene();
-
+function preLevel() {
   //Draw background
-  drawRect(0, 0, screenWidth, screenHeight, "#4B7DFA");
-  imageRepeat(groundTexture, 0, screenHeight * 6 / 8, screenHeight / 8, screenHeight / 8, screenWidth / (screenHeight / 8), 2);
-  drawImageOnCanvas(screenWidth / 6, screenHeight * 11 / 16, screenHeight / 4, screenHeight / 16, hillSmallTexture);
-  drawImageOnCanvas(screenWidth * 2 / 7, screenHeight * 10 / 16, screenHeight / 3, screenHeight / 8, hillLargeTexture);
+  drawRect(0, 0, screenWidth, screenHeight, "black");
+  drawText(screenWidth / 50, screenHeight / 18, "emulogic", screenWidth / 50, "left", "white", "Mario ");
+  drawText(screenWidth * 3 / 10, screenHeight * 2 / 18, "emulogic", screenWidth / 50, "left", "white", "x" + coinsCollected.toString());
+  drawImageOnCanvas(screenWidth * 3 / 10 - blockSize, screenHeight * 2 / 18 - blockSize * 5 / 6, blockSize * 2 / 3, blockSize, coin[0]);
+  drawText(screenWidth * 3 / 5, screenHeight / 18, "emulogic", screenWidth / 50, "center", "white", "world");
+  drawText(screenWidth * 3 / 5, screenHeight * 2 / 18, "emulogic", screenWidth / 50, "center", "white", "1-" + level.toString());
+  drawText(screenWidth * 49 / 50, screenHeight / 18, "emulogic", screenWidth / 50, "right", "white", "Time");
+  drawImageOnCanvas(screenWidth / 2 - blockSize * 30 / 16, screenHeight / 2 - blockSize * 18 / 16, blockSize * 24 / 16, blockSize * 30 / 16, marioTexture[0]);
+  drawText(screenWidth / 2, screenHeight / 2, "emulogic", screenWidth / 50, "left", "white", "x " + lives.toString());
 
-  //Level boxes
-  drawImageOnCanvas(screenWidth * 5 / 23, screenHeight * 2 / 7, screenWidth * 3 / 23, screenWidth * 3 / 23, levelOneBox);
-  drawImageOnCanvas(screenWidth * 10 / 23, screenHeight * 2 / 7, screenWidth * 3 / 23, screenWidth * 3 / 23, levelLockedBox);
-  drawImageOnCanvas(screenWidth * 15 / 23, screenHeight * 2 / 7, screenWidth * 3 / 23, screenWidth * 3 / 23, levelLockedBox);
+  setTimeout(function () {
+    currentScene = "levelOne";
+    initialiseScene();
+  }, 3000);
 }
 
 //Level One scene
-function levelOneScene() {
+function levelScene() {
   //clear
   clearScene();
 
   //background
   drawRect(0, 0, screenWidth, screenHeight, "#4B7DFA");
-  drawText(screenWidth / 50, screenHeight / 18, "emulogic", "20px", "left", "black", "score: " + score.toString());
 
   //objects and mario
   for (var i = 0; i < levelCoins.length; i++) {
@@ -66,6 +67,7 @@ function levelOneScene() {
   drawArray(levelGround);
   drawArray(levelBackgroundObjects);
   drawArray(levelBlocks);
+  drawArray(levelText);
   for (var i = 0; i < levelEnemies.length; i++) {
     if (levelEnemies[i].removed == false) {
       levelEnemies[i].draw();

@@ -356,6 +356,25 @@ var Pipe = function (_CollidableObject3) {
         drawImageOnCanvas(this.x, this.y + blockSize * i, this.width, blockSize, this.image[1]);
       }
     }
+  }, {
+    key: "detectCollisionWithMario",
+    value: function detectCollisionWithMario() {
+      if (isColliding(mario, this) == true) {
+        if (mario.y + mario.height <= this.y + this.height / 20) {
+          if (mario.x + mario.width >= this.x + this.width / 10 && mario.x <= this.x + this.width * 9 / 10) {
+            _get(Object.getPrototypeOf(Pipe.prototype), "collisionDown", this).call(this);
+          }
+        } else if (mario.y + mario.height / 2 >= this.y + this.height) {
+          if (mario.x + mario.width >= this.x + this.width / 10 && mario.x <= this.x + this.width * 9 / 10) {
+            _get(Object.getPrototypeOf(Pipe.prototype), "collisionUp", this).call(this);
+          }
+        } else if (mario.x + mario.width <= this.x + this.width / 2) {
+          _get(Object.getPrototypeOf(Pipe.prototype), "collisionRight", this).call(this);
+        } else if (mario.x + mario.width / 2 >= this.x + this.width) {
+          _get(Object.getPrototypeOf(Pipe.prototype), "collisionLeft", this).call(this);
+        }
+      }
+    }
   }]);
 
   return Pipe;
@@ -399,32 +418,38 @@ var Mario = function (_BasicObject3) {
     _this11.jump = false;
     _this11.starMode = false;
     _this11.isBig = false;
+    _this11.currentSpeed = 0;
     return _this11;
   }
 
   _createClass(Mario, [{
     key: "moveAction",
     value: function moveAction() {
-      if (this.x >= screenWidth / 2 - this.width / 2) {
-        if (moveLeft == true) {
-          //console.log("left");
+      /*if (this.x >= screenWidth/2 - this.width/2) {
+        if(moveLeft == true) {
           this.x -= this.movementSpeed;
         }
       } else if (this.x >= 0) {
-        if (moveRight == true) {
-          //console.log("right");
-          this.x += this.movementSpeed;
-        }
-        if (moveLeft == true) {
-          //console.log("left");
-          this.x -= this.movementSpeed;
-        }
-      } else if (moveRight == true) {
-        //console.log("right");
-        this.x += this.movementSpeed;
-      }
+          if (moveRight == true) {
+            //console.log("right");
+            this.x += this.movementSpeed;
+          }
+          if(moveLeft == true) {
+            //console.log("left");
+            this.x -= this.movementSpeed;
+          }
+        } else if (moveRight == true) {
+              //console.log("right");
+              this.x += this.movementSpeed;
+        } */
       if (this.x >= screenWidth / 2 - this.width / 2 && moveRight == true) {
         xPositionInLevel += this.movementSpeed / 2;
+      }
+      if (this.x <= screenWidth / 2 - this.width / 2 && moveRight == true) {
+        this.x += this.movementSpeed;
+      }
+      if (this.x >= 0 && moveLeft == true) {
+        this.x -= this.movementSpeed;
       }
     }
   }, {
@@ -554,7 +579,7 @@ var Enemy = function (_Sprite) {
 
       if (mario.starMode == false) {
         if (mario.y + mario.height <= this.y + this.height / 2) {
-          mario.velocity = screenHeight / 80;
+          mario.velocity = screenHeight / 150;
           this.squashSprite();
           setTimeout(function () {
             _this14.removed = true;
@@ -563,7 +588,7 @@ var Enemy = function (_Sprite) {
           gameplayFreeze = true;
           mario.gameOver();
           setTimeout(function () {
-            refreshLevelAndGoToScene("levelSelect");
+            refreshLevelAndGoToScene("preLevel");
           }, 1000);
         }
       } else {
@@ -673,3 +698,26 @@ var Hill = function (_BasicObject8) {
 
   return Hill;
 }(BasicObject);
+
+var Text = function () {
+  function Text(x, y, font, size, alignment, colour, text) {
+    _classCallCheck(this, Text);
+
+    this.x = x;
+    this.y = y;
+    this.font = font;
+    this.width = size;
+    this.alignment = alignment;
+    this.colour = colour;
+    this.text = text;
+  }
+
+  _createClass(Text, [{
+    key: "draw",
+    value: function draw() {
+      drawText(this.x, this.y, this.font, this.width, this.alignment, this.colour, this.text);
+    }
+  }]);
+
+  return Text;
+}();
