@@ -57,7 +57,6 @@ function initialiseScene() {
   if (levelLoaded == false) {
     window.mario = new Mario(screenHeight / 15, screenHeight * 4 / 5, blockSize * 12 / 16, blockSize * 15 / 16, marioTexture[0]);
     xPositionInLevel = 0;
-    score = 0;
   }
 
   switch (currentScene) {

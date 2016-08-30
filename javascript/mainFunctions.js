@@ -77,7 +77,7 @@ function pauseScene(){
 	if(paused == true){
 		gameplayFreeze = true;
 	}
-	if (gameplayFreeze == true) {
+	if (gameplayFreeze == true && lifeLost == false) {
 		drawPausedBox();
 	}
 }
@@ -203,4 +203,20 @@ function createBlockStairAscendingFromRight(section, blocksFromRight, blocksUp, 
 	for(var h = height - 1; h >= 0; h--){
 		createBlockStack(section, blocksFromRight + h, blocksUp, image, height - h);
 	}
+}
+
+function setHighscore(score, highscore) {
+	if(score > highscore){
+		highscore[0] = score;
+		highscore[1] = coinsCollected;
+		highscore[2] = level;
+		localStorage.setItem("highscore", JSON.stringify(highscore));
+	}
+}
+
+function updateTime(){
+	if((counter % 100) == 0){
+		gameTime -= 1;
+	}
+	++counter
 }

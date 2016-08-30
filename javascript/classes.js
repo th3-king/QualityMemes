@@ -53,6 +53,7 @@ class Coin extends OneTimeObject {
   detectCollisionWithMario(){
     super.detectCollisionWithMario();
     if(this.collected == true){
+      ++coinsCollected;
       score += 25;
     }
   }
@@ -223,6 +224,7 @@ class MysteryBox extends CollidableObject {
         case "coin":
           levelCoins.push(new Coin((this.originX + this.width/2) - screenHeight*25/1056, this.originY));
           super.spawnAbility(levelCoins, screenHeight/8, screenHeight/10, screenHeight/80, true);
+          ++coinsCollected;
           break;
         default:
           console.log("nothing inside");
@@ -248,13 +250,9 @@ class Pipe extends CollidableObject {
 
   detectCollisionWithMario() {
     if(isColliding(mario, this) == true){
-      if(mario.y + mario.height <= this.y + this.height/20){
+      if(mario.y + mario.height <= this.y + this.height/10){
         if(mario.x + mario.width >= this.x + this.width/10 && mario.x <= this.x + this.width*9/10){
           super.collisionDown();
-        }
-      } else if(mario.y + mario.height/2 >= this.y + this.height){
-        if(mario.x + mario.width >= this.x + this.width/10 && mario.x <= this.x + this.width*9/10){
-          super.collisionUp();
         }
       } else if (mario.x + mario.width <= this.x + this.width/2) {
         super.collisionRight();
@@ -339,7 +337,25 @@ class Mario extends BasicObject{
   };
 
   gameOver() {
-    this.y += this.movementSpeed/2;
+    this.y -= this.movementSpeed*5;
+    lifeLost = true;
+    gameplayFreeze = true;
+
+    if(lives == 0){
+      setTimeout(function (){
+        refreshMainScene();
+        refreshLevelAndGoToScene("main");
+        lifeLost = false;
+        lives = 3;
+        setHighscore(score, highscore);
+      }, 1000);
+    } else {
+      setTimeout(function (){
+        --lives;
+        refreshLevelAndGoToScene("preLevel");
+        lifeLost = false;
+      }, 1000);
+    }
   };
 
   fallAction() {
@@ -418,11 +434,7 @@ class Enemy extends Sprite{
           this.removed = true;
         }, 1000);
       } else {
-        gameplayFreeze = true;
         mario.gameOver();
-        setTimeout(function (){
-          refreshLevelAndGoToScene("preLevel");
-        }, 1000);
       }
     } else {
         mario.velocity = screenHeight/80;

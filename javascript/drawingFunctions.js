@@ -78,9 +78,19 @@ function clearScene(){
 }
 
 
-function drawPausedBox (){
+function drawPausedBox() {
 	drawImageOnCanvas(screenWidth/4, screenHeight/8, screenWidth/2, screenHeight/2, pauseBox);
 	drawImageOnCanvas(screenWidth*5/16, screenHeight*7/32, screenWidth*3/8, screenHeight/14, gamePausedText);
 	drawImageOnCanvas(screenWidth*3/8, screenHeight*5/16, screenWidth/4, screenHeight/20, resumeGameText);
 	drawImageOnCanvas(screenWidth*3/8, screenHeight*3/8, screenWidth/4, screenHeight/20, mainMenuText);
+}
+
+function drawTopBar(colour) {
+  drawText(screenWidth/50, screenHeight/18 ,"emulogic", screenWidth/50 , "left", colour, "Mario ");
+  drawText(screenWidth/50, screenHeight*2/18 ,"emulogic", screenWidth/50 , "left", colour, score.toString());
+  drawText(screenWidth*3/10, screenHeight*2/18 ,"emulogic", screenWidth/50 , "left", colour, "x" + coinsCollected.toString());
+  drawImageOnCanvas(screenWidth*3/10 - blockSize, screenHeight*2/18 - blockSize*5/6, blockSize*2/3, blockSize, coin[0]);
+  drawText(screenWidth*3/5, screenHeight/18 ,"emulogic", screenWidth/50 , "center", colour, "world");
+  drawText(screenWidth*3/5, screenHeight*2/18 ,"emulogic", screenWidth/50 , "center", colour, "1-" + level.toString());
+  drawText(screenWidth*49/50, screenHeight/18 ,"emulogic", screenWidth/50 , "right", colour, "Time");
 }

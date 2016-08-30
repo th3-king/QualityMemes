@@ -59,5 +59,5 @@ function initialiseLevelOneGround() {
 
 function initialiseLevelText() {
   levelText = [];
-  levelText.push(new Text(screenWidth / 50, screenHeight / 18, "emulogic", screenWidth / 50, "left", "black", "Mario "), new Text(screenWidth / 50, screenHeight * 2 / 18, "emulogic", screenWidth / 50, "left", "black", score.toString()));
+  levelText.push(new Text(screenWidth / 50, screenHeight / 18, "emulogic", screenWidth / 50, "left", "black", "Mario "), new Text(screenWidth / 50, screenHeight * 2 / 18, "emulogic", screenWidth / 50, "left", "black", score.toString()), new Text(screenWidth * 3 / 10, screenHeight * 2 / 18, "emulogic", screenWidth / 50, "left", "black", "x" + coinsCollected.toString()), new Text(screenWidth * 3 / 5, screenHeight / 18, "emulogic", screenWidth / 50, "center", "black", "world"), new Text(screenWidth * 3 / 5, screenHeight * 2 / 18, "emulogic", screenWidth / 50, "center", "black", "1-" + level.toString()), new Text(screenWidth * 49 / 50, screenHeight / 18, "emulogic", screenWidth / 50, "right", "black", "Time"), new Text(screenWidth * 49 / 50, screenHeight * 2 / 18, "emulogic", screenWidth / 50, "right", "black", gameTime.toString()));
 }

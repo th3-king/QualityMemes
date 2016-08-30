@@ -54,6 +54,9 @@ function getPositionClick(event) {
   switch (currentScene) {
     case "main":
       if ((x > screenWidth*5/16 && x < screenWidth*11/16)&&(y > screenHeight*9/16 && y < screenHeight*10/16 )){
+        coinsCollected = 0;
+        score = 0;
+        level = 1;
         refreshMainScene();
         currentScene = "preLevel";
         initialiseScene();

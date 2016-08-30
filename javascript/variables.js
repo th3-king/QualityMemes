@@ -10,6 +10,7 @@ var createdClouds = false;
 var initialRun = true;
 var gameplayFreeze = false;
 var floorCollision = false;
+var lifeLost = false;
 
 var groundLevelY;
 var blockSize;
@@ -58,7 +59,8 @@ var moveLeft = false;
 var moveRight = false;
 var moveDown = false;
 var moveUp = false;
-var score = 0, lives = 3, time = 0, coinsCollected = 0, level = 1;
+var score = 0, lives = 3, time = 0, coinsCollected = 0, level = 1
+var gameTime = 300, counter = 0;
 
 //Declare Characters for level
 function declareLevelOneObjects() {
