@@ -22,7 +22,7 @@ function initialiseLevelOneBlocks() {
   levelBlocks.push(new NormalBlock(0, 24, 4, floatingBlock), new NormalBlock(0, 22, 4, floatingBlock), new NormalBlock(0, 20, 4, floatingBlock), new NormalBlock(3, 2, 4, floatingBlock), new NormalBlock(3, 4, 4, floatingBlock), new NormalBlock(4, 0, 4, floatingBlock), new NormalBlock(4, 18, 4, floatingBlock), new NormalBlock(5, 3, 8, floatingBlock), new NormalBlock(5, 6, 8, floatingBlock), new NormalBlock(6, 18, 4, floatingBlock), new NormalBlock(6, 19, 4, floatingBlock), new NormalBlock(6, 21, 4, floatingBlock),
 
   //MysterBoxes (section, blocksFromRight, blocksUp, image, ability, amountOfAbilities)
-  new MysteryBox(0, 23, 4, mysteryBox, "coin", 1), new MysteryBox(0, 16, 4, mysteryBox, "coin", 1), new MysteryBox(0, 21, 4, mysteryBox, "coin", 1), new MysteryBox(0, 22, 8, mysteryBox, "coin", 1), new MysteryBox(2, 14, 5, empty, "coin", 1), new MysteryBox(3, 3, 4, mysteryBox, "coin", 1), new MysteryBox(3, 19, 8, mysteryBox, "coin", 1), new MysteryBox(3, 19, 4, floatingBlock, "coin", 1), new MysteryBox(4, 1, 4, mysteryBox, "coin", 1), new MysteryBox(4, 6, 4, mysteryBox, "coin", 1), new MysteryBox(4, 9, 4, mysteryBox, "coin", 1), new MysteryBox(4, 9, 8, mysteryBox, "coin", 1), new MysteryBox(4, 12, 4, mysteryBox, "coin", 1), new MysteryBox(5, 4, 8, mysteryBox, "coin", 1), new MysteryBox(5, 5, 8, mysteryBox, "coin", 1), new MysteryBox(6, 20, 4, mysteryBox, "coin", 1), new SolidBlock(7, 23, 1, solidBlock),
+  new MysteryBox(0, 23, 4, mysteryBox, "coin", 1), new MysteryBox(0, 16, 4, mysteryBox, "coin", 1), new MysteryBox(0, 21, 4, mysteryBox, "coin", 1), new MysteryBox(0, 22, 8, mysteryBox, "coin", 1), new MysteryBox(2, 14, 5, empty, "coin", 1), new MysteryBox(3, 3, 4, mysteryBox, "coin", 1), new MysteryBox(3, 19, 8, mysteryBox, "coin", 1), new MysteryBox(3, 19, 4, floatingBlock, "coin", 1), new MysteryBox(4, 1, 4, mysteryBox, "coin", 1), new MysteryBox(4, 6, 4, mysteryBox, "coin", 1), new MysteryBox(4, 9, 4, mysteryBox, "coin", 1), new MysteryBox(4, 9, 8, mysteryBox, "coin", 1), new MysteryBox(4, 12, 4, mysteryBox, "coin", 1), new MysteryBox(5, 4, 8, mysteryBox, "coin", 1), new MysteryBox(5, 5, 8, mysteryBox, "coin", 1), new MysteryBox(6, 20, 4, mysteryBox, "coin", 1), new SolidBlock(7, 23, 1, solidBlock), new EndingPole(7, 23.25, 10.5),
 
   //(x, lengthFromGround)
   new Pipe(screenWidth + blockSize * 3, 2), new Pipe(screenWidth + blockSize * 13, 3), new Pipe(screenWidth + blockSize * 21, 4), new Pipe(screenWidth * 2 + blockSize * 7, 4), new Pipe(screenWidth * 6 + blockSize * 13, 2), new Pipe(screenWidth * 7 + blockSize * 4, 2));
@@ -46,7 +46,10 @@ function initialiseLevelOneCoins() {
 
 function initialiseLevelOneEnemies() {
   levelEnemies = [];
-  levelEnemies.push(new Enemy(screenWidth * 3 / 4, groundLevelY - goombaHeight, blockSize, goombaHeight, screenWidth / 1500, goomba));
+  levelEnemies.push(
+  //Enemy(section, blocksFromRight, blocksAboveGround)
+
+  new Goomba(0, 20.5625, 0), new Goomba(1, 15.25, 0), new Goomba(2, 2.5625, 0), new Goomba(2, 4.0625, 0), new Goomba(3, 3.75, 5.375), new Goomba(3, 6.5, 8), new Goomba(3, 19.8125, 0), new Goomba(3, 21.3125, 0), new Goomba(4, 23.375, 0), new Goomba(4, 24.8125, 0), new Goomba(5, 1.8125, 0), new Goomba(5, 3.25, 0), new Goomba(6, 23.1875, 0), new Goomba(6, 24.625, 0));
 }
 
 function initialiseLevelOneGround() {

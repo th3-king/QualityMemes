@@ -16,7 +16,7 @@ function mainScene() {
   drawImageOnCanvas(screenWidth * 2 / 7, screenHeight * 10 / 16, hillLargeWidth, hillLargeHeight, hillLargeTexture);
 
   //sprites
-  mario.draw();
+  drawImageOnCanvas(screenHeight / 15, screenHeight * 3 / 5, screenHeight * 1 / 10, screenHeight * 3 / 20, marioTexture[0]);
 
   //draws clouds and moves clouds
   for (var i = 0; i < clouds.length; i++) {
@@ -42,7 +42,7 @@ function preLevel() {
   drawImageOnCanvas(screenWidth / 2 - blockSize * 30 / 16, screenHeight / 2 - blockSize * 18 / 16, blockSize * 24 / 16, blockSize * 30 / 16, marioTexture[0]);
   drawText(screenWidth / 2, screenHeight / 2, "emulogic", screenWidth / 50, "left", "white", "x " + lives.toString());
 
-  gameTime = 300;
+  gameTime = 400;
   counter = 0;
   setTimeout(function () {
     currentScene = "levelOne";
@@ -58,7 +58,6 @@ function levelScene() {
   //background
   drawRect(0, 0, screenWidth, screenHeight, "#4B7DFA");
   drawImageOnCanvas(screenWidth * 3 / 10 - blockSize, screenHeight * 2 / 18 - blockSize * 5 / 6, blockSize * 2 / 3, blockSize, coin[0]);
-  updateTime();
   initialiseLevelText();
 
   //objects and mario
@@ -74,11 +73,14 @@ function levelScene() {
   drawArray(levelText);
 
   for (var i = 0; i < levelEnemies.length; i++) {
-    if (levelEnemies[i].removed == false) {
-      levelEnemies[i].draw();
-    }
-    if (levelEnemies[i].squashed == false && gameplayFreeze == false) {
-      levelEnemies[i].detectCollisionWithMario();
+    if (inScreen(levelEnemies[i])) {
+      if (levelEnemies[i].removed == false) {
+        levelEnemies[i].draw();
+        levelEnemies[i].collisions();
+      }
+      if (levelEnemies[i].squashed == false && gameplayFreeze == false) {
+        levelEnemies[i].detectCollisionWithMario();
+      }
     }
   }
   mario.draw();
@@ -86,8 +88,11 @@ function levelScene() {
   //update
   if (gameplayFreeze == false) {
     //mario update
-    mario.jumpAction();
-    mario.moveAction();
+    if (!ending) {
+      mario.jumpAction();
+      mario.moveAction();
+      updateTime();
+    }
     //sprite update
     for (var i = 0; i < levelEnemies.length; i++) {
       levelEnemies[i].moveWithMario();
@@ -118,9 +123,10 @@ function levelScene() {
     if (floorCollision == false && mario.jump == false) {
       mario.fallAction();
     }
-  }
-  if (mario.y + mario.height > screenHeight || gameTime == 0) {
-    mario.gameOver();
+
+    if (mario.y + mario.height > screenHeight || gameTime == 0) {
+      mario.gameOver();
+    }
   }
   //console.log(xPositionInLevel);
   //pause scene causing menu to appear

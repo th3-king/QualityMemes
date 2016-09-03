@@ -5,6 +5,7 @@ browserDeviceCheck();
 
 function CreateCanvas() {
   var canvas = document.getElementById('canvas');
+  setTextures();
 
   // resize the canvas to fill browser window dynamically
   window.addEventListener('resize', resizeCanvas, false);
@@ -54,7 +55,7 @@ function CreateCanvas() {
 }
 
 function initialiseScene() {
-  if (levelLoaded == false) {
+  if (!levelLoaded) {
     window.mario = new Mario(screenHeight / 15, screenHeight * 4 / 5, blockSize * 12 / 16, blockSize * 15 / 16, marioTexture[0]);
     xPositionInLevel = 0;
   }
@@ -62,9 +63,8 @@ function initialiseScene() {
   switch (currentScene) {
     case "main":
       //play();
-      window.mario = new Mario(screenHeight / 15, screenHeight * 3 / 5, screenHeight * 1 / 10, screenHeight * 3 / 20, marioTexture[0]);
       //checks if clouds have been created
-      if (createdClouds == false) {
+      if (!createdClouds) {
         createClouds(randomNum(3, 1));
         createdClouds = true;
       } else {

@@ -6,9 +6,9 @@ function onKeyDown() {
   if (event.keyCode == 37) {
     moveLeft = true;
   } // left arrow pressed
-  if (event.keyCode == 38) {
+  if (event.keyCode == 38 || event.keyCode == 90) {
     moveUp = true;
-  } // up arrow pressed
+  } // up or z arrow pressed
   if (event.keyCode == 39) {
     moveRight = true;
   } // right arrow pressed
@@ -18,6 +18,9 @@ function onKeyDown() {
   if (event.keyCode == 27 || event.keyCode == 80) {
     paused = true;
   } // escape key pressed
+  if (event.keyCode == 88) {
+    mario.movementSpeed = screenWidth/100;
+  } // x key pressed
 }
 
 //when key is not pressed or is "up"
@@ -25,9 +28,9 @@ function onKeyUp() {
   if (event.keyCode == 37) {
     moveLeft = false;
   } // left arrow released
-  if (event.keyCode == 38) {
+  if (event.keyCode == 38 && event.keyCode == 90) {
     moveUp = false;
-  } // up arrow released
+  } // up or z arrow released
   if (event.keyCode == 39) {
     moveRight = false;
   } // right arrow released
@@ -37,6 +40,9 @@ function onKeyUp() {
   if (event.keyCode == 27 || event.keyCode == 80) {
     paused = false;
   } // escape key released
+  if (event.keyCode == 88) {
+    mario.movementSpeed = screenWidth/300;
+  } // x key pressed
 }
 
 window.addEventListener("mousedown", getPositionClick, false);
@@ -53,6 +59,7 @@ function getPositionClick(event) {
 
   switch (currentScene) {
     case "main":
+      //when player clicks play new game text
       if ((x > screenWidth*5/16 && x < screenWidth*11/16)&&(y > screenHeight*9/16 && y < screenHeight*10/16 )){
         coinsCollected = 0;
         score = 0;
@@ -64,9 +71,12 @@ function getPositionClick(event) {
     break;
     case "levelOne":
      if(gameplayFreeze){
+        //when player clicks resume game text
         if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*5/16 && y < screenHeight*29/80)) {
           gameplayFreeze = false;
+          pausedBox = false;
         }
+        //when player clicks main menu text
         if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*6/16 && y < screenHeight*34/80)) {
           refreshLevelAndGoToScene("main");
         }

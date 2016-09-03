@@ -119,7 +119,9 @@ var Coin = function (_OneTimeObject) {
   return Coin;
 }(OneTimeObject);
 
-/*  */
+/* any object which can be collided into by mario
+  (includes spawnAbility and popUpBlock because it is used
+   in MysteryBox and NormalBlock) */
 
 
 var CollidableObject = function (_BasicObject2) {
@@ -240,6 +242,10 @@ var CollidableObject = function (_BasicObject2) {
   return CollidableObject;
 }(BasicObject);
 
+/* any block which doesn't have an ability yet does popUpBlock when
+  mario jumps into it and breaks when mario is big*/
+
+
 var NormalBlock = function (_CollidableObject) {
   _inherits(NormalBlock, _CollidableObject);
 
@@ -266,6 +272,9 @@ var NormalBlock = function (_CollidableObject) {
   return NormalBlock;
 }(CollidableObject);
 
+/* any block which mario can collide with however doesn't do anything */
+
+
 var SolidBlock = function (_NormalBlock) {
   _inherits(SolidBlock, _NormalBlock);
 
@@ -285,6 +294,10 @@ var SolidBlock = function (_NormalBlock) {
 
   return SolidBlock;
 }(NormalBlock);
+
+/* any block which mario can interact with and can contain an ability
+  either mushroom, coin, life or fire flower */
+
 
 var MysteryBox = function (_CollidableObject2) {
   _inherits(MysteryBox, _CollidableObject2);
@@ -337,6 +350,10 @@ var MysteryBox = function (_CollidableObject2) {
 
   return MysteryBox;
 }(CollidableObject);
+
+/* pipes that act just like a solidBlock however can interact with certain pipes
+  to go to secret levels */
+
 
 var Pipe = function (_CollidableObject3) {
   _inherits(Pipe, _CollidableObject3);
@@ -417,37 +434,104 @@ var Mario = function (_BasicObject3) {
     _this11.starMode = false;
     _this11.isBig = false;
     _this11.currentSpeed = 0;
+    _this11.currentImage = 3;
+    _this11.flipped = false;
+    _this11.runningCounter = 0;
     return _this11;
   }
 
   _createClass(Mario, [{
+    key: "draw",
+    value: function draw() {
+      marioSizing(this.image);
+      if (this.flipped) {
+        drawFlippedImage(this.x, this.y, this.width, this.height, this.image);
+      } else {
+        _get(Object.getPrototypeOf(Mario.prototype), "draw", this).call(this);
+      }
+    }
+  }, {
+    key: "animateRunning",
+    value: function animateRunning() {
+      if (!this.jump) {
+        for (var i = 0; i < Math.floor(Math.abs(this.currentSpeed)); i++) {
+          if (this.runningCounter % 10 == 0) {
+            this.image = marioTexture[this.currentImage];
+            if (this.currentImage < 5) {
+              ++this.currentImage;
+            } else {
+              this.currentImage = 3;
+            }
+          }
+          this.runningCounter++;
+        }
+      }
+    }
+  }, {
     key: "moveAction",
     value: function moveAction() {
-      /*if (this.x >= screenWidth/2 - this.width/2) {
-        if(moveLeft == true) {
-          this.x -= this.movementSpeed;
+      if (moveRight) {
+        this.flipped = false;
+        if (this.currentSpeed < this.movementSpeed) {
+          if (this.currentSpeed >= 0) {
+            this.animateRunning();
+          } else {
+            this.image = marioTexture[2];
+          }
+          this.currentSpeed += this.movementSpeed / 25;
+        } else {
+          this.animateRunning();
+          this.currentSpeed = this.movementSpeed;
         }
-      } else if (this.x >= 0) {
-          if (moveRight == true) {
-            //console.log("right");
-            this.x += this.movementSpeed;
-          }
-          if(moveLeft == true) {
-            //console.log("left");
-            this.x -= this.movementSpeed;
-          }
-        } else if (moveRight == true) {
-              //console.log("right");
-              this.x += this.movementSpeed;
-        } */
-      if (this.x >= screenWidth / 2 - this.width / 2 && moveRight == true) {
-        xPositionInLevel += this.movementSpeed / 2;
       }
-      if (this.x <= screenWidth / 2 - this.width / 2 && moveRight == true) {
-        this.x += this.movementSpeed;
+      if (moveLeft) {
+        this.flipped = true;
+        if (this.currentSpeed > -this.movementSpeed) {
+          if (this.currentSpeed <= 0) {
+            this.animateRunning();
+          } else {
+            this.image = marioTexture[2];
+          }
+          this.currentSpeed -= this.movementSpeed / 25;
+        } else {
+          this.animateRunning();
+          this.currentSpeed = -this.movementSpeed;
+        }
       }
-      if (this.x >= 0 && moveLeft == true) {
-        this.x -= this.movementSpeed;
+      if (this.x >= 0 && this.x < screenWidth / 2) {
+        this.x += this.currentSpeed;
+      } else if (this.x + this.width / 2 > screenWidth / 2) {
+        if (moveLeft) {
+          this.flipped = true;
+          if (this.currentSpeed <= 0) {
+            this.x = screenWidth / 2 - this.width / 2;
+          }
+          this.x -= this.currentSpeed;
+        } else {
+          this.flipped = false;
+        }
+        xPositionInLevel += this.currentSpeed / 2;
+      } else {
+        this.flipped = false;
+        this.currentSpeed = 0;
+        this.x = 0;
+      }
+      if (!moveRight && !moveLeft && !lifeLost && !ending && !this.jump) {
+        if (this.currentSpeed < this.movementSpeed / 25 && this.currentSpeed > -this.movementSpeed / 25) {
+          this.currentSpeed = 0;
+          this.image = marioTexture[0];
+        } else {
+          if (this.currentSpeed >= this.movementSpeed / 25) {
+            this.currentSpeed -= this.movementSpeed / 25;
+            this.flipped = false;
+            this.animateRunning();
+          }
+          if (this.currentSpeed <= -this.movementSpeed / 25) {
+            this.currentSpeed += this.movementSpeed / 25;
+            this.flipped = true;
+            this.animateRunning();
+          }
+        }
       }
     }
   }, {
@@ -467,6 +551,7 @@ var Mario = function (_BasicObject3) {
       }
 
       if (this.jump == true) {
+        this.image = marioTexture[6];
         this.fallAction();
       }
     }
@@ -474,6 +559,7 @@ var Mario = function (_BasicObject3) {
     key: "gameOver",
     value: function gameOver() {
       this.y -= this.movementSpeed * 5;
+      this.image = marioTexture[1];
       lifeLost = true;
       gameplayFreeze = true;
 
@@ -483,7 +569,6 @@ var Mario = function (_BasicObject3) {
           refreshLevelAndGoToScene("main");
           lifeLost = false;
           lives = 3;
-          setHighscore(score, highscore);
         }, 1000);
       } else {
         setTimeout(function () {
@@ -504,6 +589,10 @@ var Mario = function (_BasicObject3) {
   return Mario;
 }(BasicObject);
 
+/* any sprite which the user does not control and can interact with mario
+it also contains built in gravity  */
+
+
 var Sprite = function (_BasicObject4) {
   _inherits(Sprite, _BasicObject4);
 
@@ -517,8 +606,42 @@ var Sprite = function (_BasicObject4) {
     key: "detectCollisionWithObject",
     value: function detectCollisionWithObject(object) {
       if (isColliding(object, this)) {
-        this.collision();
+        this.velocity = 0;
+        if (this.y + this.height / 2 >= object.y + object.height / 3) {
+          this.collision();
+          if (this.x >= object.x + object.width / 2) {
+            this.x = object.x + object.width;
+          }
+          if (this.x + this.width <= object.x + object.width / 2) {
+            this.x = object.x - this.width;
+          }
+        } else {
+          this.y = object.y - this.height;
+        }
+      } else {
+        this.blocksNotCollidedWith.push(0);
       }
+    }
+  }, {
+    key: "checkFall",
+    value: function checkFall() {
+      if (this.blocksNotCollidedWith.length == allCollidableObjects.length) {
+        this.velocity += gravity;
+        this.y += this.velocity;
+      }
+    }
+  }, {
+    key: "collisions",
+    value: function collisions() {
+      this.blocksNotCollidedWith = [];
+      for (var j = 0; j < allCollidableObjects.length; j++) {
+        if (allCollidableObjects[j] != this) {
+          this.detectCollisionWithObject(allCollidableObjects[j]);
+        } else {
+          this.blocksNotCollidedWith.push(0);
+        }
+      }
+      this.checkFall();
     }
   }, {
     key: "detectCollisionWithMario",
@@ -539,17 +662,22 @@ unique, it is the basis for all enemies in mario */
 var Enemy = function (_Sprite) {
   _inherits(Enemy, _Sprite);
 
-  function Enemy(x, y, width, height, movementSpeed, image) {
+  function Enemy(section, blocksFromRight, blocksAboveGround, width, height, movementSpeed, image) {
     _classCallCheck(this, Enemy);
+
+    var x = screenWidth * section + blockSize * blocksFromRight;
+    var y = groundLevelY - blockSize * blocksAboveGround - height;
 
     var _this13 = _possibleConstructorReturn(this, Object.getPrototypeOf(Enemy).call(this, x, y, width, height, image[0]));
 
     _this13.imageArray = image;
     _this13.movementSpeed = movementSpeed;
+    _this13.velocity = 0;
     _this13.index = 0;
     _this13.squashed = false;
     _this13.removed = false;
     _this13.counter = 0;
+    _this13.blocksNotCollidedWith = [];
     return _this13;
   }
 
@@ -574,10 +702,10 @@ var Enemy = function (_Sprite) {
   }, {
     key: "moveWithMario",
     value: function moveWithMario() {
-      if (this.squashed == false) {
+      if (!this.squashed && inScreen(this)) {
         this.originX -= this.movementSpeed;
-        _get(Object.getPrototypeOf(Enemy.prototype), "moveWithMario", this).call(this);
       }
+      _get(Object.getPrototypeOf(Enemy.prototype), "moveWithMario", this).call(this);
     }
   }, {
     key: "squashSprite",
@@ -599,6 +727,14 @@ var Enemy = function (_Sprite) {
           this.squashSprite();
           setTimeout(function () {
             _this14.removed = true;
+            for (var j = 0; j < allCollidableObjects.length; j++) {
+              if (allCollidableObjects[j] == _this14) {
+                var index = allCollidableObjects.indexOf(_this14);
+                if (index > -1) {
+                  allCollidableObjects.splice(index, 1);
+                }
+              }
+            }
           }, 1000);
         } else {
           mario.gameOver();
@@ -611,10 +747,35 @@ var Enemy = function (_Sprite) {
         }, 1000);
       }
     }
+  }, {
+    key: "collision",
+    value: function collision() {
+      this.movementSpeed = -this.movementSpeed;
+    }
   }]);
 
   return Enemy;
 }(Sprite);
+
+/* An extention for enemy class so that it is easier to declare goomba
+  enemies due to preset width, height and image*/
+
+
+var Goomba = function (_Enemy) {
+  _inherits(Goomba, _Enemy);
+
+  function Goomba(section, blocksFromRight, blocksAboveGround) {
+    _classCallCheck(this, Goomba);
+
+    var width = blockSize;
+    var height = goombaHeight;
+    var image = goomba;
+    var movementSpeed = screenWidth / 1500;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Goomba).call(this, section, blocksFromRight, blocksAboveGround, width, height, movementSpeed, image));
+  }
+
+  return Goomba;
+}(Enemy);
 
 /* clouds object is just an object that moves in a single
 direction and when it is out of the screen loops back to the other
@@ -627,10 +788,10 @@ var MovingCloud = function (_BasicObject5) {
   function MovingCloud(x, y, width, height, movementSpeed, image) {
     _classCallCheck(this, MovingCloud);
 
-    var _this15 = _possibleConstructorReturn(this, Object.getPrototypeOf(MovingCloud).call(this, x, y, width, height, image));
+    var _this16 = _possibleConstructorReturn(this, Object.getPrototypeOf(MovingCloud).call(this, x, y, width, height, image));
 
-    _this15.movementSpeed = movementSpeed;
-    return _this15;
+    _this16.movementSpeed = movementSpeed;
+    return _this16;
   }
 
   _createClass(MovingCloud, [{
@@ -646,6 +807,11 @@ var MovingCloud = function (_BasicObject5) {
 
   return MovingCloud;
 }(BasicObject);
+
+/* cloud object is just a background object which mario does not
+  interact with, it is a class due to simplicity of creation and
+  declaration in declaringFunctions.js. There is a small medium and big size */
+
 
 var Cloud = function (_BasicObject6) {
   _inherits(Cloud, _BasicObject6);
@@ -669,6 +835,11 @@ var Cloud = function (_BasicObject6) {
   return Cloud;
 }(BasicObject);
 
+/* cloud object is just a background object which mario does not
+  interact with, it is a class due to simplicity of creation and
+  declaration in declaringFunctions.js. There is a small medium and big size */
+
+
 var Bush = function (_BasicObject7) {
   _inherits(Bush, _BasicObject7);
 
@@ -690,6 +861,11 @@ var Bush = function (_BasicObject7) {
   return Bush;
 }(BasicObject);
 
+/* cloud object is just a background object which mario does not
+  interact with, it is a class due to simplicity of creation and
+  declaration in declaringFunctions.js. There is a big and small size*/
+
+
 var Hill = function (_BasicObject8) {
   _inherits(Hill, _BasicObject8);
 
@@ -710,6 +886,11 @@ var Hill = function (_BasicObject8) {
 
   return Hill;
 }(BasicObject);
+
+/* text objected needed as object for simplicity and so it can be
+  resized easier because it uses the screen change multipler to
+  reposition and resize it as an array of objects */
+
 
 var Text = function () {
   function Text(x, y, font, size, alignment, colour, text) {
@@ -733,3 +914,55 @@ var Text = function () {
 
   return Text;
 }();
+
+/* the ending pole mario jumps onto and ends the level begining the next level */
+
+
+var EndingPole = function (_NormalBlock2) {
+  _inherits(EndingPole, _NormalBlock2);
+
+  function EndingPole(section, blocksFromRight, blocksAboveGround) {
+    _classCallCheck(this, EndingPole);
+
+    var image = endingPole;
+
+    var _this20 = _possibleConstructorReturn(this, Object.getPrototypeOf(EndingPole).call(this, section, blocksFromRight, blocksAboveGround, image));
+
+    _this20.width = blockSize / 2;
+    _this20.height = blockSize * 9.5;
+    return _this20;
+  }
+
+  _createClass(EndingPole, [{
+    key: "draw",
+    value: function draw() {
+      _get(Object.getPrototypeOf(EndingPole.prototype), "draw", this).call(this);
+      if (!ending) {
+        this.flagX = this.x - blockSize * 0.75;
+        this.flagY = this.y + blockSize * 0.5625;
+      }
+      drawImageOnCanvas(this.flagX, this.flagY, blockSize, blockSize, endingFlag);
+    }
+  }, {
+    key: "detectCollisionWithMario",
+    value: function detectCollisionWithMario() {
+      if (isColliding(mario, this) == true) {
+        ending = true;
+        mario.image = marioTexture[7];
+        mario.x = this.x - blockSize * 10 / 16;
+        if (this.flagY + blockSize < this.y + this.height) {
+          this.flagY += screenHeight / 80;
+        } else {
+          this.flagY = this.y + this.height - blockSize;
+        }
+        if (mario.y + mario.height < this.y + this.height) {
+          mario.y += screenHeight / 80;
+        } else {
+          mario.y = this.y + this.height - mario.height;
+        }
+      }
+    }
+  }]);
+
+  return EndingPole;
+}(NormalBlock);

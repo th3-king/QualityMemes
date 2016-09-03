@@ -74,7 +74,9 @@ class Coin extends OneTimeObject {
   }
 }
 
-/*  */
+/* any object which can be collided into by mario
+  (includes spawnAbility and popUpBlock because it is used
+   in MysteryBox and NormalBlock) */
 class CollidableObject extends BasicObject {
   constructor(x, y, width, height, image){
     super(x, y, width, height, image);
@@ -171,6 +173,8 @@ class CollidableObject extends BasicObject {
   }
 }
 
+/* any block which doesn't have an ability yet does popUpBlock when
+  mario jumps into it and breaks when mario is big*/
 class NormalBlock extends CollidableObject {
     constructor(section, blocksFromRight, blocksAboveGround, image){
       var x = screenWidth*section + blockSize*blocksFromRight;
@@ -187,6 +191,7 @@ class NormalBlock extends CollidableObject {
     }
 }
 
+/* any block which mario can collide with however doesn't do anything */
 class SolidBlock extends NormalBlock {
     collisionUp(){
       mario.y = this.y + this.height*11/10;
@@ -194,6 +199,8 @@ class SolidBlock extends NormalBlock {
     }
 }
 
+/* any block which mario can interact with and can contain an ability
+  either mushroom, coin, life or fire flower */
 class MysteryBox extends CollidableObject {
   constructor(section, blocksFromRight, blocksAboveGround, image, inside, amountOfAbilities){
     var x = screenWidth*section + blockSize*blocksFromRight;
@@ -235,6 +242,8 @@ class MysteryBox extends CollidableObject {
 
 }
 
+/* pipes that act just like a solidBlock however can interact with certain pipes
+  to go to secret levels */
 class Pipe extends CollidableObject {
   constructor(x, blocksHeigh){
     super(x, groundLevelY - blockSize * blocksHeigh, blockSize*2, blockSize * blocksHeigh, [pipeHead, pipeBody]);
@@ -286,34 +295,99 @@ class Mario extends BasicObject{
     this.starMode = false;
     this.isBig = false;
     this.currentSpeed = 0;
+    this.currentImage = 3;
+    this.flipped = false;
+    this.runningCounter = 0;
+  }
+
+  draw(){
+    marioSizing(this.image);
+    if(this.flipped){
+      drawFlippedImage(this.x, this.y, this.width, this.height, this.image)
+    } else {
+      super.draw()
+    }
+  }
+
+  animateRunning(){
+    if(!this.jump){
+      for(var i = 0; i < Math.floor(Math.abs(this.currentSpeed)); i++){
+        if(this.runningCounter % 10 == 0){
+          this.image = marioTexture[this.currentImage];
+          if(this.currentImage < 5){
+            ++this.currentImage
+          } else {
+            this.currentImage = 3;
+          }
+        }
+        this.runningCounter++
+      }
+    }
   }
 
   moveAction(){
-    /*if (this.x >= screenWidth/2 - this.width/2) {
-      if(moveLeft == true) {
-        this.x -= this.movementSpeed;
+    if(moveRight){
+      this.flipped = false;
+      if(this.currentSpeed < this.movementSpeed){
+        if(this.currentSpeed >= 0){
+          this.animateRunning();
+        } else {
+          this.image = marioTexture[2];
+        }
+        this.currentSpeed += this.movementSpeed/25
+      } else {
+        this.animateRunning();
+        this.currentSpeed = this.movementSpeed;
       }
-    } else if (this.x >= 0) {
-        if (moveRight == true) {
-          //console.log("right");
-          this.x += this.movementSpeed;
-        }
-        if(moveLeft == true) {
-          //console.log("left");
-          this.x -= this.movementSpeed;
-        }
-      } else if (moveRight == true) {
-            //console.log("right");
-            this.x += this.movementSpeed;
-      } */
-    if (this.x >= screenWidth/2 - this.width/2 && moveRight == true){
-        xPositionInLevel += this.movementSpeed/2;
     }
-    if (this.x <= screenWidth/2 - this.width/2 && moveRight == true){
-        this.x += this.movementSpeed;
+    if(moveLeft){
+      this.flipped = true;
+      if(this.currentSpeed > -this.movementSpeed){
+        if(this.currentSpeed <= 0){
+          this.animateRunning();
+        } else {
+          this.image = marioTexture[2];
+        }
+        this.currentSpeed -= this.movementSpeed/25;
+      } else {
+        this.animateRunning();
+        this.currentSpeed = -this.movementSpeed;
+      }
     }
-    if(this.x >= 0 && moveLeft == true){
-        this.x -= this.movementSpeed;
+    if(this.x >= 0 && this.x < screenWidth/2){
+      this.x += this.currentSpeed;
+    } else if(this.x + this.width/2 > screenWidth/2){
+      if(moveLeft){
+        this.flipped = true;
+        if(this.currentSpeed <= 0){
+          this.x = screenWidth/2 - this.width/2;
+        }
+        this.x -= this.currentSpeed;
+      } else {
+        this.flipped = false;
+      }
+      xPositionInLevel += this.currentSpeed/2;
+    } else {
+      this.flipped = false;
+      this.currentSpeed = 0;
+      this.x = 0;
+    }
+    if(!moveRight && !moveLeft && !lifeLost && !ending && !this.jump){
+      if(this.currentSpeed < this.movementSpeed/25 && this.currentSpeed > -this.movementSpeed/25){
+        this.currentSpeed = 0;
+        this.image = marioTexture[0];
+      } else {
+        if(this.currentSpeed >= this.movementSpeed/25){
+          this.currentSpeed -= this.movementSpeed/25;
+          this.flipped = false;
+          this.animateRunning();
+        }
+        if(this.currentSpeed <= -this.movementSpeed/25){
+          this.currentSpeed += this.movementSpeed/25;
+          this.flipped = true;
+          this.animateRunning();
+        }
+      }
     }
   }
 
@@ -332,12 +406,14 @@ class Mario extends BasicObject{
     }
 
     if (this.jump == true) {
+      this.image = marioTexture[6];
       this.fallAction();
     }
   };
 
   gameOver() {
     this.y -= this.movementSpeed*5;
+    this.image = marioTexture[1];
     lifeLost = true;
     gameplayFreeze = true;
 
@@ -347,7 +423,6 @@ class Mario extends BasicObject{
         refreshLevelAndGoToScene("main");
         lifeLost = false;
         lives = 3;
-        setHighscore(score, highscore);
       }, 1000);
     } else {
       setTimeout(function (){
@@ -364,11 +439,45 @@ class Mario extends BasicObject{
   }
 }
 
+/* any sprite which the user does not control and can interact with mario
+it also contains built in gravity  */
 class Sprite extends BasicObject{
   detectCollisionWithObject(object){
     if(isColliding(object, this)){
-      this.collision()
+      this.velocity = 0;
+      if(this.y + this.height/2 >= object.y + object.height/3){
+        this.collision();
+        if(this.x >= object.x + object.width/2){
+          this.x = object.x + object.width;
+        }
+        if(this.x + this.width <= object.x + object.width/2){
+          this.x = object.x - this.width;
+        }
+      } else {
+        this.y = object.y - this.height;
+      }
+    } else {
+      this.blocksNotCollidedWith.push(0);
     }
+  }
+
+  checkFall(){
+    if(this.blocksNotCollidedWith.length == allCollidableObjects.length){
+      this.velocity += gravity;
+      this.y += this.velocity;
+    }
+  }
+
+  collisions() {
+    this.blocksNotCollidedWith = [];
+    for(var j = 0; j < allCollidableObjects.length; j++){
+      if(allCollidableObjects[j] != this){
+        this.detectCollisionWithObject(allCollidableObjects[j]);
+      } else {
+        this.blocksNotCollidedWith.push(0);
+      }
+    }
+    this.checkFall();
   }
 
   detectCollisionWithMario(){
@@ -383,14 +492,18 @@ class Sprite extends BasicObject{
 /* Enemy Class extends from basic object because it is also quite
 unique, it is the basis for all enemies in mario */
 class Enemy extends Sprite{
-  constructor(x, y, width, height, movementSpeed, image){
+  constructor(section ,blocksFromRight, blocksAboveGround, width, height, movementSpeed, image){
+    var x = screenWidth*section + blockSize*blocksFromRight;
+    var y = groundLevelY - blockSize*blocksAboveGround - height;
     super(x, y, width, height, image[0]);
     this.imageArray = image;
     this.movementSpeed = movementSpeed;
+    this.velocity = 0;
     this.index = 0;
     this.squashed = false;
     this.removed = false;
     this.counter = 0;
+    this.blocksNotCollidedWith = [];
   }
 
   draw(){
@@ -411,10 +524,10 @@ class Enemy extends Sprite{
 	}
 
   moveWithMario(){
-    if(this.squashed == false){
-    this.originX -= this.movementSpeed;
-    super.moveWithMario();
+    if(!this.squashed && inScreen(this)){
+      this.originX -= this.movementSpeed;
     }
+    super.moveWithMario();
   }
 
   squashSprite(){
@@ -432,6 +545,14 @@ class Enemy extends Sprite{
         this.squashSprite();
         setTimeout(() => {
           this.removed = true;
+          for(var j = 0; j < allCollidableObjects.length; j++){
+            if(allCollidableObjects[j] == this){
+              var index = allCollidableObjects.indexOf(this);
+              if (index > -1) {
+                allCollidableObjects.splice(index, 1);
+              }
+            }
+          }
         }, 1000);
       } else {
         mario.gameOver();
@@ -443,6 +564,22 @@ class Enemy extends Sprite{
           this.removed = true;
         }, 1000);
     }
+  }
+
+  collision(){
+    this.movementSpeed = -this.movementSpeed;
+  }
+}
+
+/* An extention for enemy class so that it is easier to declare goomba
+  enemies due to preset width, height and image*/
+class Goomba extends Enemy {
+  constructor(section ,blocksFromRight, blocksAboveGround){
+    var width = blockSize;
+    var height = goombaHeight;
+    var image = goomba;
+    var movementSpeed = screenWidth/1500;
+    super(section ,blocksFromRight, blocksAboveGround, width, height, movementSpeed, image);
   }
 }
 
@@ -464,7 +601,9 @@ class MovingCloud extends BasicObject {
   }
 }
 
-
+/* cloud object is just a background object which mario does not
+  interact with, it is a class due to simplicity of creation and
+  declaration in declaringFunctions.js. There is a small medium and big size */
 class Cloud extends BasicObject {
   constructor(section, blocksFromRight, blocksAboveGround, size){
     var cloudImage;
@@ -481,6 +620,9 @@ class Cloud extends BasicObject {
   }
 }
 
+/* cloud object is just a background object which mario does not
+  interact with, it is a class due to simplicity of creation and
+  declaration in declaringFunctions.js. There is a small medium and big size */
 class Bush extends BasicObject {
   constructor(section, blocksFromRight, size){
     var bushImage;
@@ -496,6 +638,9 @@ class Bush extends BasicObject {
   }
 }
 
+/* cloud object is just a background object which mario does not
+  interact with, it is a class due to simplicity of creation and
+  declaration in declaringFunctions.js. There is a big and small size*/
 class Hill extends BasicObject {
   constructor(section, blocksFromRight, size){
     var hillImage;
@@ -511,6 +656,9 @@ class Hill extends BasicObject {
   }
 }
 
+/* text objected needed as object for simplicity and so it can be
+  resized easier because it uses the screen change multipler to
+  reposition and resize it as an array of objects */
 class Text {
   constructor(x, y ,font, size, alignment, colour, text){
     this.x = x;
@@ -524,5 +672,42 @@ class Text {
 
   draw(){
     drawText(this.x, this.y ,this.font, this.width, this.alignment, this.colour, this.text);
+  }
+}
+
+/* the ending pole mario jumps onto and ends the level begining the next level */
+class EndingPole extends NormalBlock {
+  constructor(section, blocksFromRight, blocksAboveGround){
+    var image = endingPole;
+    super(section, blocksFromRight, blocksAboveGround, image);
+    this.width = blockSize/2;
+    this.height = blockSize * 9.5;
+  }
+
+  draw(){
+    super.draw();
+    if(!ending){
+      this.flagX = this.x - blockSize * 0.75;
+      this.flagY = this.y + blockSize * 0.5625;
+    }
+    drawImageOnCanvas(this.flagX, this.flagY, blockSize, blockSize, endingFlag);
+  }
+
+  detectCollisionWithMario() {
+    if(isColliding(mario, this) == true){
+      ending = true;
+      mario.image = marioTexture[7];
+      mario.x = this.x - blockSize*10/16;
+      if(this.flagY + blockSize < this.y + this.height){
+        this.flagY += screenHeight/80;
+      } else {
+        this.flagY =  this.y + this.height - blockSize;
+      }
+      if(mario.y + mario.height < this.y + this.height){
+        mario.y += screenHeight/80;
+      } else {
+        mario.y = this.y + this.height - mario.height;
+      }
+    }
   }
 }

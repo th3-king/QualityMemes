@@ -84,6 +84,7 @@ function initialiseLevelOneBlocks(){
     new MysteryBox(6, 20, 4, mysteryBox, "coin", 1),
 
     new SolidBlock(7, 23, 1, solidBlock),
+    new EndingPole(7, 23.25, 10.5),
 
     //(x, lengthFromGround)
     new Pipe(screenWidth + blockSize * 3, 2),
@@ -118,7 +119,24 @@ function initialiseLevelOneCoins() {
 function initialiseLevelOneEnemies() {
   levelEnemies = [];
   levelEnemies.push(
-    new Enemy(screenWidth*3/4, (groundLevelY - goombaHeight), blockSize, goombaHeight, screenWidth/1500, goomba)
+    //Enemy(section, blocksFromRight, blocksAboveGround)
+
+    new Goomba(0, 20.5625, 0),
+    new Goomba(1, 15.25, 0),
+    new Goomba(2, 2.5625, 0),
+    new Goomba(2, 4.0625, 0),
+    new Goomba(3, 3.75, 5.375),
+    new Goomba(3, 6.5, 8),
+    new Goomba(3, 19.8125, 0),
+    new Goomba(3, 21.3125, 0),
+    new Goomba(4, 23.375, 0),
+    new Goomba(4, 24.8125, 0),
+    new Goomba(5, 1.8125, 0),
+    new Goomba(5, 3.25, 0),
+    new Goomba(6, 23.1875, 0),
+    new Goomba(6, 24.625, 0)
+    
+
   );
 }
 

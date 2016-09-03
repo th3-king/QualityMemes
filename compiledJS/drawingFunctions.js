@@ -50,6 +50,18 @@ function drawImageOnCanvas(x, y, width, height, image) {
 	context.drawImage(image, x, y, width, height);
 }
 
+//draws a flipped image and replaces it in same place as drawn normally
+function drawFlippedImage(x, y, width, height, image) {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+
+	context.save();
+	context.scale(-1, 1);
+	context.drawImage(image, -x - width, y, width, height);
+	context.restore();
+}
+
+//creates clouds used only in main scene for aesthetics
 function createClouds(amountOfClouds) {
 	var cloudType = 0;
 	var cloudImage;
@@ -75,10 +87,12 @@ function createClouds(amountOfClouds) {
 	}
 }
 
+//simple function for clearing screen
 function clearScene() {
 	drawRect(0, 0, screenWidth, screenHeight, "white");
 }
 
+//draws paused box when game is paused in level
 function drawPausedBox() {
 	drawImageOnCanvas(screenWidth / 4, screenHeight / 8, screenWidth / 2, screenHeight / 2, pauseBox);
 	drawImageOnCanvas(screenWidth * 5 / 16, screenHeight * 7 / 32, screenWidth * 3 / 8, screenHeight / 14, gamePausedText);
@@ -86,6 +100,7 @@ function drawPausedBox() {
 	drawImageOnCanvas(screenWidth * 3 / 8, screenHeight * 3 / 8, screenWidth / 4, screenHeight / 20, mainMenuText);
 }
 
+//draws the top bar of text without time number used for preLevel and main scene 
 function drawTopBar(colour) {
 	drawText(screenWidth / 50, screenHeight / 18, "emulogic", screenWidth / 50, "left", colour, "Mario ");
 	drawText(screenWidth / 50, screenHeight * 2 / 18, "emulogic", screenWidth / 50, "left", colour, score.toString());
