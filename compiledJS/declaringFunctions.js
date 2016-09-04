@@ -13,7 +13,10 @@ function initialiseLevelOneBackground() {
 
   //bush objects (section, blocksFromRight, size)
   //size 1 = small, 2 = medium, 3 = large
-  new Bush(0, 11.5, 3), new Bush(0, 23.5, 1), new Bush(1, 16.5, 2), new Bush(2, 9.5, 3), new Bush(2, 21.5, 1), new Bush(3, 14.5, 2), new Bush(4, 7.5, 3), new Bush(4, 19.5, 1), new Bush(5, 12.5, 2), new Bush(6, 7.5, 1), new Bush(6, 17.5, 1));
+  new Bush(0, 11.5, 3), new Bush(0, 23.5, 1), new Bush(1, 16.5, 2), new Bush(2, 9.5, 3), new Bush(2, 21.5, 1), new Bush(3, 14.5, 2), new Bush(4, 7.5, 3), new Bush(4, 19.5, 1), new Bush(5, 12.5, 2), new Bush(6, 7.5, 1), new Bush(6, 17.5, 1),
+
+  //final castle
+  new BasicObject(blockSize * 202, blockSize * 6.3125, blockSize * 5, blockSize * 5, castle));
 }
 
 function initialiseLevelOneBlocks() {

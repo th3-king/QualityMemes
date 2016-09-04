@@ -17,6 +17,8 @@ const gamePausedText    = new Image();
 const levelSelectText   = new Image();
 const mainMenuText      = new Image();
 const resumeGameText    = new Image();
+const helpButton        = new Image();
+const helpKeys          = [new Image(), new Image(), new Image()];
 const coin              = [new Image(), new Image(), new Image(), new Image()];
 const floatingBlock     = new Image();
 const solidBlock        = new Image();
@@ -33,6 +35,9 @@ const turtle            = [new Image(), new Image(), new Image()];
 const flower            = [new Image(), new Image(), new Image(), new Image()];
 const blueFlower        = [new Image(), new Image(), new Image(), new Image()];
 const starPower         = [new Image(), new Image(), new Image(), new Image(), new Image()];
+const castle            = new Image();
+const bigCastle         = new Image();
+const castleFlag        = new Image();
 
 //texture sources
 //marioTextures
@@ -57,6 +62,13 @@ cloudTextures[2].src  = "textures/backgroundTextures/cloudLargeTexture.png";
 bushTextures[0].src   = "textures/backgroundTextures/bushSmallTexture.png";
 bushTextures[1].src   = "textures/backgroundTextures/bushMediumTexture.png";
 bushTextures[2].src   = "textures/backgroundTextures/bushLargeTexture.png";
+castle.src            = "textures/backgroundTextures/castle.png";
+bigCastle.src         = "textures/backgroundTextures/bigCastle.png";
+castleFlag.src        = "textures/backgroundTextures/castleFlag.png";
+helpButton.src        = "textures/backgroundTextures/help.png";
+helpKeys[0].src       = "textures/backgroundTextures/keyboardArrows.png";
+helpKeys[1].src       = "textures/backgroundTextures/xKey.png";
+helpKeys[2].src       = "textures/backgroundTextures/zKey.png";
 
 //levelSelectTextures
 levelOneBox.src       = "textures/levelSelectTextures/levelOneBox.png";

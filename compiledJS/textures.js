@@ -19,6 +19,8 @@ var gamePausedText = new Image();
 var levelSelectText = new Image();
 var mainMenuText = new Image();
 var resumeGameText = new Image();
+var helpButton = new Image();
+var helpKeys = [new Image(), new Image(), new Image()];
 var coin = [new Image(), new Image(), new Image(), new Image()];
 var floatingBlock = new Image();
 var solidBlock = new Image();
@@ -35,6 +37,9 @@ var turtle = [new Image(), new Image(), new Image()];
 var flower = [new Image(), new Image(), new Image(), new Image()];
 var blueFlower = [new Image(), new Image(), new Image(), new Image()];
 var starPower = [new Image(), new Image(), new Image(), new Image(), new Image()];
+var castle = new Image();
+var bigCastle = new Image();
+var castleFlag = new Image();
 
 //texture sources
 //marioTextures
@@ -59,6 +64,13 @@ cloudTextures[2].src = "textures/backgroundTextures/cloudLargeTexture.png";
 bushTextures[0].src = "textures/backgroundTextures/bushSmallTexture.png";
 bushTextures[1].src = "textures/backgroundTextures/bushMediumTexture.png";
 bushTextures[2].src = "textures/backgroundTextures/bushLargeTexture.png";
+castle.src = "textures/backgroundTextures/castle.png";
+bigCastle.src = "textures/backgroundTextures/bigCastle.png";
+castleFlag.src = "textures/backgroundTextures/castleFlag.png";
+helpButton.src = "textures/backgroundTextures/help.png";
+helpKeys[0].src = "textures/backgroundTextures/keyboardArrows.png";
+helpKeys[1].src = "textures/backgroundTextures/xKey.png";
+helpKeys[2].src = "textures/backgroundTextures/zKey.png";
 
 //levelSelectTextures
 levelOneBox.src = "textures/levelSelectTextures/levelOneBox.png";

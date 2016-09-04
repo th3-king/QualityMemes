@@ -62,6 +62,9 @@ var OneTimeObject = function (_BasicObject) {
     value: function detectCollisionWithMario() {
       if (isColliding(mario, this)) {
         this.collected = true;
+        if (this.collected) {
+          this.isCollected();
+        }
       }
     }
   }]);
@@ -74,37 +77,30 @@ var OneTimeObject = function (_BasicObject) {
  one it increments score by 25 */
 
 
-var Coin = function (_OneTimeObject) {
-  _inherits(Coin, _OneTimeObject);
+var AnimatedOneTimeObject = function (_OneTimeObject) {
+  _inherits(AnimatedOneTimeObject, _OneTimeObject);
 
-  function Coin(x, y) {
-    _classCallCheck(this, Coin);
+  function AnimatedOneTimeObject(x, y, imageArray, speedOfAnimation) {
+    _classCallCheck(this, AnimatedOneTimeObject);
 
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Coin).call(this, x, y, coin[0]));
+    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(AnimatedOneTimeObject).call(this, x, y, imageArray[0]));
 
+    _this2.imageArray = imageArray;
     _this2.index = 0;
     _this2.width = screenHeight * 25 / 528;
     _this2.height = screenHeight / 16;
     _this2.counter = 0;
+    _this2.speedOfAnimation = speedOfAnimation;
     return _this2;
   }
 
-  _createClass(Coin, [{
-    key: "detectCollisionWithMario",
-    value: function detectCollisionWithMario() {
-      _get(Object.getPrototypeOf(Coin.prototype), "detectCollisionWithMario", this).call(this);
-      if (this.collected == true) {
-        ++coinsCollected;
-        score += 25;
-      }
-    }
-  }, {
+  _createClass(AnimatedOneTimeObject, [{
     key: "draw",
     value: function draw() {
-      this.image = coin[this.index];
-      _get(Object.getPrototypeOf(Coin.prototype), "draw", this).call(this);
-      if (this.counter == 6) {
-        if (this.index < coin.length - 1) {
+      this.image = this.imageArray[this.index];
+      _get(Object.getPrototypeOf(AnimatedOneTimeObject.prototype), "draw", this).call(this);
+      if (this.counter == this.speedOfAnimation) {
+        if (this.index < this.imageArray.length - 1) {
           this.index++;
         } else {
           this.index = 0;
@@ -116,9 +112,58 @@ var Coin = function (_OneTimeObject) {
     }
   }]);
 
-  return Coin;
+  return AnimatedOneTimeObject;
 }(OneTimeObject);
 
+var Coin = function (_AnimatedOneTimeObjec) {
+  _inherits(Coin, _AnimatedOneTimeObjec);
+
+  function Coin(x, y) {
+    _classCallCheck(this, Coin);
+
+    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Coin).call(this, x, y, coin, 6));
+
+    _this3.width = screenHeight * 25 / 528;
+    _this3.height = screenHeight / 16;
+    return _this3;
+  }
+
+  _createClass(Coin, [{
+    key: "isCollected",
+    value: function isCollected() {
+      ++coinsCollected;
+      score += 25;
+    }
+  }]);
+
+  return Coin;
+}(AnimatedOneTimeObject);
+
+var Star = function (_AnimatedOneTimeObjec2) {
+  _inherits(Star, _AnimatedOneTimeObjec2);
+
+  function Star(x, y) {
+    _classCallCheck(this, Star);
+
+    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Star).call(this, x, y, starPower, 4));
+
+    _this4.width = blockSize * 14 / 16;
+    _this4.height = blockSize / 16;
+    return _this4;
+  }
+
+  _createClass(Star, [{
+    key: "isCollected",
+    value: function isCollected() {
+      mario.starMode = true;
+      setTimeout(function () {
+        mario.starMode = false;
+      }, 10000);
+    }
+  }]);
+
+  return Star;
+}(AnimatedOneTimeObject);
 /* any object which can be collided into by mario
   (includes spawnAbility and popUpBlock because it is used
    in MysteryBox and NormalBlock) */
@@ -130,12 +175,12 @@ var CollidableObject = function (_BasicObject2) {
   function CollidableObject(x, y, width, height, image) {
     _classCallCheck(this, CollidableObject);
 
-    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(CollidableObject).call(this, x, y, width, height, image));
+    var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(CollidableObject).call(this, x, y, width, height, image));
 
-    _this3.removed = false;
-    _this3.popUpInterval = 0;
-    _this3.spawnAbilityInterval = 0;
-    return _this3;
+    _this5.removed = false;
+    _this5.popUpInterval = 0;
+    _this5.spawnAbilityInterval = 0;
+    return _this5;
   }
 
   _createClass(CollidableObject, [{
@@ -160,7 +205,7 @@ var CollidableObject = function (_BasicObject2) {
   }, {
     key: "spawnAbility",
     value: function spawnAbility(objectArray, peakHeight, rest, speed, disappear) {
-      var _this4 = this;
+      var _this6 = this;
 
       var peaked = false;
       var object = objectArray[objectArray.length - 1];
@@ -176,8 +221,8 @@ var CollidableObject = function (_BasicObject2) {
           }
           if (peaked == true && object.y > object.originY - rest) {
             object.y = object.originY - rest;
-            clearInterval(_this4.spawnAbilityInterval);
-            _this4.spawnAbilityInterval = 0;
+            clearInterval(_this6.spawnAbilityInterval);
+            _this6.spawnAbilityInterval = 0;
             if (disappear == true) {
               objectArray.pop();
               score += 200;
@@ -189,23 +234,23 @@ var CollidableObject = function (_BasicObject2) {
   }, {
     key: "popUpBlock",
     value: function popUpBlock() {
-      var _this5 = this;
+      var _this7 = this;
 
       var peaked = false;
       if (this.popUpInterval == undefined || this.popUpInterval == 0) {
         this.popUpInterval = setInterval(function () {
-          if (_this5.y > _this5.originY - screenHeight / 100 && peaked == false) {
-            _this5.y -= screenHeight / 500;
+          if (_this7.y > _this7.originY - screenHeight / 100 && peaked == false) {
+            _this7.y -= screenHeight / 500;
           } else {
             peaked = true;
           }
           if (peaked == true) {
-            _this5.y += screenHeight / 500;
+            _this7.y += screenHeight / 500;
           }
-          if (peaked == true && _this5.y > _this5.originY) {
-            _this5.y = _this5.originY;
-            clearInterval(_this5.popUpInterval);
-            _this5.popUpInterval = 0;
+          if (peaked == true && _this7.y > _this7.originY) {
+            _this7.y = _this7.originY;
+            clearInterval(_this7.popUpInterval);
+            _this7.popUpInterval = 0;
           }
         }, 25);
       }
@@ -308,13 +353,13 @@ var MysteryBox = function (_CollidableObject2) {
     var x = screenWidth * section + blockSize * blocksFromRight;
     var y = groundLevelY - blockSize * blocksAboveGround;
 
-    var _this8 = _possibleConstructorReturn(this, Object.getPrototypeOf(MysteryBox).call(this, x, y, blockSize, blockSize, image));
+    var _this10 = _possibleConstructorReturn(this, Object.getPrototypeOf(MysteryBox).call(this, x, y, blockSize, blockSize, image));
 
-    _this8.inside = inside;
-    _this8.hit = false;
-    _this8.abilitiesAlreadySpawned = 0;
-    _this8.amountOfAbilities = amountOfAbilities;
-    return _this8;
+    _this10.inside = inside;
+    _this10.hit = false;
+    _this10.abilitiesAlreadySpawned = 0;
+    _this10.amountOfAbilities = amountOfAbilities;
+    return _this10;
   }
 
   _createClass(MysteryBox, [{
@@ -361,10 +406,10 @@ var Pipe = function (_CollidableObject3) {
   function Pipe(x, blocksHeigh) {
     _classCallCheck(this, Pipe);
 
-    var _this9 = _possibleConstructorReturn(this, Object.getPrototypeOf(Pipe).call(this, x, groundLevelY - blockSize * blocksHeigh, blockSize * 2, blockSize * blocksHeigh, [pipeHead, pipeBody]));
+    var _this11 = _possibleConstructorReturn(this, Object.getPrototypeOf(Pipe).call(this, x, groundLevelY - blockSize * blocksHeigh, blockSize * 2, blockSize * blocksHeigh, [pipeHead, pipeBody]));
 
-    _this9.amountOfBodies = blocksHeigh - 1;
-    return _this9;
+    _this11.amountOfBodies = blocksHeigh - 1;
+    return _this11;
   }
 
   _createClass(Pipe, [{
@@ -425,19 +470,19 @@ var Mario = function (_BasicObject3) {
   function Mario(x, y, width, height, image) {
     _classCallCheck(this, Mario);
 
-    var _this11 = _possibleConstructorReturn(this, Object.getPrototypeOf(Mario).call(this, x, y, width, height, image));
+    var _this13 = _possibleConstructorReturn(this, Object.getPrototypeOf(Mario).call(this, x, y, width, height, image));
 
-    _this11.velocity = 0;
-    _this11.gravity = screenHeight / 5000;
-    _this11.movementSpeed = screenWidth / 300;
-    _this11.jump = false;
-    _this11.starMode = false;
-    _this11.isBig = false;
-    _this11.currentSpeed = 0;
-    _this11.currentImage = 3;
-    _this11.flipped = false;
-    _this11.runningCounter = 0;
-    return _this11;
+    _this13.velocity = 0;
+    _this13.gravity = screenHeight / 5000;
+    _this13.movementSpeed = screenWidth / 300;
+    _this13.jump = false;
+    _this13.starMode = false;
+    _this13.isBig = false;
+    _this13.currentSpeed = 0;
+    _this13.currentImage = 3;
+    _this13.flipped = false;
+    _this13.runningCounter = 0;
+    return _this13;
   }
 
   _createClass(Mario, [{
@@ -668,17 +713,17 @@ var Enemy = function (_Sprite) {
     var x = screenWidth * section + blockSize * blocksFromRight;
     var y = groundLevelY - blockSize * blocksAboveGround - height;
 
-    var _this13 = _possibleConstructorReturn(this, Object.getPrototypeOf(Enemy).call(this, x, y, width, height, image[0]));
+    var _this15 = _possibleConstructorReturn(this, Object.getPrototypeOf(Enemy).call(this, x, y, width, height, image[0]));
 
-    _this13.imageArray = image;
-    _this13.movementSpeed = movementSpeed;
-    _this13.velocity = 0;
-    _this13.index = 0;
-    _this13.squashed = false;
-    _this13.removed = false;
-    _this13.counter = 0;
-    _this13.blocksNotCollidedWith = [];
-    return _this13;
+    _this15.imageArray = image;
+    _this15.movementSpeed = movementSpeed;
+    _this15.velocity = 0;
+    _this15.index = 0;
+    _this15.squashed = false;
+    _this15.removed = false;
+    _this15.counter = 0;
+    _this15.blocksNotCollidedWith = [];
+    return _this15;
   }
 
   _createClass(Enemy, [{
@@ -719,17 +764,17 @@ var Enemy = function (_Sprite) {
   }, {
     key: "collisionWithMario",
     value: function collisionWithMario() {
-      var _this14 = this;
+      var _this16 = this;
 
       if (mario.starMode == false) {
         if (mario.y + mario.height <= this.y + this.height / 2) {
           mario.velocity = screenHeight / 150;
           this.squashSprite();
           setTimeout(function () {
-            _this14.removed = true;
+            _this16.removed = true;
             for (var j = 0; j < allCollidableObjects.length; j++) {
-              if (allCollidableObjects[j] == _this14) {
-                var index = allCollidableObjects.indexOf(_this14);
+              if (allCollidableObjects[j] == _this16) {
+                var index = allCollidableObjects.indexOf(_this16);
                 if (index > -1) {
                   allCollidableObjects.splice(index, 1);
                 }
@@ -743,7 +788,7 @@ var Enemy = function (_Sprite) {
         mario.velocity = screenHeight / 80;
         this.squashSprite();
         setTimeout(function () {
-          _this14.removed = true;
+          _this16.removed = true;
         }, 1000);
       }
     }
@@ -788,10 +833,10 @@ var MovingCloud = function (_BasicObject5) {
   function MovingCloud(x, y, width, height, movementSpeed, image) {
     _classCallCheck(this, MovingCloud);
 
-    var _this16 = _possibleConstructorReturn(this, Object.getPrototypeOf(MovingCloud).call(this, x, y, width, height, image));
+    var _this18 = _possibleConstructorReturn(this, Object.getPrototypeOf(MovingCloud).call(this, x, y, width, height, image));
 
-    _this16.movementSpeed = movementSpeed;
-    return _this16;
+    _this18.movementSpeed = movementSpeed;
+    return _this18;
   }
 
   _createClass(MovingCloud, [{
@@ -926,11 +971,11 @@ var EndingPole = function (_NormalBlock2) {
 
     var image = endingPole;
 
-    var _this20 = _possibleConstructorReturn(this, Object.getPrototypeOf(EndingPole).call(this, section, blocksFromRight, blocksAboveGround, image));
+    var _this22 = _possibleConstructorReturn(this, Object.getPrototypeOf(EndingPole).call(this, section, blocksFromRight, blocksAboveGround, image));
 
-    _this20.width = blockSize / 2;
-    _this20.height = blockSize * 9.5;
-    return _this20;
+    _this22.width = blockSize / 2;
+    _this22.height = blockSize * 9.5;
+    return _this22;
   }
 
   _createClass(EndingPole, [{

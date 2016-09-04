@@ -33,6 +33,9 @@ class OneTimeObject extends BasicObject {
   detectCollisionWithMario() {
     if(isColliding(mario, this)){
       this.collected = true;
+      if(this.collected){
+        this.isCollected();
+      }
     }
   }
 }
@@ -41,28 +44,22 @@ class OneTimeObject extends BasicObject {
 /* Coin object is an object which animates through the coin images
  to give off the illusion it is rotating and when player collects
  one it increments score by 25 */
-class Coin extends OneTimeObject {
-  constructor(x, y){
-    super(x,y,coin[0]);
+class AnimatedOneTimeObject extends OneTimeObject {
+  constructor(x, y, imageArray, speedOfAnimation){
+    super(x,y,imageArray[0]);
+    this.imageArray = imageArray;
     this.index = 0;
   	this.width = screenHeight*25/528;
   	this.height = screenHeight/16;
     this.counter = 0;
-  }
-
-  detectCollisionWithMario(){
-    super.detectCollisionWithMario();
-    if(this.collected == true){
-      ++coinsCollected;
-      score += 25;
-    }
+    this.speedOfAnimation = speedOfAnimation;
   }
 
   draw(){
-    this.image = coin[this.index];
+    this.image = this.imageArray[this.index];
     super.draw();
-    if(this.counter == 6){
-      if(this.index < coin.length - 1){
+    if(this.counter == this.speedOfAnimation){
+      if(this.index < this.imageArray.length - 1){
         this.index++;
       } else {
         this.index = 0;
@@ -74,6 +71,33 @@ class Coin extends OneTimeObject {
   }
 }
 
+class Coin extends AnimatedOneTimeObject{
+  constructor(x,y){
+    super(x,y,coin, 6);
+    this.width = screenHeight*25/528;
+  	this.height = screenHeight/16;
+  }
+
+  isCollected(){
+      ++coinsCollected;
+      score += 25;
+  }
+}
+
+class Star extends AnimatedOneTimeObject{
+  constructor(x,y){
+    super(x,y,starPower, 4);
+    this.width = blockSize*14/16;
+  	this.height = blockSize/16;
+  }
+
+  isCollected(){
+    mario.starMode = true;
+    setTimeout(function(){
+      mario.starMode = false;
+    }, 10000)
+  }
+}
 /* any object which can be collided into by mario
   (includes spawnAbility and popUpBlock because it is used
    in MysteryBox and NormalBlock) */

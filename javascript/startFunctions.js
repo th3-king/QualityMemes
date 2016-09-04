@@ -73,6 +73,9 @@ function initialiseScene() {
         startScreenInterval = setInterval(mainScene, 15);
       }
   	break;
+    case "helpScene":
+      helpScene();
+    break;
     case "preLevel":
       preLevel();
     break;

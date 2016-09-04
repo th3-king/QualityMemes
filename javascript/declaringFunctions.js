@@ -44,7 +44,10 @@ function initialiseLevelOneBackground(){
     new Bush(4, 19.5, 1),
     new Bush(5, 12.5, 2),
     new Bush(6, 7.5, 1),
-    new Bush(6, 17.5, 1)
+    new Bush(6, 17.5, 1),
+
+    //final castle
+    new BasicObject(blockSize*202, blockSize*6.3125, blockSize*5, blockSize*5, castle)
   )
 }
 
@@ -135,7 +138,7 @@ function initialiseLevelOneEnemies() {
     new Goomba(5, 3.25, 0),
     new Goomba(6, 23.1875, 0),
     new Goomba(6, 24.625, 0)
-    
+
 
   );
 }

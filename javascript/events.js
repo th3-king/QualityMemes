@@ -68,6 +68,11 @@ function getPositionClick(event) {
         currentScene = "preLevel";
         initialiseScene();
       }
+      if((x > screenWidth*3/40 && x < screenWidth*3/40 + screenHeight*1.56/7)&&(y > screenHeight*16/32 && y < screenHeight/7 + screenHeight*16/32 )){
+        refreshMainScene();
+        currentScene = "helpScene";
+        initialiseScene();
+      }
     break;
     case "levelOne":
      if(gameplayFreeze){

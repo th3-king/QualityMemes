@@ -13,8 +13,10 @@ function mainScene() {
   drawImageOnCanvas(screenWidth/6, screenHeight*11/16, hillSmallWidth, hillSmallHeight, hillSmallTexture);
   drawImageOnCanvas(screenWidth*2/7, screenHeight*10/16, hillLargeWidth, hillLargeHeight, hillLargeTexture);
 
+
   //sprites
   drawImageOnCanvas(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, marioTexture[0]);
+  drawImageOnCanvas(screenWidth*3/40, screenHeight*16/32, screenHeight*1.56/7, screenHeight/7, helpButton)
 
   //draws clouds and moves clouds
   for(var i = 0; i < clouds.length; i++){
@@ -31,6 +33,31 @@ function mainScene() {
   drawImageOnCanvas(screenWidth*5/16, screenHeight*9/16, screenWidth*3/8, screenHeight/16, playButton);
 }
 
+function helpScene() {
+  clearScene();
+
+  //background
+  drawRect(0,0, screenWidth, screenHeight, "#4B7DFA");
+  //floor
+  imageRepeat(groundTexture, 0, screenHeight*6/8, screenHeight/8, screenHeight/8, screenWidth/(screenHeight*1/8), 2);
+  //two hills
+  drawImageOnCanvas(screenWidth/6, screenHeight*11/16, hillSmallWidth, hillSmallHeight, hillSmallTexture);
+  drawImageOnCanvas(screenWidth*2/7, screenHeight*10/16, hillLargeWidth, hillLargeHeight, hillLargeTexture);
+
+
+  //sprites
+  drawImageOnCanvas(screenHeight/15, screenHeight*3/5, screenHeight*1/10, screenHeight*3/20, marioTexture[0]);
+
+  //help stuff
+  drawText(screenWidth/2, screenHeight*3/20 ,"emulogic", 30, "center", "black", "help");
+  drawText(screenWidth*4/20, screenHeight*5/20 ,"emulogic", 12, "left", "black", "Uses theses keys to move Mario \b around");
+  drawText(screenWidth*13/20, screenHeight*9/20 ,"emulogic", 12, "left", "black", "help");
+  drawText(screenWidth*3/20, screenHeight*9/20 ,"emulogic", 12, "left", "black", "help");
+
+  drawImageOnCanvas(screenWidth/40, screenHeight*3/20, screenWidth*3/20, screenHeight/6, helpKeys[0]);
+  drawImageOnCanvas(screenWidth*16/30, screenHeight*8/20, screenHeight/10, screenHeight/10, helpKeys[1]);
+  drawImageOnCanvas(screenWidth/30, screenHeight*8/20, screenHeight/10, screenHeight/10, helpKeys[2]);
+}
 
 //Level Selection scene
 function preLevel() {
