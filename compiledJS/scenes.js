@@ -17,7 +17,6 @@ function mainScene() {
 
   //sprites
   drawImageOnCanvas(screenHeight / 15, screenHeight * 3 / 5, screenHeight * 1 / 10, screenHeight * 3 / 20, marioTexture[0]);
-  drawImageOnCanvas(screenWidth * 3 / 40, screenHeight * 16 / 32, screenHeight * 1.56 / 7, screenHeight / 7, helpButton);
 
   //draws clouds and moves clouds
   for (var i = 0; i < clouds.length; i++) {
@@ -27,8 +26,9 @@ function mainScene() {
 
   drawTopBar("black");
 
-  //title has to go after cloud due to layering
+  //title and speach bubble has to go after cloud due to layering
   drawImageOnCanvas(screenWidth / 4, screenHeight / 8, screenWidth / 2, screenHeight / 3, titleTexture);
+  drawImageOnCanvas(screenWidth * 3 / 40, screenHeight / 2, screenHeight * 1.56 / 7, screenHeight / 7, helpButtons[0]);
 
   //play button
   drawImageOnCanvas(screenWidth * 5 / 16, screenHeight * 9 / 16, screenWidth * 3 / 8, screenHeight / 16, playButton);
@@ -45,18 +45,24 @@ function helpScene() {
   drawImageOnCanvas(screenWidth / 6, screenHeight * 11 / 16, hillSmallWidth, hillSmallHeight, hillSmallTexture);
   drawImageOnCanvas(screenWidth * 2 / 7, screenHeight * 10 / 16, hillLargeWidth, hillLargeHeight, hillLargeTexture);
 
-  //sprites
+  //mario drawing
   drawImageOnCanvas(screenHeight / 15, screenHeight * 3 / 5, screenHeight * 1 / 10, screenHeight * 3 / 20, marioTexture[0]);
 
-  //help stuff
-  drawText(screenWidth / 2, screenHeight * 3 / 20, "emulogic", 30, "center", "black", "help");
-  drawText(screenWidth * 4 / 20, screenHeight * 5 / 20, "emulogic", 12, "left", "black", "Uses theses keys to move Mario \b around");
-  drawText(screenWidth * 13 / 20, screenHeight * 9 / 20, "emulogic", 12, "left", "black", "help");
-  drawText(screenWidth * 3 / 20, screenHeight * 9 / 20, "emulogic", 12, "left", "black", "help");
+  //help text
+  drawText(screenWidth / 2, screenHeight * 3 / 20, "emulogic", screenHeight / 10, "center", "black", "help");
+  drawText(screenWidth * 4 / 20, screenHeight * 5 / 20, "emulogic", screenHeight / 26, "left", "black", "Uses theses keys to move Mario");
+  drawText(screenWidth * 4 / 20, screenHeight * 6 / 20, "emulogic", screenHeight / 26, "left", "black", "around");
+  drawText(screenWidth * 12 / 20, screenHeight * 9 / 20, "emulogic", screenHeight / 26, "left", "black", "Press X key to");
+  drawText(screenWidth * 12 / 20, screenHeight * 10 / 20, "emulogic", screenHeight / 26, "left", "black", "jump");
+  drawText(screenWidth * 2 / 20, screenHeight * 9 / 20, "emulogic", screenHeight / 26, "left", "black", "Press Z key to run");
 
-  drawImageOnCanvas(screenWidth / 40, screenHeight * 3 / 20, screenWidth * 3 / 20, screenHeight / 6, helpKeys[0]);
+  //keyboard key images
+  drawImageOnCanvas(screenWidth / 40, screenHeight * 4 / 20, screenWidth * 3 / 20, screenHeight / 6, helpKeys[0]);
   drawImageOnCanvas(screenWidth * 16 / 30, screenHeight * 8 / 20, screenHeight / 10, screenHeight / 10, helpKeys[1]);
   drawImageOnCanvas(screenWidth / 30, screenHeight * 8 / 20, screenHeight / 10, screenHeight / 10, helpKeys[2]);
+
+  //speach bubble
+  drawImageOnCanvas(screenWidth * 3 / 40, screenHeight * 16 / 32, screenHeight * 1.56 / 7, screenHeight / 7, helpButtons[1]);
 }
 
 //Level Selection scene
@@ -71,48 +77,44 @@ function preLevel() {
   gameTime = 400;
   counter = 0;
   setTimeout(function () {
-    currentScene = "levelOne";
+    currentScene = "levelThree";
     initialiseScene();
   }, 3000);
 }
 
 //Level One scene
 function levelScene() {
-  //clear
-  clearScene();
+  // background/clear
+  drawRect(0, 0, screenWidth, screenHeight, backgroundColour);
+  initialiseLevelText(textColour);
 
-  //background
-  drawRect(0, 0, screenWidth, screenHeight, "#4B7DFA");
-  drawImageOnCanvas(screenWidth * 3 / 10 - blockSize, screenHeight * 2 / 18 - blockSize * 5 / 6, blockSize * 2 / 3, blockSize, coin[0]);
-  initialiseLevelText();
-
-  //objects and mario
+  // objects and mario
   for (var i = 0; i < levelCoins.length; i++) {
-    if (levelCoins[i].collected == false) {
+    if (!levelCoins[i].collected) {
       levelCoins[i].draw();
     }
   }
 
   drawArray(levelGround);
   drawArray(levelBackgroundObjects);
-  drawArray(levelBlocks);
-  drawArray(levelText);
+  drawRemovableArray(levelBlocks);
+  drawImageOnCanvas(screenWidth * 3 / 10 - blockSize, screenHeight * 2 / 18 - blockSize * 5 / 6, blockSize * 2 / 3, blockSize, coin[0]);
 
-  for (var i = 0; i < levelEnemies.length; i++) {
-    if (inScreen(levelEnemies[i])) {
-      if (levelEnemies[i].removed == false) {
-        levelEnemies[i].draw();
-        levelEnemies[i].collisions();
-      }
-      if (levelEnemies[i].squashed == false && gameplayFreeze == false) {
-        levelEnemies[i].detectCollisionWithMario();
+  for (var i = 0; i < levelSprites.length; i++) {
+    if (inScreen(levelSprites[i])) {
+      if (!levelSprites[i].removed && !levelSprites[i].spawning) {
+        levelSprites[i].draw();
+        levelSprites[i].collisions();
+        if (!levelSprites[i].squashed && !gameplayFreeze) {
+          levelSprites[i].detectCollisionWithMario();
+        }
       }
     }
   }
   mario.draw();
 
   //update
-  if (gameplayFreeze == false) {
+  if (!gameplayFreeze) {
     //mario update
     if (!ending) {
       mario.jumpAction();
@@ -120,23 +122,27 @@ function levelScene() {
       updateTime();
     }
     //sprite update
-    for (var i = 0; i < levelEnemies.length; i++) {
-      levelEnemies[i].moveWithMario();
+    for (var i = 0; i < levelSprites.length; i++) {
+      levelSprites[i].moveWithMario();
+      if (levelSprites[i].spawning) {
+        levelSprites[i].spawning = false;
+      }
     }
     //blocks update
     groundNotCollidedWith = [];
-    collisionWithArrayOfBlocks(groundNotCollidedWith, levelGround);
+    collisionWithArrayOfBlocks(groundNotCollidedWith, allLevelBlocks);
+
     for (var i = 0; i < levelBlocks.length; i++) {
       levelBlocks[i].moveWithMario();
       levelBlocks[i].detectCollisionWithMario();
     }
 
-    if (groundNotCollidedWith.length == levelGround.length) {
+    if (groundNotCollidedWith.length == allLevelBlocks.length) {
       floorCollision = false;
     }
 
     for (var i = 0; i < levelCoins.length; i++) {
-      if (levelCoins[i].collected == false) {
+      if (!levelCoins[i].collected) {
         levelCoins[i].detectCollisionWithMario();
         levelCoins[i].moveWithMario();
       }
@@ -146,15 +152,15 @@ function levelScene() {
       levelBackgroundObjects[i].moveWithMario();
     }
 
-    if (floorCollision == false && mario.jump == false) {
+    if (!floorCollision && !mario.jump) {
       mario.fallAction();
     }
 
-    if (mario.y + mario.height > screenHeight || gameTime == 0) {
+    if (mario.y + mario.height > screenHeight || gameTime === 0) {
       mario.gameOver();
     }
   }
-  //console.log(xPositionInLevel);
   //pause scene causing menu to appear
   pauseScene();
+  drawArray(levelText);
 }

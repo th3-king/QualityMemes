@@ -12,7 +12,7 @@ function CreateCanvas() {
     if (initialRun == false){
       createScreenChangeMultiplierArray(levelGround);
       createScreenChangeMultiplierArray(clouds);
-      createScreenChangeMultiplierArray(levelEnemies);
+      createScreenChangeMultiplierArray(levelSprites);
       createScreenChangeMultiplierArray(levelBlocks);
       createScreenChangeMultiplierArray(levelCoins);
       createScreenChangeMultiplierArray(levelBackgroundObjects);
@@ -38,7 +38,7 @@ function CreateCanvas() {
     } else {
       updateObjectToScreenChangeArray(levelGround);
       updateObjectToScreenChange(mario);
-      updateObjectToScreenChangeArray(levelEnemies);
+      updateObjectToScreenChangeArray(levelSprites);
       updateObjectToScreenChangeArray(levelBlocks);
       updateObjectToScreenChangeArray(levelCoins);
       updateObjectToScreenChangeArray(levelBackgroundObjects);
@@ -54,10 +54,8 @@ function CreateCanvas() {
 
 function initialiseScene() {
   if (!levelLoaded){
-    window.mario = new Mario(screenHeight/15, screenHeight*4/5, blockSize*12/16, blockSize*15/16, marioTexture[0]);
     xPositionInLevel = 0;
   }
-
   switch (currentScene) {
     case "main":
       //play();
@@ -80,15 +78,33 @@ function initialiseScene() {
       preLevel();
     break;
   	case "levelOne":
+      level = 1;
+      backgroundColour = "#4B7DFA";
   		createLevelInterval(levelScene);
-      declareLevelOneObjects();
-      levelLoaded = true;
+      if (!levelLoaded){
+        window.mario = new Mario(screenHeight/15, screenHeight*4/5, blockSize*12/16, blockSize*15/16, marioTexture[0]);
+        declareLevelOneObjects();
+        levelLoaded = true;
+      }
   	break;
     case "levelTwo":
+      level = 2;
+      backgroundColour = "black";
       createLevelInterval(levelScene);
+      if (!levelLoaded){
+        window.mario = new Mario(blockSize*1.625, blockSize*3.0625, blockSize*12/16, blockSize*15/16, marioTexture[0]);
+        declareLevelTwoObjects();
+        levelLoaded = true;
+      }
   	break;
     case "levelThree":
+      level = 3;
       createLevelInterval(levelScene);
+      if (!levelLoaded){
+        window.mario = new Mario(blockSize*2.5, groundLevelY - blockSize, blockSize*12/16, blockSize*15/16, marioTexture[0]);
+        declareLevelThreeObjects();
+        levelLoaded = true;
+      }
   	break;
   	default:
   		console.log("no current scene");

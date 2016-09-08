@@ -8,7 +8,7 @@
   <script type="text/javascript" src="compiledJS/textures.js"></script>
 	<script type="text/javascript" src="compiledJS/drawingFunctions.js"></script>
 	<script type="text/javascript" src="compiledJS/variables.js"></script>
-	<script type="text/javascript" src="compiledJS/events.js"></script>
+	<script type="text/javascript" src="compiledJS/eventsMobile.js"></script>
   <script type="text/javascript" src="compiledJS/scenes.js"></script>
   <script type="text/javascript" src="compiledJS/declaringFunctions.js"></script>
 
@@ -24,14 +24,15 @@
 		</div>
     <div id="controlButtons">
         <div id="movementControls">
-        <button id="up"></button>
-        <button id="left"></button>
-        <button id="right"></button>
-        <button id="down"></button>
+        <button id="up" onkeydown="moveUp()"></button>
+        <button id="left" onclick="moveLeft()"></button>
+        <button id="right" onclick="moveRight()"></button>
+        <button id="down" onclick="moveDown()"></button>
         </div>
+        <button id="pause" onclick="pause()"></button>
         <div id="actionControls">
-        <button id="aButton"></button>
-        <button id="bButton"></button>
+        <button id="aButton" onclick="run()"></button>
+        <button id="bButton" onclick="moveUp()"></button>
         </div>
     </div>
     </body>

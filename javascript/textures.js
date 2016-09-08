@@ -1,7 +1,9 @@
 //textures
 
 const groundTexture     = new Image();
+const blueGroundTexture = new Image();
 const marioTexture      = [new Image(),new Image(),new Image(),new Image(),new Image(),new Image(),new Image(),new Image()];
+const bigMarioTexture   = [new Image(),new Image(),new Image(),new Image(),new Image(),new Image(),new Image(),new Image(), new Image()];
 const titleTexture      = new Image();
 const playButton        = new Image();
 const hillSmallTexture  = new Image();
@@ -17,11 +19,13 @@ const gamePausedText    = new Image();
 const levelSelectText   = new Image();
 const mainMenuText      = new Image();
 const resumeGameText    = new Image();
-const helpButton        = new Image();
+const helpButtons       = [new Image(), new Image()];
 const helpKeys          = [new Image(), new Image(), new Image()];
 const coin              = [new Image(), new Image(), new Image(), new Image()];
 const floatingBlock     = new Image();
+const blueFloatingBlock = new Image();
 const solidBlock        = new Image();
+const blueSolidBlock    = new Image();
 const mysteryBox        = new Image();
 const usedBox           = new Image();
 const pipeHead          = new Image();
@@ -35,9 +39,13 @@ const turtle            = [new Image(), new Image(), new Image()];
 const flower            = [new Image(), new Image(), new Image(), new Image()];
 const blueFlower        = [new Image(), new Image(), new Image(), new Image()];
 const starPower         = [new Image(), new Image(), new Image(), new Image(), new Image()];
+const treeBlock         = [new Image(), new Image(), new Image(), new Image()];
+const mushroom          = new Image();
+const oneUp             = new Image();
 const castle            = new Image();
 const bigCastle         = new Image();
 const castleFlag        = new Image();
+const movingPlatform    = new Image();
 
 //texture sources
 //marioTextures
@@ -50,8 +58,19 @@ marioTexture[5].src   = "textures/marioTextures/run4.png";
 marioTexture[6].src   = "textures/marioTextures/jumpMario.png";
 marioTexture[7].src   = "textures/marioTextures/endMario.png";
 
+bigMarioTexture[0].src   = "textures/marioTextures/bigStandingMario.png";
+bigMarioTexture[1].src   = "textures/marioTextures/gameOverMario.png";
+bigMarioTexture[2].src   = "textures/marioTextures/bigRun1.png";
+bigMarioTexture[3].src   = "textures/marioTextures/bigRun2.png";
+bigMarioTexture[4].src   = "textures/marioTextures/bigRun3.png";
+bigMarioTexture[5].src   = "textures/marioTextures/bigRun4.png";
+bigMarioTexture[6].src   = "textures/marioTextures/bigJumpMario.png";
+bigMarioTexture[7].src   = "textures/marioTextures/endMario.png";
+bigMarioTexture[8].src   = "textures/marioTextures/bigCrouchMario.png";
+
 //backgroundTextures
 groundTexture.src     = "textures/backgroundTextures/groundTexture.png";
+blueGroundTexture.src = "textures/backgroundTextures/blueGroundTexture.png";
 titleTexture.src      = "textures/backgroundTextures/titleTexture.png";
 playButton.src        = "textures/backgroundTextures/playButton.png";
 hillSmallTexture.src  = "textures/backgroundTextures/hillSmallTexture.png";
@@ -65,7 +84,8 @@ bushTextures[2].src   = "textures/backgroundTextures/bushLargeTexture.png";
 castle.src            = "textures/backgroundTextures/castle.png";
 bigCastle.src         = "textures/backgroundTextures/bigCastle.png";
 castleFlag.src        = "textures/backgroundTextures/castleFlag.png";
-helpButton.src        = "textures/backgroundTextures/help.png";
+helpButtons[0].src    = "textures/backgroundTextures/help.png";
+helpButtons[1].src    = "textures/backgroundTextures/back.png";
 helpKeys[0].src       = "textures/backgroundTextures/keyboardArrows.png";
 helpKeys[1].src       = "textures/backgroundTextures/xKey.png";
 helpKeys[2].src       = "textures/backgroundTextures/zKey.png";
@@ -89,7 +109,9 @@ coin[1].src           = "textures/blocksOfLevelsTextures/coinTwo.png";
 coin[2].src           = "textures/blocksOfLevelsTextures/coinThree.png";
 coin[3].src           = "textures/blocksOfLevelsTextures/coinFour.png";
 floatingBlock.src     = "textures/blocksOfLevelsTextures/floatingBlock.png";
+blueFloatingBlock.src = "textures/blocksOfLevelsTextures/blueFloatingBlock.png";
 solidBlock.src        = "textures/blocksOfLevelsTextures/solidBlock.png";
+blueSolidBlock.src    = "textures/blocksOfLevelsTextures/blueSolidBlock.png";
 mysteryBox.src        = "textures/blocksOfLevelsTextures/mysteryBox.png";
 usedBox.src           = "textures/blocksOfLevelsTextures/usedBox.png";
 pipeHead.src          = "textures/blocksOfLevelsTextures/pipeHead.png";
@@ -97,6 +119,15 @@ pipeBody.src          = "textures/blocksOfLevelsTextures/pipeBody.png";
 empty.src             = "textures/blocksOfLevelsTextures/empty.png";
 endingPole.src        = "textures/blocksOfLevelsTextures/endingPole.png";
 endingFlag.src        = "textures/blocksOfLevelsTextures/endingFlag.png";
+movingPlatform.src    = "textures/blocksOfLevelsTextures/movingPlatform.png";
+treeBlock[0].src      = "textures/blocksOfLevelsTextures/treeTopLeft.png";
+treeBlock[1].src      = "textures/blocksOfLevelsTextures/treeTopRight.png";
+treeBlock[2].src      = "textures/blocksOfLevelsTextures/treeTopMiddle.png";
+treeBlock[3].src      = "textures/blocksOfLevelsTextures/treeTrunk.png";
+
+//powerUpTextures
+mushroom.src       = "textures/powerUpTextures/mushroom.png";
+oneUp.src          = "textures/powerUpTextures/1up.png";
 
 //texture arrays
 function setTextures(){
@@ -106,5 +137,4 @@ function setTextures(){
   imageSourceSetter(flower, "textures/powerUpTextures/flower", 4);
   imageSourceSetter(blueFlower, "textures/powerUpTextures/blueFlower", 4);
   imageSourceSetter(starPower, "textures/powerUpTextures/star", 5);
-
 }

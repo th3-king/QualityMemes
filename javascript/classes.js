@@ -72,7 +72,9 @@ class AnimatedOneTimeObject extends OneTimeObject {
 }
 
 class Coin extends AnimatedOneTimeObject{
-  constructor(x,y){
+  constructor(section, blocksFromRight, blocksUp){
+    var x = section * screenWidth + (((blocksFromRight + 0.5) * blockSize) - screenHeight*25/1056);
+    var y = groundLevelY - (((blocksUp - 0.5) * blockSize) + screenHeight/32);
     super(x,y,coin, 6);
     this.width = screenHeight*25/528;
   	this.height = screenHeight/16;
@@ -84,20 +86,6 @@ class Coin extends AnimatedOneTimeObject{
   }
 }
 
-class Star extends AnimatedOneTimeObject{
-  constructor(x,y){
-    super(x,y,starPower, 4);
-    this.width = blockSize*14/16;
-  	this.height = blockSize/16;
-  }
-
-  isCollected(){
-    mario.starMode = true;
-    setTimeout(function(){
-      mario.starMode = false;
-    }, 10000)
-  }
-}
 /* any object which can be collided into by mario
   (includes spawnAbility and popUpBlock because it is used
    in MysteryBox and NormalBlock) */
@@ -107,10 +95,11 @@ class CollidableObject extends BasicObject {
     this.removed = false;
     this.popUpInterval = 0;
     this.spawnAbilityInterval = 0;
+    this.removed = false;
   }
 
   detectCollisionWithMario() {
-    if(isColliding(mario, this) == true){
+    if(isColliding(mario, this) && !this.removed){
       if(mario.y + mario.height <= this.y + this.height/2){
         if(mario.x + mario.width >= this.x + this.width/10 && mario.x <= this.x + this.width*9/10){
           this.collisionDown();
@@ -129,21 +118,22 @@ class CollidableObject extends BasicObject {
   spawnAbility(objectArray, peakHeight, rest, speed, disappear){
     var peaked = false;
     var object = objectArray[objectArray.length - 1];
-    if(this.spawnAbilityInterval == undefined || this.spawnAbilityInterval == 0){
+    if(this.spawnAbilityInterval === undefined || this.spawnAbilityInterval === 0){
         this.spawnAbilityInterval = setInterval(() => {
-        if(object.y > object.originY - peakHeight && peaked == false){
+        if(object.y > object.originY - peakHeight && !peaked){
           object.y -= speed;
         } else {
           peaked = true;
         }
-        if(peaked == true){
+        if(peaked){
           object.y += speed;
         }
-        if(peaked == true && object.y > object.originY - rest){
+        if(peaked && object.y > object.originY - rest){
           object.y = object.originY - rest;
           clearInterval(this.spawnAbilityInterval);
           this.spawnAbilityInterval = 0;
-          if(disappear == true){
+          this.spawning = false;
+          if(disappear){
             objectArray.pop();
             score += 200;
           }
@@ -154,17 +144,17 @@ class CollidableObject extends BasicObject {
 
   popUpBlock(){
     var peaked = false;
-    if(this.popUpInterval == undefined || this.popUpInterval == 0){
+    if(this.popUpInterval === undefined || this.popUpInterval === 0){
         this.popUpInterval = setInterval(() => {
-        if(this.y > this.originY - screenHeight/100 && peaked == false){
+        if(this.y > this.originY - screenHeight/100 && !peaked){
           this.y -= screenHeight/500;
         } else {
           peaked = true;
         }
-        if(peaked == true){
+        if(peaked){
           this.y += screenHeight/500;
         }
-        if(peaked == true && this.y > this.originY){
+        if(peaked && this.y > this.originY){
           this.y = this.originY;
           clearInterval(this.popUpInterval);
           this.popUpInterval = 0;
@@ -207,10 +197,10 @@ class NormalBlock extends CollidableObject {
     }
     collisionUp(){
       super.collisionUp();
-      if(mario.isBig == false){
+      if(!mario.isBig){
         super.popUpBlock();
       } else {
-        console.log("break Block");
+        this.removed = true;
       }
     }
 }
@@ -221,6 +211,25 @@ class SolidBlock extends NormalBlock {
       mario.y = this.y + this.height*11/10;
       mario.velocity = -mario.gravity;
     }
+}
+
+class MovingPlatform extends CollidableObject {
+  constructor(section, startingBlocksFromRight, startingBlocksUp, width, height, image, movementSpeed){
+    var x = screenWidth*section + blockSize*startingBlocksFromRight;
+    var y = groundLevelY - blockSize*startingBlocksUp;
+    super(x, y, width, height, image);
+    this.movementSpeed = movementSpeed;
+    this.maxY = screenHeight;
+    this.minY = 0;
+  }
+
+  draw(){
+    if(this.y < this.minY){
+      this.y = this.maxY;
+    }
+    this.y -= this.movementSpeed;
+    super.draw();
+  }
 }
 
 /* any block which mario can interact with and can contain an ability
@@ -238,7 +247,7 @@ class MysteryBox extends CollidableObject {
 
   collisionUp(){
     super.collisionUp();
-    if(this.hit == false){
+    if(!this.hit){
       ++this.abilitiesAlreadySpawned;
       if(this.abilitiesAlreadySpawned == this.amountOfAbilities){
         this.hit = true;
@@ -247,15 +256,18 @@ class MysteryBox extends CollidableObject {
       super.popUpBlock();
       switch (this.inside) {
         case "star":
-          mario.starMode = true;
-          setTimeout(function(){
-            starMode = false;
-          }, 20000);
+          levelSprites.push(new Star(0, this.originX/blockSize, screenHeight/blockSize - this.originY/blockSize - 1.5));
           break;
         case "coin":
           levelCoins.push(new Coin((this.originX + this.width/2) - screenHeight*25/1056, this.originY));
           super.spawnAbility(levelCoins, screenHeight/8, screenHeight/10, screenHeight/80, true);
           ++coinsCollected;
+          break;
+        case "mushroom":
+          levelSprites.push(new Mushroom(0, this.originX/blockSize, screenHeight/blockSize - this.originY/blockSize - 1.5));
+          break;
+        case "oneUp":
+          levelSprites.push(new OneUp(0, this.originX/blockSize, screenHeight/blockSize - this.originY/blockSize - 1.5));
           break;
         default:
           console.log("nothing inside");
@@ -269,7 +281,8 @@ class MysteryBox extends CollidableObject {
 /* pipes that act just like a solidBlock however can interact with certain pipes
   to go to secret levels */
 class Pipe extends CollidableObject {
-  constructor(x, blocksHeigh){
+  constructor(section, blocksFromRight, blocksHigh){
+    var x = section * screenWidth + blockSize * blocksFromRight;
     super(x, groundLevelY - blockSize * blocksHeigh, blockSize*2, blockSize * blocksHeigh, [pipeHead, pipeBody]);
     this.amountOfBodies = blocksHeigh - 1;
   }
@@ -281,8 +294,12 @@ class Pipe extends CollidableObject {
     }
   }
 
+  collisionUp(){
+    //clear collisionUp
+  }
+
   detectCollisionWithMario() {
-    if(isColliding(mario, this) == true){
+    if(isColliding(mario, this)){
       if(mario.y + mario.height <= this.y + this.height/10){
         if(mario.x + mario.width >= this.x + this.width/10 && mario.x <= this.x + this.width*9/10){
           super.collisionDown();
@@ -307,12 +324,21 @@ class GroundBlock extends CollidableObject {
   }
 }
 
+class BackgroundBlock extends BasicObject{
+  constructor(section, blocksFromRight, blocksAboveGround, image){
+    var x = screenWidth*section + blockSize*blocksFromRight;
+    var y = groundLevelY - blockSize*blocksAboveGround;
+    super(x, y, blockSize, blockSize, image);
+  }
+}
+
 /* The main chatacter of the game Mario, he only extends
  form basic object due to him having quite specific methods */
 class Mario extends BasicObject{
   constructor(x, y, width, height, image) {
     super(x, y, width, height, image);
     this.velocity = 0;
+    this.imageArray = marioTexture;
     this.gravity = screenHeight/5000;
     this.movementSpeed = screenWidth/300;
     this.jump = false;
@@ -322,29 +348,34 @@ class Mario extends BasicObject{
     this.currentImage = 3;
     this.flipped = false;
     this.runningCounter = 0;
+    this.crouching = false;
   }
 
   draw(){
-    marioSizing(this.image);
-    if(this.flipped){
-      drawFlippedImage(this.x, this.y, this.width, this.height, this.image)
+    if(mario.isBig){
+      marioSizingBig(this.image);
     } else {
-      super.draw()
+      marioSizingSmall(this.image);
+    }
+    if(this.flipped){
+      drawFlippedImage(this.x, this.y, this.width, this.height, this.image);
+    } else {
+      super.draw();
     }
   }
 
   animateRunning(){
     if(!this.jump){
       for(var i = 0; i < Math.floor(Math.abs(this.currentSpeed)); i++){
-        if(this.runningCounter % 10 == 0){
-          this.image = marioTexture[this.currentImage];
+        if(this.runningCounter % 10 === 0){
+          this.image = this.imageArray[this.currentImage];
           if(this.currentImage < 5){
-            ++this.currentImage
+            ++this.currentImage;
           } else {
             this.currentImage = 3;
           }
         }
-        this.runningCounter++
+        this.runningCounter++;
       }
     }
   }
@@ -356,9 +387,9 @@ class Mario extends BasicObject{
         if(this.currentSpeed >= 0){
           this.animateRunning();
         } else {
-          this.image = marioTexture[2];
+          this.image = this.imageArray[2];
         }
-        this.currentSpeed += this.movementSpeed/25
+        this.currentSpeed += this.movementSpeed/25;
       } else {
         this.animateRunning();
         this.currentSpeed = this.movementSpeed;
@@ -370,7 +401,7 @@ class Mario extends BasicObject{
         if(this.currentSpeed <= 0){
           this.animateRunning();
         } else {
-          this.image = marioTexture[2];
+          this.image = this.imageArray[2];
         }
         this.currentSpeed -= this.movementSpeed/25;
       } else {
@@ -399,7 +430,7 @@ class Mario extends BasicObject{
     if(!moveRight && !moveLeft && !lifeLost && !ending && !this.jump){
       if(this.currentSpeed < this.movementSpeed/25 && this.currentSpeed > -this.movementSpeed/25){
         this.currentSpeed = 0;
-        this.image = marioTexture[0];
+        this.image = this.imageArray[0];
       } else {
         if(this.currentSpeed >= this.movementSpeed/25){
           this.currentSpeed -= this.movementSpeed/25;
@@ -413,35 +444,42 @@ class Mario extends BasicObject{
         }
       }
     }
+    if(mario.isBig && moveDown && this.currentSpeed === 0){
+      this.image = this.imageArray[8];
+      this.crouching = true;
+    }
+    if(!moveDown && this.crouching){
+      console.log("run");
+      this.crouching = false;
+      mario.y -= blockSize*5/8;
+    }
   }
 
   jumpAction(){
     //check if fall through floor
-    if (floorCollision == true && this.jump == true){
+    if (floorCollision && this.jump){
       this.velocity = 0;
       this.jump = false;
-      this.y = screenHeight*4/5;
+      this.y = groundLevelY - this.height;
     }
-
-    if (moveUp == true && this.jump == false) {
+    if (moveUp && !this.jump) {
       moveUp = false;
       this.jump = true;
       this.velocity = screenHeight/90;
     }
-
-    if (this.jump == true) {
-      this.image = marioTexture[6];
+    if (this.jump) {
+      this.image = this.imageArray[6];
       this.fallAction();
     }
-  };
+  }
 
   gameOver() {
     this.y -= this.movementSpeed*5;
-    this.image = marioTexture[1];
+    this.image = this.imageArray[1];
     lifeLost = true;
     gameplayFreeze = true;
 
-    if(lives == 0){
+    if(lives === 0){
       setTimeout(function (){
         refreshMainScene();
         refreshLevelAndGoToScene("main");
@@ -455,7 +493,7 @@ class Mario extends BasicObject{
         lifeLost = false;
       }, 1000);
     }
-  };
+  }
 
   fallAction() {
     this.y -= this.velocity;
@@ -466,9 +504,31 @@ class Mario extends BasicObject{
 /* any sprite which the user does not control and can interact with mario
 it also contains built in gravity  */
 class Sprite extends BasicObject{
+  constructor(section ,blocksFromRight, blocksAboveGround, width, height, movementSpeed, image){
+    var x = screenWidth*section + blockSize*blocksFromRight;
+    var y = groundLevelY - blockSize*blocksAboveGround - height;
+    super(x, y, width, height, image);
+    this.velocity = 0;
+    this.removed = false;
+    this.blocksNotCollidedWith = [];
+    this.movementSpeed = movementSpeed;
+    this.collideVelocity = 0;
+  }
+
+  collision(){
+    this.movementSpeed = -this.movementSpeed;
+  }
+
+  moveWithMario(){
+    if(inScreen(this)){
+      this.originX -= this.movementSpeed;
+    }
+    super.moveWithMario();
+  }
+
   detectCollisionWithObject(object){
-    if(isColliding(object, this)){
-      this.velocity = 0;
+    if(isColliding(object, this) && !this.spawning){
+      this.velocity = this.collideVelocity;
       if(this.y + this.height/2 >= object.y + object.height/3){
         this.collision();
         if(this.x >= object.x + object.width/2){
@@ -495,7 +555,7 @@ class Sprite extends BasicObject{
   collisions() {
     this.blocksNotCollidedWith = [];
     for(var j = 0; j < allCollidableObjects.length; j++){
-      if(allCollidableObjects[j] != this){
+      if(allCollidableObjects[j] != this && !allCollidableObjects[j].removed){
         this.detectCollisionWithObject(allCollidableObjects[j]);
       } else {
         this.blocksNotCollidedWith.push(0);
@@ -512,31 +572,18 @@ class Sprite extends BasicObject{
 
 }
 
-
-/* Enemy Class extends from basic object because it is also quite
-unique, it is the basis for all enemies in mario */
-class Enemy extends Sprite{
+class AnimatedSprite extends Sprite {
   constructor(section ,blocksFromRight, blocksAboveGround, width, height, movementSpeed, image){
-    var x = screenWidth*section + blockSize*blocksFromRight;
-    var y = groundLevelY - blockSize*blocksAboveGround - height;
-    super(x, y, width, height, image[0]);
-    this.imageArray = image;
-    this.movementSpeed = movementSpeed;
-    this.velocity = 0;
-    this.index = 0;
-    this.squashed = false;
-    this.removed = false;
+    super(section ,blocksFromRight, blocksAboveGround, width, height, movementSpeed, image[0]);
     this.counter = 0;
-    this.blocksNotCollidedWith = [];
+    this.imageArray = image;
+    this.index = 0;
   }
 
   draw(){
-    if(this.squashed == false){
-      this.image = this.imageArray[this.index];
-    }
-    super.draw()
-    if(this.counter == 16){
-      if(this.index < this.imageArray.length - 2){
+    super.draw();
+    if(this.counter == this.animationFrequency){
+      if(this.index < this.imageArray.length - (this.excessAnimationImages + 1)){
         this.index++;
       } else {
         this.index = 0;
@@ -545,13 +592,30 @@ class Enemy extends Sprite{
     } else {
       ++this.counter;
     }
+  }
+}
+
+/* Enemy Class extends from basic object because it is also quite
+unique, it is the basis for all enemies in mario */
+class Enemy extends AnimatedSprite {
+  constructor(section ,blocksFromRight, blocksAboveGround, width, height, movementSpeed, image){
+    super(section, blocksFromRight, blocksAboveGround, width, height, movementSpeed, image);
+    this.squashed = false;
+    this.excessAnimationImages = 1;
+  }
+
+  draw(){
+    if(!this.squashed){
+      this.image = this.imageArray[this.index];
+    }
+    super.draw();
 	}
 
   moveWithMario(){
     if(!this.squashed && inScreen(this)){
       this.originX -= this.movementSpeed;
     }
-    super.moveWithMario();
+    this.x = this.originX - xPositionInLevel;
   }
 
   squashSprite(){
@@ -563,23 +627,26 @@ class Enemy extends Sprite{
   }
 
   collisionWithMario(){
-    if(mario.starMode == false){
-      if(mario.y + mario.height <= this.y + this.height/2){
-        mario.velocity = screenHeight/150;
-        this.squashSprite();
-        setTimeout(() => {
-          this.removed = true;
-          for(var j = 0; j < allCollidableObjects.length; j++){
-            if(allCollidableObjects[j] == this){
-              var index = allCollidableObjects.indexOf(this);
-              if (index > -1) {
-                allCollidableObjects.splice(index, 1);
-              }
-            }
+    if(!mario.starMode){
+      if(!unhittable){
+        if(mario.y + mario.height <= this.y + this.height/2){
+          mario.velocity = screenHeight/150;
+          this.squashSprite();
+          setTimeout(() => {
+            this.removed = true;
+          }, 1000);
+        } else {
+          if(mario.isBig){
+            mario.imageArray = marioTexture;
+            unhittable = true;
+            mario.isBig = false;
+            setTimeout(function(){
+              unhittable = false;
+            }, 3000);
+          } else {
+            mario.gameOver();
           }
-        }, 1000);
-      } else {
-        mario.gameOver();
+        }
       }
     } else {
         mario.velocity = screenHeight/80;
@@ -589,21 +656,91 @@ class Enemy extends Sprite{
         }, 1000);
     }
   }
-
-  collision(){
-    this.movementSpeed = -this.movementSpeed;
-  }
 }
 
 /* An extention for enemy class so that it is easier to declare goomba
   enemies due to preset width, height and image*/
 class Goomba extends Enemy {
-  constructor(section ,blocksFromRight, blocksAboveGround){
+  constructor(section ,blocksFromRight, blocksAboveGround, image){
     var width = blockSize;
     var height = goombaHeight;
-    var image = goomba;
     var movementSpeed = screenWidth/1500;
     super(section ,blocksFromRight, blocksAboveGround, width, height, movementSpeed, image);
+    this.animationFrequency = 16;
+  }
+}
+
+class Star extends AnimatedSprite{
+  constructor(section ,blocksFromRight, blocksAboveGround){
+    super(section ,blocksFromRight, blocksAboveGround, blockSize, blockSize, -screenWidth/2000, starPower);
+    this.spawning = true;
+    this.excessAnimationImages = 0;
+    this.animationFrequency = 4;
+    this.collideVelocity = -screenHeight/100;
+  }
+
+  draw(){
+    super.draw();
+    this.image = this.imageArray[this.index];
+  }
+
+  moveWithMario(){
+    if(!this.removed && inScreen(this)){
+      this.originX -= this.movementSpeed;
+    }
+    super.moveWithMario();
+  }
+
+  checkFall(){
+    if(this.blocksNotCollidedWith.length == allCollidableObjects.length){
+      this.velocity += gravity;
+    }
+    this.y += this.velocity;
+  }
+
+  collisionWithMario(){
+    mario.starMode = true;
+    this.removed = true;
+    setTimeout(function(){
+      mario.starMode = false;
+    }, 10000);
+  }
+}
+
+class Mushroom extends Sprite{
+  constructor(section ,blocksFromRight, blocksAboveGround){
+    super(section ,blocksFromRight, blocksAboveGround, blockSize, blockSize, -screenWidth/2000, mushroom);
+    this.spawning = true;
+  }
+
+  moveWithMario(){
+    if(!this.removed && inScreen(this)){
+      this.originX -= this.movementSpeed;
+    }
+    super.moveWithMario();
+  }
+
+  collisionWithMario(){
+    if(mario.isBig){
+      score += 1000;
+    }
+    mario.isBig = true;
+    mario.image = bigMarioTexture[0];
+    mario.imageArray = bigMarioTexture;
+    mario.y -= blockSize;
+    this.removed = true;
+  }
+}
+
+class OneUp extends Mushroom {
+  constructor(section ,blocksFromRight, blocksAboveGround){
+    super(section ,blocksFromRight, blocksAboveGround, blockSize, blockSize, -screenWidth/2000, mushroom)
+    this.image = oneUp;
+  }
+
+  collisionWithMario(){
+    this.removed = true;
+    lives += 1;
   }
 }
 
@@ -668,12 +805,13 @@ class Bush extends BasicObject {
 class Hill extends BasicObject {
   constructor(section, blocksFromRight, size){
     var hillImage;
+    var width;
     if(size == 1){
       hillImage = hillSmallTexture;
-      var width = 3;
+      width = 3;
     } else {
       hillImage = hillLargeTexture;
-      var width = 5;
+      width = 5;
     }
     var x = screenWidth*section + blockSize*blocksFromRight;
     super(x, groundLevelY - (blockSize* (size+0.1875)), blockSize * (width), blockSize* (size+0.1875),hillImage);
@@ -706,24 +844,28 @@ class EndingPole extends NormalBlock {
     super(section, blocksFromRight, blocksAboveGround, image);
     this.width = blockSize/2;
     this.height = blockSize * 9.5;
+    this.flagXOrigin = this.x - blockSize * 0.75;
+    this.flagYOrigin = this.y + blockSize * 0.5625;
+    this.counter = 0;
   }
 
   draw(){
     super.draw();
     if(!ending){
-      this.flagX = this.x - blockSize * 0.75;
-      this.flagY = this.y + blockSize * 0.5625;
+      this.flagX = this.flagXOrigin;
+      this.flagY = this.flagYOrigin;
     }
     drawImageOnCanvas(this.flagX, this.flagY, blockSize, blockSize, endingFlag);
   }
 
   detectCollisionWithMario() {
-    if(isColliding(mario, this) == true){
+    if(isColliding(mario, this)){
       ending = true;
       mario.image = marioTexture[7];
       mario.x = this.x - blockSize*10/16;
       if(this.flagY + blockSize < this.y + this.height){
-        this.flagY += screenHeight/80;
+        this.flagY = this.flagYOrigin + (screenHeight/80)*this.counter;
+        this.counter++
       } else {
         this.flagY =  this.y + this.height - blockSize;
       }
@@ -734,4 +876,13 @@ class EndingPole extends NormalBlock {
       }
     }
   }
+}
+
+class Debris extends BasicObject {
+  constructor(x, y, width, height, image, dx, dy){
+    super(x, y, width, height, image);
+    this.dx = dx;
+    this.dy = dy;
+  }
+
 }

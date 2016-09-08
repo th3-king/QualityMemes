@@ -28,7 +28,7 @@ function onKeyUp() {
   if (event.keyCode == 37) {
     moveLeft = false;
   } // left arrow released
-  if (event.keyCode == 38 && event.keyCode == 90) {
+  if (event.keyCode == 38 || event.keyCode == 90) {
     moveUp = false;
   } // up or z arrow released
   if (event.keyCode == 39) {
@@ -75,6 +75,8 @@ function getPositionClick(event) {
       }
     break;
     case "levelOne":
+    case "levelTwo":
+    case "levelThree":
      if(gameplayFreeze){
         //when player clicks resume game text
         if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*5/16 && y < screenHeight*29/80)) {
@@ -85,6 +87,12 @@ function getPositionClick(event) {
         if((x > screenWidth*3/8 && x < screenWidth*5/8) && (y > screenHeight*6/16 && y < screenHeight*34/80)) {
           refreshLevelAndGoToScene("main");
         }
+      }
+    break;
+    case "helpScene":
+      if((x > screenWidth*3/40 && x < screenWidth*3/40 + screenHeight*1.56/7)&&(y > screenHeight*16/32 && y < screenHeight/7 + screenHeight*16/32 )){
+        currentScene = "main";
+        initialiseScene();
       }
     break;
     default:

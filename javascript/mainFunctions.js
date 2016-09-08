@@ -8,27 +8,30 @@ function browserDeviceCheck(){
 	    isOpera = winNav.userAgent.indexOf("OPR") > -1,
 	    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
 	    isIOSChrome = winNav.userAgent.match("CriOS"),
-			prePathname = "/Users/Dan/Desktop/@ll%20Programs/Html/Canvas%20tasks/projectMario/";
+			length = window.location.pathname.length;
 
 	if(isIOSChrome){
 	  // is Google Chrome on IOS
-		if(window.location.pathname != prePathname + "marioMobile.html"){
-			window.location = "marioMobile.html";
+		console.log(window.location.pathname.slice(length-16, length));
+		if(window.location.pathname.slice(length-16, length) !=  "marioMobile.html"){
+			window.location = "marioMobile.html"
 		}
 	} else if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera == false && isIEedge == false) {
 	  // is Google Chrome
-		if(window.location.pathname != prePathname + "mario.html"){
-			window.location = "mario.html";
+		if(window.location.pathname.slice(length-10, length) != "mario.html"){
+			//window.location = "mario.html";
 		}
 	} else {
 	  // not Google Chrome
-		if(window.location.pathname != prePathname + "marioEs5.html") {
+		if(window.location.pathname.slice(length-13, length) != "marioEs5.html") {
 		 	window.location = "marioEs5.html";
 	 	}
 	}
 	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
-	// Take the user to a different screen here.
-		if(window.location.pathname != prePathname + "marioMobile.html"){
+	//Just if mobile
+		if(window.location.pathname.slice(length-16, length) != "marioMobile.html"){
+			console.log(window.location.pathname.slice(length-16, length));
+
 			window.location = "marioMobile.html";
 		}
 	}
@@ -103,9 +106,9 @@ function refreshLevelAndGoToScene(scene){
   gameplayFreeze = false;
   levelLoaded = false;
   initialiseScene();
-  for(var i = 0; i < levelEnemies.length; i ++){
-    levelEnemies[i].removed = false;
-    levelEnemies[i].squashed = false;
+  for(var i = 0; i < levelSprites.length; i ++){
+    levelSprites[i].removed = false;
+    levelSprites[i].squashed = false;
   }
 }
 
@@ -167,12 +170,25 @@ function isColliding(objectOne, objectTwo) {
 /* function for creating ground blocks. Note: if you use this function
  	use it in the declaringFunctions.js file and then run that function
 	to declare it BEFORE the level begins*/
-function createGroundBlocks(startingX, finishingX, startingY, finishingY){
+function createGroundBlocks(startingX, finishingX, startingY, finishingY, texture){
 	for(var x = startingX; x < finishingX; x++){
 		for(var y = startingY; y < finishingY; y++){
-			levelGround.push(new GroundBlock(0 + blockSize*x, groundLevelY + blockSize*y, groundTexture));
+			levelGround.push(new GroundBlock(0 + blockSize*x, groundLevelY + blockSize*y, texture));
 		}
 	}
+}
+
+function createTreeTop(section, blocksFromRight, blocksAboveGround, width, trunkLength){
+	for(var y = 0; y < (width - 2); y++){
+		for(var t = 0; t < trunkLength; t++){
+			levelBackgroundObjects.push(new BackgroundBlock(section, (blocksFromRight + 1) + y, (blocksAboveGround - 1) - t, treeBlock[3]));
+		}
+	}
+	createBlockPlatform(section,blocksFromRight + 1, blocksAboveGround,treeBlock[2],width-2, SolidBlock);
+	levelBlocks.push(
+		new SolidBlock(section, blocksFromRight, blocksAboveGround, treeBlock[0]),
+		new SolidBlock(section, blocksFromRight + width - 1, blocksAboveGround, treeBlock[1])
+	);
 }
 
 /* checks to see if the object is currently within the users visible screen
@@ -190,7 +206,26 @@ function inScreen(object){
 /* a handy function used to simplify drawing an array of objects */
 function drawArray(arrayOfObjects){
 	for(var i = 0; i < arrayOfObjects.length; i++){
-		if (inScreen(arrayOfObjects[i]) == true){
+		if (inScreen(arrayOfObjects[i])){
+    	arrayOfObjects[i].draw();
+		}
+  }
+}
+
+function clearLevelArrays(){
+	levelSprites = [];
+	levelBlocks = [];
+	levelCoins = [];
+	levelGround = [];
+	levelBackgroundObjects = [];
+	levelText = [];
+	allLevelBlocks = [];
+	allCollidableObjects = [];
+}
+
+function drawRemovableArray(arrayOfObjects){
+	for(var i = 0; i < arrayOfObjects.length; i++){
+		if (inScreen(arrayOfObjects[i]) && !arrayOfObjects[i].removed){
     	arrayOfObjects[i].draw();
 		}
   }
@@ -219,9 +254,20 @@ function createBlockPlatform(section, blocksFromRight, blocksUp, image, length){
 
 /* create a stack of blocks (vertical) above the ground which mario can stand on
 	they are of class SolidBlock*/
-function createBlockStack(section, blocksFromRight, blocksUp, image, length){
+function createBlockStack(section, blocksFromRight, blocksUp, image, length, type){
 	for(var i = 0; i < length; i++){
-		levelBlocks.push(new SolidBlock(section, blocksFromRight, blocksUp + i, image));
+		levelBlocks.push(new type(section, blocksFromRight, blocksUp + i, image));
+	}
+}
+
+/* creates a rectancle of normal blocks which has a width and a height
+	note: if using then use top left block as reference.
+ */
+function createBlockRectangle(section, blocksFromRight, blocksUp, image, width, height, type){
+	for(var w = 0; w < width; w++){
+		for(var h = 0; h < height; h++){
+			levelBlocks.push(new type(section, blocksFromRight + w, blocksUp - h, image));
+		}
 	}
 }
 
@@ -229,7 +275,7 @@ function createBlockStack(section, blocksFromRight, blocksUp, image, length){
 	they are of class SolidBlock*/
 function createBlockStairAscendingFromLeft(section, blocksFromRight, blocksUp, image, height){
 	for(var h = 0; h < height; h++){
-		createBlockStack(section, blocksFromRight + h, blocksUp, image, h + 1);
+		createBlockStack(section, blocksFromRight + h, blocksUp, image, h + 1, SolidBlock);
 	}
 }
 
@@ -237,7 +283,7 @@ function createBlockStairAscendingFromLeft(section, blocksFromRight, blocksUp, i
 	they are of class SolidBlock*/
 function createBlockStairAscendingFromRight(section, blocksFromRight, blocksUp, image, height){
 	for(var h = height - 1; h >= 0; h--){
-		createBlockStack(section, blocksFromRight + h, blocksUp, image, height - h);
+		createBlockStack(section, blocksFromRight + h, blocksUp, image, height - h, SolidBlock);
 	}
 }
 
@@ -254,7 +300,7 @@ function updateTime(){
  dimensions accordingly. This is due to marios different images having different
  dimensions so when it changes the dimensions of mario it doesn't distort image and
  makes collsion detection more accurate */
-function marioSizing(image){
+function marioSizingSmall(image){
 	switch (image) {
 		case marioTexture[0]:
 			setMarioSize(13, 16);
@@ -282,6 +328,41 @@ function marioSizing(image){
 			break;
 		default:
 			setMarioSize(13, 16);
+			break;
+	}
+}
+
+function marioSizingBig(image){
+	switch (image) {
+		case bigMarioTexture[0]:
+			setMarioSize(16, 32);
+			break;
+		case bigMarioTexture[1]:
+			setMarioSize(15, 14);
+			break;
+		case bigMarioTexture[2]:
+			setMarioSize(16, 32);
+			break;
+		case bigMarioTexture[3]:
+			setMarioSize(14, 31);
+			break;
+		case bigMarioTexture[4]:
+			setMarioSize(16, 30);
+			break;
+		case bigMarioTexture[5]:
+			setMarioSize(16, 32);
+			break;
+		case bigMarioTexture[6]:
+			setMarioSize(16, 33);
+			break;
+		case bigMarioTexture[7]:
+			setMarioSize(13, 15);
+			break;
+		case bigMarioTexture[8]:
+			setMarioSize(16, 22);
+			break;
+		default:
+			setMarioSize(16, 32);
 			break;
 	}
 }

@@ -11,6 +11,7 @@ var initialRun = true;
 var gameplayFreeze = false;
 var floorCollision = false;
 var lifeLost = false, ending = false;
+var backgroundColour = "#4B7DFA", textColour = "black";
 
 //screen size related variables being declared so they can be used globally
 var groundLevelY;
@@ -48,7 +49,7 @@ function pause() {
 }
 
 //arrays
-var levelEnemies = [];
+var levelSprites = [];
 var levelBlocks = [];
 var levelCoins = [];
 var levelGround = [];
@@ -67,17 +68,50 @@ var moveDown = false;
 var moveUp = false;
 var score = 0, lives = 3, time = 0, coinsCollected = 0, level = 1;
 var gameTime = 300, counter = 0;
+var unhittable = false;
 
 //Declare all objects for different level
 function declareLevelOneObjects() {
-	if (levelLoaded == false){
+	if (!levelLoaded){
+		textColour = "black";
+		clearLevelArrays();
 		initialiseLevelOneBlocks();
 		initialiseLevelOneCoins();
 		initialiseLevelOneBackground();
-		initialiseLevelOneEnemies();
+		initialiseLevelOneSprites();
 		initialiseLevelOneGround();
-		initialiseLevelText();
+		initialiseLevelText(textColour);
 		allLevelBlocks = levelBlocks.concat(levelGround);
-		allCollidableObjects = allLevelBlocks.concat(levelEnemies);
-	};
-};
+		allCollidableObjects = allLevelBlocks.concat(levelSprites);
+	}
+}
+
+function declareLevelTwoObjects() {
+	if (!levelLoaded){
+		textColour = "white";
+		clearLevelArrays();
+		initialiseLevelTwoBlocks();
+		initialiseLevelTwoCoins();
+		initialiseLevelTwoBackground();
+		initialiseLevelTwoSprites();
+		initialiseLevelTwoGround();
+		initialiseLevelText(textColour);
+		allLevelBlocks = levelBlocks.concat(levelGround);
+		allCollidableObjects = allLevelBlocks.concat(levelSprites);
+	}
+}
+
+function declareLevelThreeObjects() {
+	if (!levelLoaded){
+		textColour = "black";
+		clearLevelArrays();
+		initialiseLevelThreeBackground();
+		initialiseLevelThreeBlocks();
+		initialiseLevelThreeCoins();
+		initialiseLevelThreeSprites();
+		initialiseLevelThreeGround();
+		initialiseLevelText(textColour);
+		allLevelBlocks = levelBlocks.concat(levelGround);
+		allCollidableObjects = allLevelBlocks.concat(levelSprites);
+	}
+}

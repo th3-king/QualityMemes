@@ -98,7 +98,7 @@ function drawPausedBox() {
 	drawImageOnCanvas(screenWidth*3/8, screenHeight*3/8, screenWidth/4, screenHeight/20, mainMenuText);
 }
 
-//draws the top bar of text without time number used for preLevel and main scene 
+//draws the top bar of text without time number used for preLevel and main scene
 function drawTopBar(colour) {
   drawText(screenWidth/50, screenHeight/18 ,"emulogic", screenWidth/50 , "left", colour, "Mario ");
   drawText(screenWidth/50, screenHeight*2/18 ,"emulogic", screenWidth/50 , "left", colour, score.toString());
